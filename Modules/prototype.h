@@ -47,7 +47,7 @@
 
 
 void execTetris();
-//int checkGameOver(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino); 
+//int checkscreenGameOver(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino); 
 void generatePhrase(int coordX, int coordY, char *list, int lenList, short cor);
 void drawScore(int coordX, int coordY, int score); 
 void gameField(int score, int hscore); 
@@ -57,7 +57,7 @@ void changeGameState(int *pointer_state, int *pointer_buttons);
 //void drawBoard(PartTetromino boardMatrix[LINES][COLUMNS]); 
 //void drawBoardTerminal(PartTetromino boardMatrix[LINES][COLUMNS]); 
 int buttonRead(); 
-void gameOver();
+void screenGameOver();
 void changePauseState(int *pointerStateGame, int *pointerButtons); 
 extern int closeGpuMapping();
 extern int gpuMapping();
@@ -72,7 +72,7 @@ void videoClear();
 void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int blockLength);
 int charToIndex(char c);
 void printChar(int coordX, int coordY, char caracter, short color);
-void gamePause();
+void screenGamePause();
 
 // Variáveis globais para o acelerômetro
 extern int16_t axis_x; // Eixo X do acelerômetro.

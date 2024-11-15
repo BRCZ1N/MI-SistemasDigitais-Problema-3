@@ -8,11 +8,11 @@
  * @return void
 */
 void bola9x9 (int coordX, int coordY, short cor) {
-    video_box(coordX - 1, coordY - 4, coordX + 1, coordY - 4, cor);
-	video_box(coordX - 3, coordY - 3, coordX + 3, coordY - 2, cor);
-	video_box(coordX - 4, coordY - 1, coordX + 4, coordY + 1, cor);
-	video_box(coordX - 3, coordY + 2, coordX + 3, coordY + 3, cor);
-	video_box(coordX - 1, coordY + 4, coordX + 1, coordY + 4, cor);
+    videoBox(coordX - 1, coordY - 4, coordX + 1, coordY - 4, cor, 1);
+	videoBox(coordX - 3, coordY - 3, coordX + 3, coordY - 2, cor, 1);
+	videoBox(coordX - 4, coordY - 1, coordX + 4, coordY + 1, cor, 1);
+	videoBox(coordX - 3, coordY + 2, coordX + 3, coordY + 3, cor, 1);
+	videoBox(coordX - 1, coordY + 4, coordX + 1, coordY + 4, cor, 1);
 }
 
 /**
@@ -180,7 +180,7 @@ void moveBall(Ball *ball, Bar *bar) {
             }
         }
 
-        // Encontrar o lado que houve a clisão
+        // Encontrar o lado que houve a colisão
         if ((ball->ballPositionX - COLLISION_RADIUS == WALL_WIDHT_X)) {  // Esquerdo
             if (ball->ballSpeedX < 0){
                 ball->ballSpeedX = -ball->ballSpeedX;

@@ -347,38 +347,6 @@ int charToIndex(char c) {
 
 
 /**
- * Desenha o tabuleiro na tela usando a matriz fornecida.
- *
- * Esta função itera sobre a matriz de tetrominos e desenha os blocos
- * correspondentes em suas posições no tabuleiro. Blocos que não estão vazios
- * são desenhados com a cor especificada.
- *
- * @param boardMatrix A matriz que representa o estado do tabuleiro, onde cada
- *                    elemento contém informações sobre o bloco, incluindo
- *                    sua cor e se está vazio ou não.
- */
-
-void drawBoard(PartTetromino boardMatrix[LINES][COLUMNS])
-{
-    for (int i = 0; i < LINES; i++)
-    {
-        for (int j = 0; j < COLUMNS; j++)
-        {
-            if (boardMatrix[i][j].isNotEmpty)
-            {
-
-                int initialX1 = INITIAL_LIMIT_X + j * (BLOCK_SIZE);
-                int initialY1 = INITIAL_LIMIT_Y + i * (BLOCK_SIZE);
-                int finalX2 = initialX1 + BLOCK_SIZE;
-                int finalY2 = initialY1 + BLOCK_SIZE;
-                videoBox(initialX1, initialY1, finalX2, finalY2, boardMatrix[i][j].color, 1);
-            }
-        }
-    }
-}
-
-
-/**
  * @brief Gera uma caixa colorida na tela.
  * 
  * Esta função desenha uma caixa colorida na tela, preenchendo uma área quadrada
@@ -465,36 +433,4 @@ void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int
         }
     }
 }
-
-// /**
-//  * Desenha o tabuleiro no terminal para depuração.
-//  *
-//  * Esta função exibe o estado do tabuleiro representado pela matriz
-//  * `boardMatrix`. Cada linha do tabuleiro é numerada, e os blocos
-//  * preenchidos são representados por `#`, enquanto os espaços vazios
-//  * são representados por `.`.
-//  *
-//  * @param boardMatrix A matriz que representa o estado do tabuleiro.
-//  */
-// void drawBoardTerminal(PartTetromino boardMatrix[LINES][COLUMNS])
-// {
-//     for (int i = 0; i < LINES; i++)
-//     {
-//         printf("%.2d", i + 1);
-//         for (int j = 0; j < COLUMNS; j++)
-//         {
-//             if (boardMatrix[i][j].isNotEmpty != 0)
-//             {
-
-//                 printf("# ");
-//             }
-//             else
-//             {
-
-//                 printf(". ");
-//             }
-//         }
-//         printf("\n");
-//     }
-// }
 
