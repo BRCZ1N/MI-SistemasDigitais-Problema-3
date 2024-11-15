@@ -7,12 +7,12 @@
  * @param cor Cor da bola
  * @return void
 */
-void bola9x9 (int coordX, int coordY, short cor) {
-    video_box(coordX - 1, coordY - 4, coordX + 1, coordY - 4, cor);
-	video_box(coordX - 3, coordY - 3, coordX + 3, coordY - 2, cor);
-	video_box(coordX - 4, coordY - 1, coordX + 4, coordY + 1, cor);
-	video_box(coordX - 3, coordY + 2, coordX + 3, coordY + 3, cor);
-	video_box(coordX - 1, coordY + 4, coordX + 1, coordY + 4, cor);
+void generateBall (int coordX, int coordY, short cor) {
+    videoBox(coordX - 1, coordY - 4, coordX + 1, coordY - 4, cor, 1);
+	videoBox(coordX - 3, coordY - 3, coordX + 3, coordY - 2, cor, 1);
+	videoBox(coordX - 4, coordY - 1, coordX + 4, coordY + 1, cor, 1);
+	videoBox(coordX - 3, coordY + 2, coordX + 3, coordY + 3, cor, 1);
+	videoBox(coordX - 1, coordY + 4, coordX + 1, coordY + 4, cor, 1);
 }
 
 /**
@@ -28,7 +28,7 @@ void bola9x9 (int coordX, int coordY, short cor) {
  * @param y_point Coordenada do ponto de impacto no eixo y
  * @return 1 se houve colisão, 0 caso contrário
 */
-int detect_collision(int x_rect, int y_rect, int length_rect, int width_rect,  int x_boll, int y_boll, int ray, int *x_point, int *y_point) {
+int detectCollision(int x_rect, int y_rect, int length_rect, int width_rect,  int x_boll, int y_boll, int ray, int *x_point, int *y_point) {
 
     *x_point = x_boll;  /* Ponto de impacto em x */
     *y_point = y_boll;  /* ponto de impacto em y */
@@ -76,7 +76,7 @@ int getTypeCollision(Ball *ball, Bar *bar) {
         return 1;
 
     /* Barra e parede */
-    else if ((detect_collision(bar->coordX - BAR_SIZE, bar->coordY - BAR_WIDHT, (BAR_SIZE * 2 + 1), (BAR_WIDHT * 2 + 1),
+    else if ((detectCollision(bar->coordX - BAR_SIZE, bar->coordY - BAR_WIDHT, (BAR_SIZE * 2 + 1), (BAR_WIDHT * 2 + 1),
             ball->ballPositionX, ball->ballPositionY, COLLISION_RADIUS, &x_point, &y_point) == 1) &&
             ((ball->ballPositionX - COLLISION_RADIUS == WALL_WIDHT_X) ||
              (ball->ballPositionX + COLLISION_RADIUS == (SCREEN_X - WALL_WIDHT_X)))) 
@@ -92,7 +92,7 @@ int getTypeCollision(Ball *ball, Bar *bar) {
         return 3;
 
     /* Colisões na barra */
-    else if ((detect_collision(bar->coordX - BAR_SIZE, bar->coordY - BAR_WIDHT, (BAR_SIZE * 2 + 1), 
+    else if ((detectCollision(bar->coordX - BAR_SIZE, bar->coordY - BAR_WIDHT, (BAR_SIZE * 2 + 1), 
             (BAR_WIDHT * 2 + 1), ball->ballPositionX, ball->ballPositionY, COLLISION_RADIUS, &x_point, &y_point)) == 1)
         return 4;
 
@@ -180,7 +180,7 @@ void moveBall(Ball *ball, Bar *bar) {
             }
         }
 
-        // Encontrar o lado que houve a clisão
+        // Encontrar o lado que houve a colisão
         if ((ball->ballPositionX - COLLISION_RADIUS == WALL_WIDHT_X)) {  // Esquerdo
             if (ball->ballSpeedX < 0){
                 ball->ballSpeedX = -ball->ballSpeedX;
