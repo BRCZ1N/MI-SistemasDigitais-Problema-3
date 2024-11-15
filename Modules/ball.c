@@ -1,9 +1,3 @@
-/**
- * @file ball.c
- * @date 2021-10-17
- * @brief Arquivo que contém as funções para movimentar, verificar colisões e exibir a bola
-*/
-
 #include "prototype.h"
 
 /**
@@ -65,7 +59,6 @@ int detect_collision(int x_rect, int y_rect, int length_rect, int width_rect,  i
 /**
  * Função para verificar o tipo de colisão
  * @param ball Bola
- * @param blocksList Lista de blocos
  * @param bar Barra
  * @return 1 para colisões em  x e y, 2 para colisões em x, 3 para colisões em y, 4 para colisões na barra, -1 caso contrário
 */
@@ -127,7 +120,6 @@ void getVelcBall(Ball *ball, Bar *bar){
 /**
  * Função para pegar o próximo movimento da bola
  * @param ball Bola
- * @param blocksList Lista de blocos
  * @param bar Barra
  * @return 1 para colisões em  x e y, 2 para colisões em x, 3 para colisões em y, 4 para colisões na barra, -1 caso contrário
 */
@@ -169,7 +161,6 @@ int getMoveBall(Ball *ball, Bar *bar) {
 /**
  * Função para mover a bola
  * @param ball Bola
- * @param blocksList Lista de blocos
  * @param bar Barra
  * @return void
 */

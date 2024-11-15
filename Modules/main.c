@@ -47,11 +47,6 @@ void execTetris()
     int buttons, buttonValue, buttonValueRotate;
     int16_t mg_per_lsb = 4;
 
-    srand(time(NULL));
-
-    Tetromino currentTetromino;
-    PartTetromino boardMatrix[LINES][COLUMNS], OldboardMatrix[LINES][COLUMNS];
-
     int dx = 0, dy = 1, moved = 1, score, hscore = 0, old_score;
     char text_over[4] = "over";
     char text_paused[6] = "paused";
