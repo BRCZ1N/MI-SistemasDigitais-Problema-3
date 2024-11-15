@@ -69,7 +69,6 @@ void execTetris()
         while (!checkGameOver(boardMatrix, &currentTetromino))
         {
             buttonValue = buttonRead();
-            clearBoard(boardMatrix);
             gameField(score, hscore);
             changePauseState(&pointerStateGame, &buttonValue);
             buttonValue = 15;

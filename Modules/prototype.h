@@ -19,31 +19,45 @@
 #include "acelerometro.h"
 #include <unistd.h>
 
+
+// // Lógica do layout
+// void phrase           (int coordX, int coordY, char *list, int lenList, short cor);
+// void write_score      (int coordX, int coordY, int score);
+// void screen_defeat    (int score);
+// void screen_victory   ();
+// void create_menu      ();
+// void game_field       (Block blocksList[], int score, int state_game);
+
+// // Escrita na tela
+// void title            (int coordX, int coordY);
+// void alphanumeric     (int coordX, int coordY, char caracter, short cor);
+ 
+// // Bola
+// int  detect_collision (int x_rect, int y_rect, int length_rect, int width_rect,  
+//                       int x_boll, int y_boll, int ray, int *x_point, int *y_point);
+// int  getTypeCollision (Ball *ball, Block blocksList[], Bar *bar);
+// int  getMoveBall      (Ball *ball, Block blocksList[], Bar *bar);
+// void moveBall         (Ball *ball, Block blocksList[], Bar *bar);
+
+// // Barra
+// void moveBar          (Bar *bar, int accelX);
+
+// // Botões
+// void change_state     (int *pointer_state, int *pointer_buttons);
+
+
 void execTetris();
-int checkGameOver(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino); 
+//int checkGameOver(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino); 
 void generatePhrase(int coordX, int coordY, char *list, int lenList, short cor);
 void drawScore(int coordX, int coordY, int score); 
 void gameField(int score, int hscore); 
 void generateChar(int coordX, int coordY, char caracter, short cor); 
 void changeGameState(int *pointer_state, int *pointer_buttons); 
-void initBoard(PartTetromino boardMatrix[LINES][COLUMNS]); 
-int verifyCollision(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino); 
-void fixTetromino(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino, int x, int y); 
-void removeFullLines(PartTetromino boardMatrix[LINES][COLUMNS], int *score); 
-void drawBoard(PartTetromino boardMatrix[LINES][COLUMNS]); 
-void drawBoardTerminal(PartTetromino boardMatrix[LINES][COLUMNS]); 
-void drawTetrominoTerminal(Tetromino tetromino); 
-void moveTetromino(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino, int dx, int dy, int *moved); 
-void generateQPattern(Tetromino *tetromino); 
-void generateLPattern(Tetromino *tetromino); 
-void generateIPattern(Tetromino *tetromino); 
-void gerarIPatternRotate(Tetromino *tetromino); 
-void generateTetromino(Tetromino *tetromino); 
-void initTetromino(Tetromino *tetromino); 
-void clearTetromino(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino); 
+//int verifyCollision(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino); 
+//void drawBoard(PartTetromino boardMatrix[LINES][COLUMNS]); 
+//void drawBoardTerminal(PartTetromino boardMatrix[LINES][COLUMNS]); 
 int buttonRead(); 
 void gameOver();
-void clearBoard(PartTetromino boardMatrix[LINES][COLUMNS]);
 void changePauseState(int *pointerStateGame, int *pointerButtons); 
 extern int closeGpuMapping();
 extern int gpuMapping();
@@ -58,7 +72,6 @@ void videoClear();
 void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int blockLength);
 int charToIndex(char c);
 void printChar(int coordX, int coordY, char caracter, short color);
-void resetoldBoard(PartTetromino boardMatrix[LINES][COLUMNS], PartTetromino oldboardMatrix[LINES][COLUMNS]);
 void gamePause();
 
 // Variáveis globais para o acelerômetro

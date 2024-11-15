@@ -377,33 +377,6 @@ void drawBoard(PartTetromino boardMatrix[LINES][COLUMNS])
     }
 }
 
-/**
- * @brief Limpa o tabuleiro.
- * 
- * Esta função percorre a matriz do tabuleiro e limpa cada bloco, definindo-o como vazio.
- * 
- * @param boardMatrix A matriz que representa o estado do tabuleiro, onde cada
- *                    elemento contém informações sobre o bloco, incluindo
- *                    sua cor e se está vazio ou não.
- */
-void clearBoard(PartTetromino boardMatrix[LINES][COLUMNS])
-{
-    for (int i = 0; i < LINES; i++)
-    {
-        for (int j = 0; j < COLUMNS; j++)
-        {
-            if (boardMatrix[i][j].isNotEmpty)
-            {
-
-                int initialX1 = INITIAL_LIMIT_X + j * (BLOCK_SIZE);
-                int initialY1 = INITIAL_LIMIT_Y + i * (BLOCK_SIZE);
-                int finalX2 = initialX1 + BLOCK_SIZE;
-                int finalY2 = initialY1 + BLOCK_SIZE;
-                videoBox(initialX1, initialY1, finalX2, finalY2, 0, 1);
-            }
-        }
-    }
-}
 
 /**
  * @brief Gera uma caixa colorida na tela.
@@ -493,65 +466,35 @@ void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int
     }
 }
 
-/**
- * Desenha o tabuleiro no terminal para depuração.
- *
- * Esta função exibe o estado do tabuleiro representado pela matriz
- * `boardMatrix`. Cada linha do tabuleiro é numerada, e os blocos
- * preenchidos são representados por `#`, enquanto os espaços vazios
- * são representados por `.`.
- *
- * @param boardMatrix A matriz que representa o estado do tabuleiro.
- */
-void drawBoardTerminal(PartTetromino boardMatrix[LINES][COLUMNS])
-{
-    for (int i = 0; i < LINES; i++)
-    {
-        printf("%.2d", i + 1);
-        for (int j = 0; j < COLUMNS; j++)
-        {
-            if (boardMatrix[i][j].isNotEmpty != 0)
-            {
+// /**
+//  * Desenha o tabuleiro no terminal para depuração.
+//  *
+//  * Esta função exibe o estado do tabuleiro representado pela matriz
+//  * `boardMatrix`. Cada linha do tabuleiro é numerada, e os blocos
+//  * preenchidos são representados por `#`, enquanto os espaços vazios
+//  * são representados por `.`.
+//  *
+//  * @param boardMatrix A matriz que representa o estado do tabuleiro.
+//  */
+// void drawBoardTerminal(PartTetromino boardMatrix[LINES][COLUMNS])
+// {
+//     for (int i = 0; i < LINES; i++)
+//     {
+//         printf("%.2d", i + 1);
+//         for (int j = 0; j < COLUMNS; j++)
+//         {
+//             if (boardMatrix[i][j].isNotEmpty != 0)
+//             {
 
-                printf("# ");
-            }
-            else
-            {
+//                 printf("# ");
+//             }
+//             else
+//             {
 
-                printf(". ");
-            }
-        }
-        printf("\n");
-    }
-}
+//                 printf(". ");
+//             }
+//         }
+//         printf("\n");
+//     }
+// }
 
-/**
- * Desenha o padrão do tetromino no terminal para depuração.
- *
- * Esta função exibe o padrão atual do tetromino passado como
- * argumento, utilizando `#` para representar os blocos preenchidos
- * e `.` para os espaços vazios. O padrão é exibido de acordo com
- * a rotação atual do tetromino.
- *
- * @param tetromino O tetromino a ser desenhado.
- */
-void drawTetrominoTerminal(Tetromino tetromino)
-{
-
-    printf("Padrao:\n");
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            if (tetromino.pattern[tetromino.currentRotation][i][j] != 0)
-            {
-                printf("# ");
-            }
-            else
-            {
-                printf(". ");
-            }
-        }
-        printf("\n");
-    }
-}
