@@ -111,7 +111,7 @@ int checkEndGame(int *scoreJ1, int *scoreJ2)
  * @param score Pontuação
  * @return void
  */
-void resetData(Ball *ball, Bar *bar, int *scoreJ1, int *scoreJ2)
+void resetData(Ball *ball, Bar *barJ1, Bar *barJ2, int *scoreJ1, int *scoreJ2)
 {
 
     ball->ballPositionX = SCREEN_X / 2;
@@ -120,8 +120,10 @@ void resetData(Ball *ball, Bar *bar, int *scoreJ1, int *scoreJ2)
     ball->ballSpeedY = 1;
     ball->collision = -1;
 
-    bar->coordX = SCREEN_X / 2;
-    bar->coordY = SCREEN_Y - 20;
+    barJ1->coordX = SCREEN_X / 2;
+    barJ1->coordY = SCREEN_Y - 20;
+    barJ2->coordX = SCREEN_X / 2;
+    barJ2->coordY = SCREEN_Y - 20;
 
     *scoreJ1 = 0;
     *scoreJ2 = 0;
@@ -130,21 +132,22 @@ void resetData(Ball *ball, Bar *bar, int *scoreJ1, int *scoreJ2)
 int execPong()
 {
 
-    int stateGame, buttons;
+    int stateGame, buttons, velX = 1;
     buttons = buttonRead();
 
     /* Inicializar os elementos do jogo */
     int scoreJ1, scoreJ2;
     Ball ball;
-    Bar bar;
+    Bar barJ1;
+    Bar barJ2;
 
     /*Loop principal do jogo*/
     while (1)
     {
 
         /*Posiciona elementos e iniciar a maquina de estado da tela*/
-        stateGame = 0;
-        resetData(&ball, &bar, &scoreJ1, &scoreJ2);
+        stateGame = 1;
+        resetData(&ball, &barJ1, &barJ2, &scoreJ1, &scoreJ2);
 
         /*Loop da patida do jogo*/
         while (checkEndGame(&scoreJ1, &scoreJ2))
@@ -159,57 +162,54 @@ int execPong()
             { // Tela inicial
 
                 /*Desenhar elementos do jogo*/
-                resetData(&ball, &bar, &scoreJ1, &scoreJ2);
-                create_menu();
-
+                resetData(&ball, &barJ1, &barJ2, &scoreJ1, &scoreJ2);
+                screenMenu();
             }
             else if (stateGame == 1)
             { // Tela do jogo
 
                 /*Desenhar elementos do jogo*/
-                //gameField(blocksList, score, stateGame);
-                //bola9x9(ball.ballPositionX, ball.ballPositionY, 0xffe0);
-                videoBox(bar.coordX - BAR_SIZE, bar.coordY - BAR_WIDHT, bar.coordX + BAR_SIZE, bar.coordY + BAR_WIDHT, 0xfc18, 1);
+                // gameField(blocksList, score, stateGame);
+                // bola9x9(ball.ballPositionX, ball.ballPositionY, 0xffe0);
+                videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_RED, 1);
+                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_RED, 1);
 
                 /*Movimentação dos elementos do jogo*/
-                //moveBar(&bar, velX);
-                moveBall(&ball, &bar);
-
+                moveBar(&barJ1, velX);
+                moveBar(&barJ2, velX);
+                moveBall(&ball, &barJ1);
+                moveBall(&ball, &barJ2);
             }
             else if (stateGame == 2)
             { // Estado de pausa
 
                 /*Desenhar elementos do jogo*/
-                //gameField(score, stateGame);
-                //bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
-                videoBox(bar.coordX - BAR_SIZE, bar.coordY - BAR_WIDHT, bar.coordX + BAR_SIZE, bar.coordY + BAR_WIDHT, 0xFC18, 1);
-
+                // gameField(score, stateGame);
+            
             }
             else if (stateGame == 3)
             { // Tela de pause/exit
 
                 /*Desenhar elementos do jogo*/
-                //gameField(scoreJ1, scoreJ2, stateGame);
-                //bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
-                videoBox(bar.coordX - BAR_SIZE, bar.coordY - BAR_WIDHT, bar.coordX + BAR_SIZE, bar.coordY + BAR_WIDHT, 0xFC18, 1);
-               
+                // gameField(scoreJ1, scoreJ2, stateGame);
+                // bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
             }
         }
         /*Finalização do jogo*/
 
-        if (checkLose(&ball) == 0)
-        { // Se o jogador perdeu
-            do
-            {
-                buttons = buttonRead(); // Aguarda o jogador apertar o botão 1 para voltar ao menu
-                //screenscreenGameOver(score);
+        // if (checkLose(&ball) == 0)
+        // { // Se o jogador perdeu
+        //     do
+        //     {
+        //         buttons = buttonRead(); // Aguarda o jogador apertar o botão 1 para voltar ao menu
+        //         // screenscreenGameOver(score);
 
-            } while (buttons != 1);
-        }
-        else
-        { // Se o jogador ganhou
-            screen_victory();
-        }
+        //     } while (buttons != 1);
+        // }
+        // else
+        // { // Se o jogador ganhou
+        //     screen_victory();
+        // }
     }
 
     return 0;

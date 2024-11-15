@@ -45,7 +45,7 @@
 // // Botões
 // void change_state     (int *pointer_state, int *pointer_buttons);
 
-
+void screenMenu();
 void gameField(int score, int hscore); 
 void generateChar(int coordX, int coordY, char caracter, short cor); 
 void changeGameState(int *pointer_state, int *pointer_buttons); 
