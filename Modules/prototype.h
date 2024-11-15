@@ -46,10 +46,6 @@
 // void change_state     (int *pointer_state, int *pointer_buttons);
 
 
-void execTetris();
-//int checkscreenGameOver(PartTetromino boardMatrix[LINES][COLUMNS], Tetromino *tetromino); 
-void generatePhrase(int coordX, int coordY, char *list, int lenList, short cor);
-void drawScore(int coordX, int coordY, int score); 
 void gameField(int score, int hscore); 
 void generateChar(int coordX, int coordY, char caracter, short cor); 
 void changeGameState(int *pointer_state, int *pointer_buttons); 

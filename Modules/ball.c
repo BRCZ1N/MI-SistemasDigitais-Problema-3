@@ -28,7 +28,7 @@ void bola9x9 (int coordX, int coordY, short cor) {
  * @param y_point Coordenada do ponto de impacto no eixo y
  * @return 1 se houve colisão, 0 caso contrário
 */
-int detect_collision(int x_rect, int y_rect, int length_rect, int width_rect,  int x_boll, int y_boll, int ray, int *x_point, int *y_point) {
+int detectCollision(int x_rect, int y_rect, int length_rect, int width_rect,  int x_boll, int y_boll, int ray, int *x_point, int *y_point) {
 
     *x_point = x_boll;  /* Ponto de impacto em x */
     *y_point = y_boll;  /* ponto de impacto em y */
@@ -76,7 +76,7 @@ int getTypeCollision(Ball *ball, Bar *bar) {
         return 1;
 
     /* Barra e parede */
-    else if ((detect_collision(bar->coordX - BAR_SIZE, bar->coordY - BAR_WIDHT, (BAR_SIZE * 2 + 1), (BAR_WIDHT * 2 + 1),
+    else if ((detectCollision(bar->coordX - BAR_SIZE, bar->coordY - BAR_WIDHT, (BAR_SIZE * 2 + 1), (BAR_WIDHT * 2 + 1),
             ball->ballPositionX, ball->ballPositionY, COLLISION_RADIUS, &x_point, &y_point) == 1) &&
             ((ball->ballPositionX - COLLISION_RADIUS == WALL_WIDHT_X) ||
              (ball->ballPositionX + COLLISION_RADIUS == (SCREEN_X - WALL_WIDHT_X)))) 
@@ -92,7 +92,7 @@ int getTypeCollision(Ball *ball, Bar *bar) {
         return 3;
 
     /* Colisões na barra */
-    else if ((detect_collision(bar->coordX - BAR_SIZE, bar->coordY - BAR_WIDHT, (BAR_SIZE * 2 + 1), 
+    else if ((detectCollision(bar->coordX - BAR_SIZE, bar->coordY - BAR_WIDHT, (BAR_SIZE * 2 + 1), 
             (BAR_WIDHT * 2 + 1), ball->ballPositionX, ball->ballPositionY, COLLISION_RADIUS, &x_point, &y_point)) == 1)
         return 4;
 

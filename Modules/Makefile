@@ -1,5 +1,5 @@
-all:
-	gcc -Wall -w main.c ball.c acelerometro.c buttons.c draw.c layouts.c tetromino.c GpuLib.s -o tetris -pthread -lintelfpgaup -std=c99
-	sudo ./tetris
+All:
+	gcc -Wall -w main.c ball.c bar.c acelerometro.c buttons.c draw.c layouts.c GpuLib.s -o pong -pthread -std=c99
+	sudo ./pong
 
 	
