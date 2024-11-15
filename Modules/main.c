@@ -133,3 +133,10 @@ void execTetris()
     }
     closeGpuMapping();
 }
+
+int checkEndGame(int *scoreJ1,int *scoreJ2)
+{
+    if (*scoreJ1 == 3 || *scoreJ2 == 3)
+        return 1;
+    return 0;
+}

@@ -35,3 +35,71 @@ void changePauseState(int *pointerStateGame, int *pointerButtons)
         break;
     }
 }
+
+
+// /**
+//  * Alteração do estado atual do jogo.
+//  * 
+//  * Utiliza o estado atual do jogo e as alterações dos sinais dos botões para indicar qual será o próximo estado.
+//  * 
+//  * @param pointer_state   Ponteiro indicando o endereço que armazena o estado atual do jogo.
+//  * @param pointerButtons Ponteiro indicando o endereço que armazena o sinais lidos dos botões.
+//  * @return void
+//  */
+// void changeState(int *pointerStateGame, int *pointerButtons) {
+
+//     /*
+//         state = 0; tela inicial
+//         state = 1; jogo rodando
+//         state = 2; em pausa com opção de play
+//         state = 3; em pausa com opção de exit
+//     */
+
+//     switch (*pointerStateGame) {
+
+//     case 0:
+
+//         if (*pointerButtons == 1) {
+
+//             *pointerStateGame = 1;
+//         }
+
+//         break;
+
+//     case 1:
+
+//         if (*pointerButtons == 2) {
+
+//             *pointerStateGame = 2;
+//         }
+
+//         break;
+
+//     case 2:
+
+//         if (*pointerButtons == 1) {
+
+//             *pointerStateGame = 3;
+//         }
+//         else if (*pointerButtons == 2) {
+
+//             *pointerStateGame = 1;
+//         }
+
+//         break;
+
+//     case 3:
+
+//         if (*pointerButtons == 1) {
+
+//             *pointerStateGame = 2;
+//         }
+
+//         else if (*pointerButtons == 2) {
+	
+//             *pointerStateGame = 0;
+//         }
+
+//         break;
+//     }
+// }
