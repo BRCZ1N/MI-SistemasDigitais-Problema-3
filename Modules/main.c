@@ -19,7 +19,7 @@ int main()
 
     pthread_create(&thread1, NULL, execAccel, NULL);
 
-    pthread_create(&thread2, NULL, execTetris, NULL);
+    pthread_create(&thread2, NULL, execPong, NULL);
 
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
@@ -41,97 +41,176 @@ int main()
  * @note A função utiliza variáveis globais para o controle do estado
  *       do jogo e acesso a recursos de vídeo.
  */
-void execTetris()
-{
+// void execTetris()
+// {
 
-    int buttons, buttonValue, buttonValueRotate;
-    int16_t mg_per_lsb = 4;
+//     int16_t mg_per_lsb = 4;
+//     int dx = 0, dy = 1, moved = 1, scoreJ1, scoreJ2, hscore = 0, old_score, buttons;
+//     gpuMapping();
 
-    int dx = 0, dy = 1, moved = 1, score, hscore = 0, old_score;
-    char text_over[4] = "over";
-    char text_paused[6] = "paused";
-    char text_game[4] = "game";
-    gpuMapping();
+//     while (1)
+//     {
+//         int stateGame = 1;
 
-    while (1)
-    {
-        score = 0;
-        resetBoard(boardMatrix);
-        initTetromino(&currentTetromino);
-        int pointerStateGame = 1;
-        videoClear();
+//         videoClear();
 
-        while (!checkGameOver(boardMatrix, &currentTetromino))
-        {
-            buttonValue = buttonRead();
-            gameField(score, hscore);
-            changePauseState(&pointerStateGame, &buttonValue);
-            buttonValue = 15;
+//         while (!checkEndGame(&scoreJ1, &scoreJ2))
+//         {
+//             buttons = buttonRead();
+//             // gameField(score, hscore);
+//             changeState(&stateGame, &buttons);
 
-            if (pointerStateGame == 1)
-            {
-				printChar(10, 59, 'P', COLOR_BLACK);
-                printChar(20, 59, 'A', COLOR_BLACK);
-                printChar(30, 59, 'U', COLOR_BLACK);
-                printChar(40, 59, 'S', COLOR_BLACK);
-                printChar(50, 59, 'E', COLOR_BLACK);
-                pthread_mutex_lock(&lock);
-                if (axis_x * mg_per_lsb >= 100)
-                {
+//             // if (stateGame == 1)
+//             // {
+//             //     pthread_mutex_lock(&lock);
+//             //     if (axis_x * mg_per_lsb >= 100)
+//             //     {
 
-                    dx = 1;
-                }
-                else if (axis_x * mg_per_lsb <= -100)
-                {
+//             //         dx = 1;
+//             //     }
+//             //     else if (axis_x * mg_per_lsb <= -100)
+//             //     {
 
-                    dx = -1;
-                }
-                else
-                {
+//             //         dx = -1;
+//             //     }
+//             //     else
+//             //     {
 
-                    dx = 0;
-                }
-                pthread_mutex_unlock(&lock);
-                moveTetromino(boardMatrix, &currentTetromino, dx, dy, &moved);
-                dx = 0;
-                if (!moved)
-                {
-                    old_score = score;
-                    removeFullLines(boardMatrix, &score);
-                    if(old_score != score){
-                        videoClear();
-                    }
+//             //         dx = 0;
+//             //     }
+//             //     pthread_mutex_unlock(&lock);
+//             // }
+//             // else
+//             // {
+//             //     screenGamePause();
+//             // }
+//         }
 
-                    gameField(score, hscore);
-                    initTetromino(&currentTetromino);
-                }
-               
-                drawBoard(boardMatrix);
-                usleep(450000);
+//         videoClear();
+//         screenGameOver();
+//         usleep(650000);
+//         if (score > hscore)
+//         {
+//             hscore = score;
+//         }
+//     }
+//     closeGpuMapping();
+// }
 
-            }
-            else
-            {
-                gamePause();
-                drawBoard(boardMatrix);
-                usleep(450000);
-            }
-
-        }
-
-        videoClear();
-        gameOver();
-        usleep(650000);
-        if (score > hscore){
-            hscore = score;
-        }
-    }
-    closeGpuMapping();
-}
-
-int checkEndGame(int *scoreJ1,int *scoreJ2)
+int checkEndGame(int *scoreJ1, int *scoreJ2)
 {
     if (*scoreJ1 == 3 || *scoreJ2 == 3)
         return 1;
+    return 0;
+}
+
+/**
+ * Função para posicionar os elementos no jogo ao iniciar uma partida
+ * @param ball Bola
+ * @param bar Barra
+ * @param score Pontuação
+ * @return void
+ */
+void resetData(Ball *ball, Bar *bar, int *scoreJ1, int *scoreJ2)
+{
+
+    ball->ballPositionX = SCREEN_X / 2;
+    ball->ballPositionY = SCREEN_Y - 120;
+    ball->ballSpeedX = 1;
+    ball->ballSpeedY = 1;
+    ball->collision = -1;
+
+    bar->coordX = SCREEN_X / 2;
+    bar->coordY = SCREEN_Y - 20;
+
+    *scoreJ1 = 0;
+    *scoreJ2 = 0;
+}
+
+int execPong()
+{
+
+    int stateGame, buttons;
+    buttons = buttonRead();
+
+    /* Inicializar os elementos do jogo */
+    int scoreJ1, scoreJ2;
+    Ball ball;
+    Bar bar;
+
+    /*Loop principal do jogo*/
+    while (1)
+    {
+
+        /*Posiciona elementos e iniciar a maquina de estado da tela*/
+        stateGame = 0;
+        resetData(&ball, &bar, &scoreJ1, &scoreJ2);
+
+        /*Loop da patida do jogo*/
+        while (checkEndGame(&scoreJ1, &scoreJ2))
+        { // Enquanto o jogador não perdeu e não ganhou o jogo
+
+            // Leitura dos botões e mudança de estado
+            buttons = buttonRead();
+            changeState(&stateGame, &buttons);
+
+            /* switch para mudar a tela de acordo com o estado */
+            if (stateGame == 0)
+            { // Tela inicial
+
+                /*Desenhar elementos do jogo*/
+                resetData(&ball, &bar, &scoreJ1, &scoreJ2);
+                create_menu();
+
+            }
+            else if (stateGame == 1)
+            { // Tela do jogo
+
+                /*Desenhar elementos do jogo*/
+                //gameField(blocksList, score, stateGame);
+                //bola9x9(ball.ballPositionX, ball.ballPositionY, 0xffe0);
+                videoBox(bar.coordX - BAR_SIZE, bar.coordY - BAR_WIDHT, bar.coordX + BAR_SIZE, bar.coordY + BAR_WIDHT, 0xfc18, 1);
+
+                /*Movimentação dos elementos do jogo*/
+                //moveBar(&bar, velX);
+                moveBall(&ball, &bar);
+
+            }
+            else if (stateGame == 2)
+            { // Estado de pausa
+
+                /*Desenhar elementos do jogo*/
+                //gameField(score, stateGame);
+                //bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
+                videoBox(bar.coordX - BAR_SIZE, bar.coordY - BAR_WIDHT, bar.coordX + BAR_SIZE, bar.coordY + BAR_WIDHT, 0xFC18, 1);
+
+            }
+            else if (stateGame == 3)
+            { // Tela de pause/exit
+
+                /*Desenhar elementos do jogo*/
+                //gameField(scoreJ1, scoreJ2, stateGame);
+                //bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
+                videoBox(bar.coordX - BAR_SIZE, bar.coordY - BAR_WIDHT, bar.coordX + BAR_SIZE, bar.coordY + BAR_WIDHT, 0xFC18, 1);
+               
+            }
+        }
+        /*Finalização do jogo*/
+
+        if (checkLose(&ball) == 0)
+        { // Se o jogador perdeu
+            do
+            {
+                buttons = buttonRead(); // Aguarda o jogador apertar o botão 1 para voltar ao menu
+                //screenscreenGameOver(score);
+
+            } while (buttons != 1);
+        }
+        else
+        { // Se o jogador ganhou
+            screen_victory();
+        }
+    }
+
     return 0;
 }
