@@ -1,8 +1,8 @@
 #ifndef CONSTANTS_H_INCLUDED
 #define CONSTANTS_H_INCLUDED
 
-#define SCREEN_X                320
-#define SCREEN_Y                240
+#define SCREEN_X                80
+#define SCREEN_Y                60
 #define BLOCK_SIZE              8
 #define INITIAL_LIMIT_X         112
 #define FINAL_LIMIT_X           212

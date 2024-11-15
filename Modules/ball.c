@@ -7,7 +7,7 @@
  * @param cor Cor da bola
  * @return void
 */
-void bola9x9 (int coordX, int coordY, short cor) {
+void generateBall (int coordX, int coordY, short cor) {
     videoBox(coordX - 1, coordY - 4, coordX + 1, coordY - 4, cor, 1);
 	videoBox(coordX - 3, coordY - 3, coordX + 3, coordY - 2, cor, 1);
 	videoBox(coordX - 4, coordY - 1, coordX + 4, coordY + 1, cor, 1);

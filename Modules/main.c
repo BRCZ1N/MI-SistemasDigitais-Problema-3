@@ -170,9 +170,9 @@ int execPong()
 
                 /*Desenhar elementos do jogo*/
                 // gameField(blocksList, score, stateGame);
-                // bola9x9(ball.ballPositionX, ball.ballPositionY, 0xffe0);
+                bola9x9(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
                 videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_RED, 1);
-                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_RED, 1);
+                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_BLUE, 1);
 
                 /*Movimentação dos elementos do jogo*/
                 moveBar(&barJ1, velX);
