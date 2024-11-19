@@ -397,9 +397,9 @@ Color convertHexToRgb(int colorHex)
  */
 void videoClear(){
 
-    for (int i = 0; i < SCREEN_X; i++)
+    for (int i = 0; i < SCREEN_X/4; i++)
     {
-        for (int j = 0; j < SCREEN_Y; j++)
+        for (int j = 0; j < SCREEN_Y/4; j++)
         {
             while (1)
             {
@@ -418,9 +418,9 @@ void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int
 {
 
     Color colorRGB = convertHexToRgb(color);
-    for (int i = initial_x; i < end_x; i++)
+    for (int i = initial_x/4; i < end_x/4; i++)
     {
-        for (int j = initial_y; j < end_y; j++)
+        for (int j = initial_y/4; j < end_y/4; j++)
         {
             while (1)
             {
