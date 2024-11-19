@@ -99,7 +99,7 @@ int main()
 
 int checkEndGame(int *scoreJ1, int *scoreJ2)
 {
-    if (*scoreJ1 == 3 || *scoreJ2 == 3)
+    if (*scoreJ1 < 3 || *scoreJ2 < 3)
         return 1;
     return 0;
 }
@@ -121,9 +121,9 @@ void resetData(Ball *ball, Bar *barJ1, Bar *barJ2, int *scoreJ1, int *scoreJ2)
     ball->collision = -1;
 
     barJ1->coordX = SCREEN_X / 2;
-    barJ1->coordY = SCREEN_Y - 20;
+    barJ1->coordY = SCREEN_Y - 5;
     barJ2->coordX = SCREEN_X / 2;
-    barJ2->coordY = SCREEN_Y - 20;
+    barJ2->coordY = SCREEN_Y - 55;
 
     *scoreJ1 = 0;
     *scoreJ2 = 0;
@@ -132,6 +132,8 @@ void resetData(Ball *ball, Bar *barJ1, Bar *barJ2, int *scoreJ1, int *scoreJ2)
 int execPong()
 {
 
+    gpuMapping();
+    int16_t mg_per_lsb = 4;
     int stateGame, buttons, velX = 1;
     buttons = buttonRead();
 
@@ -168,17 +170,35 @@ int execPong()
             else if (stateGame == 1)
             { // Tela do jogo
 
+                videoClear();
                 /*Desenhar elementos do jogo*/
                 // gameField(blocksList, score, stateGame);
-                bola9x9(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
-                videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_RED, 1);
-                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_BLUE, 1);
+                //generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
+                videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, 1);
+                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, 1);
 
                 /*Movimentação dos elementos do jogo*/
+                pthread_mutex_lock(&lock);
+                if (axis_x * mg_per_lsb >= 100)
+                {
+
+                    velX = 1;
+                }
+                else if (axis_x * mg_per_lsb <= -100)
+                {
+
+                    velX = -1;
+                }
+                else
+                {
+
+                    velX = 0;
+                }
+                pthread_mutex_unlock(&lock);
                 moveBar(&barJ1, velX);
                 moveBar(&barJ2, velX);
-                moveBall(&ball, &barJ1);
-                moveBall(&ball, &barJ2);
+                //moveBall(&ball, &barJ1);
+                //moveBall(&ball, &barJ2);
             }
             else if (stateGame == 2)
             { // Estado de pausa
@@ -212,5 +232,6 @@ int execPong()
         // }
     }
 
+    closeGpuMapping();
     return 0;
 }

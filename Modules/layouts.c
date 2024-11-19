@@ -117,26 +117,26 @@ void screenGamePause()
  * @param score Valor do score alcançado na rodada.
  * @return void
  */
-void screenDefeat (int score) {
+// void screenDefeat (int score) {
 
-    char defeat_message[9] = "game over";
-    char score_message[6] = "score:";
-    int sub_coordX = 0;
+//     char defeat_message[9] = "game over";
+//     char score_message[6] = "score:";
+//     int sub_coordX = 0;
 
-    if (score > 100) {
+//     if (score > 100) {
 
-        sub_coordX = 10; 
-    }
-    else if (score > 10) {
+//         sub_coordX = 10; 
+//     }
+//     else if (score > 10) {
 
-        sub_coordX = 5;
-    }
+//         sub_coordX = 5;
+//     }
 
-    phrase(100, 110, defeat_message, 9, COLOR_RED);
-    phrase(110 - sub_coordX, 145, score_message, 6, COLOR_YELLOW);
-    write_score(188 - sub_coordX,  145, score);
+//     phrase(100, 110, defeat_message, 9, COLOR_RED);
+//     phrase(110 - sub_coordX, 145, score_message, 6, COLOR_YELLOW);
+//     write_score(188 - sub_coordX,  145, score);
 
-}
+// }
 
 /**
  * Exibe a tela inicial do jogo

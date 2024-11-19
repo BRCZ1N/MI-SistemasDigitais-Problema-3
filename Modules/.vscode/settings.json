@@ -2,6 +2,7 @@
     "files.associations": {
         "stdio.h": "c",
         "fcntl.h": "c",
-        "prototype.h": "c"
+        "prototype.h": "c",
+        "acelerometro.h": "c"
     }
 }

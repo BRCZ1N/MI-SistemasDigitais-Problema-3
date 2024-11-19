@@ -11,7 +11,7 @@
 #define WALL_WIDHT_Y            15
 #define RADIUS                  4
 #define COLLISION_RADIUS        5
-#define BAR_SIZE                30
+#define BAR_SIZE                5
 #define BAR_WIDHT               1
 
 #define COLOR_WHITE 0xFFFFFF

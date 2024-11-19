@@ -45,11 +45,13 @@
 // // Botões
 // void change_state     (int *pointer_state, int *pointer_buttons);
 
+int execPong();
 void screenMenu();
-void gameField(int score, int hscore); 
+void gameField(int stateGame);
 void generateChar(int coordX, int coordY, char caracter, short cor); 
 void changeGameState(int *pointer_state, int *pointer_buttons); 
 int buttonRead(); 
+void generateBall (int coordX, int coordY, short cor);
 void screenGameOver();
 void changePauseState(int *pointerStateGame, int *pointerButtons); 
 void generateBox(int column, int line, int R, int G, int B, int length);
