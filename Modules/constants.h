@@ -3,15 +3,11 @@
 
 #define SCREEN_X                80
 #define SCREEN_Y                60
-#define BLOCK_SIZE              1
-#define ENABLE                  1       
-#define INITIAL_LIMIT_X         112
-#define FINAL_LIMIT_X           212
-#define INITIAL_LIMIT_Y         18
-#define WALL_WIDHT_X            3
-#define WALL_WIDHT_Y            15
-#define RADIUS                  4
-#define COLLISION_RADIUS        5
+#define BLOCK_SIZE              1     
+#define WALL_WIDHT_X            0
+#define WALL_WIDHT_Y            1
+#define RADIUS                  1
+#define COLLISION_RADIUS        1
 #define BAR_SIZE                5
 #define BAR_WIDHT               1
 #define MOUSEFILE "/dev/input/mice"

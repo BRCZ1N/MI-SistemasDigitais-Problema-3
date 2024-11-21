@@ -60,7 +60,7 @@ Color convertHexToRgb(int colorHex);
 void videoClear();
 int normalizeVelocity(int velX);
 void spriteTest();
-void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int blockLength, int enable);
+void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int blockLength);
 int charToIndex(char c);
 void printChar(int coordX, int coordY, char caracter, short color);
 void screenGamePause();

@@ -9,7 +9,7 @@
 */
 void generateBall (int coordX, int coordY, short cor) {
 
-    // videoBox(coordX - 1, coordY - 4, coordX + 1, coordY - 4, cor, 1);
+    videoBox(coordX, coordY, coordX+1, coordY+1, cor, 1);
 	// videoBox(coordX - 2, coordY - 2, coordX + 2, coordY - 1, cor, 1);
 	// videoBox(coordX - 4, coordY - 1, coordX + 4, coordY + 1, cor, 1);
 	// videoBox(coordX - 3, coordY + 2, coordX + 3, coordY + 3, cor, 1);

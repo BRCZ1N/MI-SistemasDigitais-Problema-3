@@ -118,10 +118,10 @@ int checkEndGame(int *scoreJ1, int *scoreJ2)
 void resetData(Ball *ball, Bar *barJ1, Bar *barJ2, int *scoreJ1, int *scoreJ2)
 {
 
-    ball->ballPositionX = SCREEN_X / 2;
-    ball->ballPositionY = SCREEN_Y - 120;
-    ball->ballSpeedX = 1;
-    ball->ballSpeedY = 1;
+    ball->ballPositionX = 320;
+    ball->ballPositionY = 240;
+    ball->ballSpeedX = 8;
+    ball->ballSpeedY = 8;
     ball->collision = -1;
 
     barJ1->coordX = SCREEN_X / 2;
@@ -135,13 +135,9 @@ void resetData(Ball *ball, Bar *barJ1, Bar *barJ2, int *scoreJ1, int *scoreJ2)
 
 int normalizeVelocity(int velX)
 {
-
-   
-
-        while (velX >= 10 || velX <= -10)
-            velX /= 10;
-        return velX;
-    
+    while (velX >= 10 || velX <= -10)
+        velX /= 10;
+    return velX;
 }
 
 int execPong()
@@ -186,29 +182,54 @@ int execPong()
             else if (stateGame == 1)
             { // Tela do jogo
 
+                /*Testes da outra branch
                 videoClear();
+                // gameField(blocksList, score, stateGame);
+                //spriteTest();
+                //Desconhecido,Sprite a ser selecionado,Bit ativacao IMPAR/PAR,CoordX,CoordY
+                //barJ1.coordX = 300;
+                //barJ1.coordY = 225;
+                //videoBox(79, 15, 81, 209, COLOR_CYAN, 1, 1); // esquerda
+                //videoBox(77, 207, 230, 209, COLOR_CYAN, 1, 1); // baixo
+                //videoBox(230, 15, 235, 209, COLOR_CYAN, 1, 1); // direita
+                //videoBox(77, 15, 230, 17, COLOR_CYAN, 1, 1); // cima
+                */
+            
+                videoClear();
+                //generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
+                while(1){ if(isFull() == 0) { setSprite(1, 9, 1, ball.ballPositionX, ball.ballPositionY); break; } }
                 /*Desenhar elementos do jogo*/
                 // gameField(blocksList, score, stateGame);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
-                videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE, ENABLE);
-                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE, ENABLE);
+                // Esquerda
+                videoBox(10, 1, 11, 58, COLOR_CYAN, BLOCK_SIZE);
+                // Baixo
+                videoBox(10, 58, 71, 59, COLOR_CYAN, BLOCK_SIZE);
+                // Direita
+                videoBox(70, 1, 71, 58, COLOR_CYAN, BLOCK_SIZE);
+                // Cima
+                videoBox(10, 1, 70, 2, COLOR_CYAN, BLOCK_SIZE);
+
+                videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
+                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
                 /*Movimentação dos elementos do jogo*/
                 pthread_mutex_lock(&lock);
-                velX = 0;
                 velX = axis_x * mg_per_lsb;
                 velX = normalizeVelocity(velX);
                 pthread_mutex_unlock(&lock);
                 pthread_mutex_lock(&lockMouse);
-                velXMouse = 0;
                 velXMouse = xMouse;
                 velXMouse = normalizeVelocity(velXMouse);
                 pthread_mutex_unlock(&lockMouse);
-                printf("VELOCIDADE X:%d",velX);
+                printf("VELOCIDADE X ACCEL:%d\n", velX);
+                printf("VELOCIDADE X MOUSE:%d\n", velXMouse);
                 usleep(16666);
                 moveBar(&barJ1, velX);
                 moveBar(&barJ2, velXMouse);
                 moveBall(&ball, &barJ1);
                 moveBall(&ball, &barJ2);
+
+                usleep(450000);
             }
             else if (stateGame == 2)
             { // Estado de pausa

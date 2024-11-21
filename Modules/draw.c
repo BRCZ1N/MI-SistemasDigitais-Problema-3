@@ -414,14 +414,8 @@ void videoClear(){
 
 }
 
-void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int blockLength, int enable)
+void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int blockLength)
 {
-
-    if(!enable){
-
-        color = 0;
-
-    }
     Color colorRGB = convertHexToRgb(color);
     for (int i = initial_x; i < end_x; i++)
     {
