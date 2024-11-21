@@ -22,6 +22,9 @@ fd:
 .global closeGpuMapping  
 .type	closeGpuMapping, %function
 
+.global	setSpriteMemory
+.type	setSpriteMemory, %function
+
 .global	isFull
 .type	isFull, %function
 
@@ -225,6 +228,33 @@ setPolygon:
     BL sendInstruction    @Salta para branch/função de envio de instrução para GPU, isto é, envia o DATA A E DATA B nos registradores R0 E R1
     POP {LR}
     BX LR
+
+setSpriteMemory:
+	PUSH {R4, LR}				
+
+	LDR R4, =400					
+	MUL R0, R0, R4					
+
+	MOV R4, #20						
+	MUL R3, R3, R4			
+	ADD R3, R2, R3					
+
+	ADD R0, R0, R3					
+	LSL R0, R0, #4					
+	ADD R0, R0, #1 					
+									
+	AND R3, R1, #0b000111000 			 
+	AND R4, R1, #0b000000111 		 	
+	LSR R1, R1, #6					
+	LSL R4, R4, #6						
+
+	ORR R1, R1, R3					
+	ORR R1, R1, R4					
+										
+	BL sendInstruction
+
+	POP {R4, LR}
+	BX LR
 
 buttonRead:
 

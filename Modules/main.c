@@ -1,6 +1,8 @@
 #include "prototype.h"
 int16_t axis_x;
+int16_t xMouse;
 pthread_mutex_t lock;
+pthread_mutex_t lockMouse;
 
 /*
  * Função principal que inicializa o ambiente do jogo Tetris.
@@ -13,7 +15,7 @@ pthread_mutex_t lock;
 int main()
 {
 
-    pthread_t thread1, thread2;
+    pthread_t thread1, thread2, thread3;
 
     pthread_mutex_init(&lock, NULL);
 
@@ -21,8 +23,10 @@ int main()
 
     pthread_create(&thread2, NULL, execPong, NULL);
 
+    pthread_create(&thread3, NULL, execMouse, NULL);
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
+    pthread_join(thread3, NULL);
 
     pthread_mutex_destroy(&lock);
 
@@ -129,12 +133,23 @@ void resetData(Ball *ball, Bar *barJ1, Bar *barJ2, int *scoreJ1, int *scoreJ2)
     *scoreJ2 = 0;
 }
 
+int normalizeVelocity(int velX)
+{
+
+   
+
+        while (velX >= 10 || velX <= -10)
+            velX /= 10;
+        return velX;
+    
+}
+
 int execPong()
 {
 
     gpuMapping();
     int16_t mg_per_lsb = 4;
-    int stateGame, buttons, velX = 1;
+    int stateGame, buttons, velX = 1, velXMouse = 1;
     buttons = buttonRead();
 
     /* Inicializar os elementos do jogo */
@@ -149,6 +164,7 @@ int execPong()
 
         /*Posiciona elementos e iniciar a maquina de estado da tela*/
         stateGame = 1;
+
         resetData(&ball, &barJ1, &barJ2, &scoreJ1, &scoreJ2);
 
         /*Loop da patida do jogo*/
@@ -173,39 +189,32 @@ int execPong()
                 videoClear();
                 /*Desenhar elementos do jogo*/
                 // gameField(blocksList, score, stateGame);
-                //generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
-                videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, 1);
-                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, 1);
-
+                // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
+                videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE, ENABLE);
+                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE, ENABLE);
                 /*Movimentação dos elementos do jogo*/
                 pthread_mutex_lock(&lock);
-                if (axis_x * mg_per_lsb >= 100)
-                {
-
-                    velX = 1;
-                }
-                else if (axis_x * mg_per_lsb <= -100)
-                {
-
-                    velX = -1;
-                }
-                else
-                {
-
-                    velX = 0;
-                }
+                velX = 0;
+                velX = axis_x * mg_per_lsb;
+                velX = normalizeVelocity(velX);
                 pthread_mutex_unlock(&lock);
+                pthread_mutex_lock(&lockMouse);
+                velXMouse = 0;
+                velXMouse = xMouse;
+                velXMouse = normalizeVelocity(velXMouse);
+                pthread_mutex_unlock(&lockMouse);
+                printf("VELOCIDADE X:%d",velX);
+                usleep(16666);
                 moveBar(&barJ1, velX);
-                moveBar(&barJ2, velX);
-                //moveBall(&ball, &barJ1);
-                //moveBall(&ball, &barJ2);
+                moveBar(&barJ2, velXMouse);
+                moveBall(&ball, &barJ1);
+                moveBall(&ball, &barJ2);
             }
             else if (stateGame == 2)
             { // Estado de pausa
 
                 /*Desenhar elementos do jogo*/
                 // gameField(score, stateGame);
-            
             }
             else if (stateGame == 3)
             { // Tela de pause/exit
