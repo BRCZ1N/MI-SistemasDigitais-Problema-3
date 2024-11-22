@@ -4,5 +4,6 @@
         "fcntl.h": "c",
         "prototype.h": "c",
         "acelerometro.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

@@ -145,7 +145,7 @@ int execPong()
 
     gpuMapping();
     int16_t mg_per_lsb = 4;
-    int stateGame, buttons, velX = 1, velXMouse = 1, buttonValue = 15;
+    int stateGame, buttons, velX = 1, velXMouse = 1, buttonValue = 15, life = 3, cima = 0, direita = 0, movVertical = 0;
     buttons = buttonRead();
 
     /* Inicializar os elementos do jogo */
@@ -164,16 +164,16 @@ int execPong()
         resetData(&ball, &barJ1, &barJ2, &scoreJ1, &scoreJ2);
 
         buttons = buttonRead();
-        buttonValue = 15; //1111 Binário todos os botões sem pressionar com lógica trocada
+        buttonValue = 15; // 1111 Binário todos os botões sem pressionar com lógica trocada
 
         /*Loop da patida do jogo*/
         while (checkEndGame(&scoreJ1, &scoreJ2))
         { // Enquanto o jogador não perdeu e não ganhou o jogo
 
-            if(buttons != 15){
+            if (buttons != 15)
+            {
 
                 buttonValue = buttons;
-
             }
 
             changeState(&stateGame, &buttonValue, &buttons);
@@ -201,13 +201,17 @@ int execPong()
                 //videoBox(230, 15, 235, 209, COLOR_CYAN, 1, 1); // direita
                 //videoBox(77, 15, 230, 17, COLOR_CYAN, 1, 1); // cima
                 */
-            
+
                 videoClear();
-                //generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
-                while(1){ if(isFull() == 0) { setSprite(1, 9, 1, ball.ballPositionX, ball.ballPositionY); break; } }
-
-
-
+                // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
+                while (1)
+                {
+                    if (isFull() == 0)
+                    {
+                        setSprite(1, 9, 1, ball.ballPositionX, ball.ballPositionY);
+                        break;
+                    }
+                }
 
                 /*Desenhar elementos do jogo*/
                 // gameField(blocksList, score, stateGame);
@@ -237,42 +241,132 @@ int execPong()
                 usleep(16666);
                 moveBar(&barJ1, velX);
                 moveBar(&barJ2, velXMouse);
-                moveBall(&ball, &barJ1);
-                moveBall(&ball, &barJ2);
 
-                usleep(450000);
-            }
-            else if (stateGame == 2)
-            { // Estado de pausa
+                ballRacketCollision(ball.ballPositionX, ball.ballPositionY, barJ1.coordX, barJ1.coordY, &cima, &direita, &movVertical);
 
-                /*Desenhar elementos do jogo*/
-                // gameField(score, stateGame);
-            }
-            else if (stateGame == 3)
-            { // Tela de pause/exit
+                if (cima == 1 && movVertical == 0)
+                {
+                    ball.ballPositionY += 1;
+                }
+                else if (movVertical == 0)
+                {
+                    ball.ballPositionY -= 1;
+                }
 
-                /*Desenhar elementos do jogo*/
-                // gameField(scoreJ1, scoreJ2, stateGame);
-                // bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
+                if (direita == 1 && movVertical == 0)
+                {
+                    ball.ballPositionX += 1;
+                }
+                else if (movVertical == 0)
+                {
+                    ball.ballPositionX -= 1;
+                }
+
+                if (movVertical == 1 && cima == 1)
+                {
+                    ball.ballPositionY += 1;
+                }
+                else if (movVertical == 1)
+                {
+                    ball.ballPositionY -= 1;
+                }
+
+                ballRacketCollision(ball.ballPositionX, ball.ballPositionY, barJ2.coordX, barJ2.coordY, &cima, &direita, &movVertical);
+
+                if (cima == 1 && movVertical == 0)
+                {
+                    ball.ballPositionY += 1;
+                }
+                else if (movVertical == 0)
+                {
+                    ball.ballPositionY -= 1;
+                }
+
+                if (direita == 1 && movVertical == 0)
+                {
+                    ball.ballPositionX += 1;
+                }
+                else if (movVertical == 0)
+                {
+                    ball.ballPositionX -= 1;
+                }
+
+                if (movVertical == 1 && cima == 1)
+                {
+                    ball.ballPositionY += 1;
+                }
+                else if (movVertical == 1)
+                {
+                    ball.ballPositionY -= 1;
+                }
+
+                ballBorderCollision(ball.ballPositionX, ball.ballPositionY, &cima, &direita, &life);
+
+                if (cima == 1 && movVertical == 0)
+                {
+                    ball.ballPositionY += 1;
+                }
+                else if (movVertical == 0)
+                {
+                    ball.ballPositionY -= 1;
+                }
+
+                if (direita == 1 && movVertical == 0)
+                {
+                    ball.ballPositionX += 1;
+                }
+                else if (movVertical == 0)
+                {
+                    ball.ballPositionX -= 1;
+                }
+
+                if (movVertical == 1 && cima == 1)
+                {
+                    ball.ballPositionY += 1;
+                }
+                else if (movVertical == 1)
+                {
+                    ball.ballPositionY -= 1;
+                }
+
+                // movimentação da bola
             }
+            // moveBall(&ball, &barJ1);
+            // moveBall(&ball, &barJ2);
+
+            usleep(450000);
         }
-        /*Finalização do jogo*/
+        else if (stateGame == 2)
+        { // Estado de pausa
 
-        // if (checkLose(&ball) == 0)
-        // { // Se o jogador perdeu
-        //     do
-        //     {
-        //         buttons = buttonRead(); // Aguarda o jogador apertar o botão 1 para voltar ao menu
-        //         // screenscreenGameOver(score);
+            /*Desenhar elementos do jogo*/
+            // gameField(score, stateGame);
+        }
+        else if (stateGame == 3)
+        { // Tela de pause/exit
 
-        //     } while (buttons != 1);
-        // }
-        // else
-        // { // Se o jogador ganhou
-        //     screen_victory();
-        // }
+            /*Desenhar elementos do jogo*/
+            // gameField(scoreJ1, scoreJ2, stateGame);
+            // bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
+        }
     }
+    /*Finalização do jogo*/
 
-    closeGpuMapping();
-    return 0;
+    // if (checkLose(&ball) == 0)
+    // { // Se o jogador perdeu
+    //     do
+    //     {
+    //         buttons = buttonRead(); // Aguarda o jogador apertar o botão 1 para voltar ao menu
+    //         // screenscreenGameOver(score);
+
+    //     } while (buttons != 1);
+    // }
+    // else
+    // { // Se o jogador ganhou
+    //     screen_victory();
+    // }
+}
+
+closeGpuMapping();
+return 0;
 }
