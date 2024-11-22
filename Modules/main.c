@@ -118,10 +118,10 @@ int checkEndGame(int *scoreJ1, int *scoreJ2)
 void resetData(Ball *ball, Bar *barJ1, Bar *barJ2, int *scoreJ1, int *scoreJ2)
 {
 
-    ball->ballPositionX = 320;
+    ball->ballPositionX = 320; // 320 x 240 para sprite centralizar // 40 x 30 para centralizar block
     ball->ballPositionY = 240;
-    ball->ballSpeedX = 8;
-    ball->ballSpeedY = 8;
+    ball->ballSpeedX = 1;
+    ball->ballSpeedY = 1;
     ball->collision = -1;
 
     barJ1->coordX = SCREEN_X / 2;
@@ -145,7 +145,7 @@ int execPong()
 
     gpuMapping();
     int16_t mg_per_lsb = 4;
-    int stateGame, buttons, velX = 1, velXMouse = 1;
+    int stateGame, buttons, velX = 1, velXMouse = 1, buttonValue = 15;
     buttons = buttonRead();
 
     /* Inicializar os elementos do jogo */
@@ -163,13 +163,20 @@ int execPong()
 
         resetData(&ball, &barJ1, &barJ2, &scoreJ1, &scoreJ2);
 
+        buttons = buttonRead();
+        buttonValue = 15; //1111 Binário todos os botões sem pressionar com lógica trocada
+
         /*Loop da patida do jogo*/
         while (checkEndGame(&scoreJ1, &scoreJ2))
         { // Enquanto o jogador não perdeu e não ganhou o jogo
 
-            // Leitura dos botões e mudança de estado
-            buttons = buttonRead();
-            changeState(&stateGame, &buttons);
+            if(buttons != 15){
+
+                buttonValue = buttons;
+
+            }
+
+            changeState(&stateGame, &buttonValue, &buttons);
 
             /* switch para mudar a tela de acordo com o estado */
             if (stateGame == 0)
@@ -198,6 +205,10 @@ int execPong()
                 videoClear();
                 //generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
                 while(1){ if(isFull() == 0) { setSprite(1, 9, 1, ball.ballPositionX, ball.ballPositionY); break; } }
+
+
+
+
                 /*Desenhar elementos do jogo*/
                 // gameField(blocksList, score, stateGame);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);

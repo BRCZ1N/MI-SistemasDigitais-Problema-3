@@ -46,7 +46,7 @@
  * @param pointerButtons    Ponteiro indicando o endereço que armazena o sinais lidos dos botões.
  * @return void
  */
-void changeState(int *pointerStateGame, int *pointerButtons) {
+void changeState(int *pointerStateGame, int *pointerButtons, int buttons) {
 
     /*
         state = 0; tela inicial
@@ -59,7 +59,7 @@ void changeState(int *pointerStateGame, int *pointerButtons) {
 
     case 0:
 
-        if (*pointerButtons == 1) {
+        if (*pointerButtons == 14 && buttons == 15) {
 
             *pointerStateGame = 1;
         }
@@ -68,7 +68,7 @@ void changeState(int *pointerStateGame, int *pointerButtons) {
 
     case 1:
 
-        if (*pointerButtons == 2) {
+        if (*pointerButtons == 13 && buttons == 15) {
 
             *pointerStateGame = 2;
         }
@@ -77,11 +77,11 @@ void changeState(int *pointerStateGame, int *pointerButtons) {
 
     case 2:
 
-        if (*pointerButtons == 1) {
+        if (*pointerButtons == 11 && buttons == 15) {
 
             *pointerStateGame = 3;
         }
-        else if (*pointerButtons == 2) {
+        else if (*pointerButtons == 11 && buttons == 15) {
 
             *pointerStateGame = 1;
         }
@@ -90,12 +90,12 @@ void changeState(int *pointerStateGame, int *pointerButtons) {
 
     case 3:
 
-        if (*pointerButtons == 1) {
+        if (*pointerButtons == 7 && buttons == 15) {
 
             *pointerStateGame = 2;
         }
 
-        else if (*pointerButtons == 2) {
+        else if (*pointerButtons == 7 && buttons == 15) {
 	
             *pointerStateGame = 0;
         }

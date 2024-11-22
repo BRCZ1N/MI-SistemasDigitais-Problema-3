@@ -50,7 +50,7 @@ void *execMouse(void *args);
 void screenMenu();
 void gameField(int stateGame);
 void generateChar(int coordX, int coordY, char caracter, short cor); 
-void changeGameState(int *pointer_state, int *pointer_buttons); 
+void changeGameState(int *pointer_state, int *pointer_buttons, int buttons); 
 int buttonRead(); 
 void generateBall (int coordX, int coordY, short cor);
 void screenGameOver();
