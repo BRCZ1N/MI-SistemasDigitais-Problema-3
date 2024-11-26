@@ -9,6 +9,7 @@
  * controle de threads, e funções de suporte ao jogo.
  */
 
+
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,33 +20,19 @@
 #include "acelerometro.h"
 #include <unistd.h>
 
+#include "home.h"
+#include "over1p.h"
+#include "over2p.h"
+#include "pRM.h"
+#include "pRT.h"
+#include "pMM.h"
 
-// // Lógica do layout
-// void phrase           (int coordX, int coordY, char *list, int lenList, short cor);
-// void write_score      (int coordX, int coordY, int score);
-// void screen_defeat    (int score);
-// void screen_victory   ();
-// void create_menu      ();
-// void game_field       (Block blocksList[], int score, int state_game);
 
-// // Escrita na tela
-// void title            (int coordX, int coordY);
-// void alphanumeric     (int coordX, int coordY, char caracter, short cor);
- 
-// // Bola
-// int  detect_collision (int x_rect, int y_rect, int length_rect, int width_rect,  
-//                       int x_boll, int y_boll, int ray, int *x_point, int *y_point);
-// int  getTypeCollision (Ball *ball, Block blocksList[], Bar *bar);
-// int  getMoveBall      (Ball *ball, Block blocksList[], Bar *bar);
-// void moveBall         (Ball *ball, Block blocksList[], Bar *bar);
-
-// // Barra
-// void moveBar          (Bar *bar, int accelX);
-
-// // Botões
-// void change_state     (int *pointer_state, int *pointer_buttons);
 
 int execPong();
+void resetData(Ball *ball, Bar *barJ1, Bar *barJ2);
+void ballRacketCollision(Ball *ball, Bar *bar, int *vert, int *hori, int *movVertical, int isTopBar);
+void ballBorderCollision(Ball *ball, Bar *barJ1, Bar *barJ2, int *vert, int *hori, int *scoreJ1, int *scoreJ2);
 void *execMouse(void *args);
 void screenMenu();
 void gameField(int stateGame);
@@ -58,12 +45,21 @@ void changePauseState(int *pointerStateGame, int *pointerButtons);
 void generateBox(int column, int line, int R, int G, int B, int length);
 Color convertHexToRgb(int colorHex);
 void videoClear();
+void videoClearSet(int x_inicial, int y_inicial, int x_final, int y_final);
 int normalizeVelocity(int velX);
 void spriteTest();
 void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int blockLength);
 int charToIndex(char c);
 void printChar(int coordX, int coordY, char caracter, short color);
 void screenGamePause();
+
+void Fover(int player);
+void Fpause(int estado);
+void Fhome();
+void renderScreen(int mode, int width, int height, const uint32_t *bitmap);
+void pauseMenu(int *pointerStateGame, int *pointerButtons, int buttons);
+
+
 
 // Variáveis globais para o acelerômetro
 extern int16_t axis_x; // Eixo X do acelerômetro.

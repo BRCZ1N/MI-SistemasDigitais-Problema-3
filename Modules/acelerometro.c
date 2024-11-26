@@ -83,7 +83,7 @@ void execAccel(void *args)
             {
                 pthread_mutex_lock(&lock);
                 axis_x = ler_x();
-                printf("Eixo X = %d mg\n", axis_x * sensibilidade);
+                //printf("Eixo X = %d mg\n", axis_x * sensibilidade);
                 pthread_mutex_unlock(&lock);
             }
         }

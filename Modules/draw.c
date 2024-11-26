@@ -414,6 +414,30 @@ void videoClear(){
 
 }
 
+/**
+ * @brief Limpa a tela de vídeo.
+ * 
+ * Esta função percorre a tela de vídeo e limpa cada bloco, definindo-o como vazio.
+ */
+void videoClearSet(int x_inicial, int y_inicial, int x_final, int y_final){
+
+    for (int i = x_inicial; i < x_final; i++)
+    {
+        for (int j = y_inicial; j < y_final; j++)
+        {
+            while (1)
+            {
+                if (((isFull() / sizeof(int))) == 0)
+                {
+                    generateBox(j, i, 0, 0, 0, 1);
+                    break;
+                }
+            }
+        }
+    }
+
+}
+
 void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int blockLength)
 {
     Color colorRGB = convertHexToRgb(color);

@@ -24,6 +24,8 @@ int main()
     pthread_create(&thread2, NULL, execPong, NULL);
 
     pthread_create(&thread3, NULL, execMouse, NULL);
+
+
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
     pthread_join(thread3, NULL);
@@ -108,30 +110,6 @@ int checkEndGame(int *scoreJ1, int *scoreJ2)
     return 0;
 }
 
-/**
- * Função para posicionar os elementos no jogo ao iniciar uma partida
- * @param ball Bola
- * @param bar Barra
- * @param score Pontuação
- * @return void
- */
-void resetData(Ball *ball, Bar *barJ1, Bar *barJ2, int *scoreJ1, int *scoreJ2)
-{
-
-    ball->ballPositionX = 320; // 320 x 240 para sprite centralizar // 40 x 30 para centralizar block
-    ball->ballPositionY = 240;
-    ball->ballSpeedX = 1;
-    ball->ballSpeedY = 1;
-    ball->collision = -1;
-
-    barJ1->coordX = SCREEN_X / 2;
-    barJ1->coordY = SCREEN_Y - 5;
-    barJ2->coordX = SCREEN_X / 2;
-    barJ2->coordY = SCREEN_Y - 55;
-
-    *scoreJ1 = 0;
-    *scoreJ2 = 0;
-}
 
 int normalizeVelocity(int velX)
 {
@@ -139,13 +117,55 @@ int normalizeVelocity(int velX)
         velX /= 10;
     return velX;
 }
+int normalizeMouse(int velX){
+    if(velX>=400){
+        return velX = 8;
+    }else if(velX <= -400){
+        return velX = -8;
+    }else if(velX >= 200){
+        return velX = 6;
+    }else if (velX <= -200)
+    {
+        return velX = -6;
+    }else if (velX >= 100)
+    {
+        return velX = 4;
+    }else if (velX <= -100)
+    {
+        return velX = -4;
+    }else if (velX >= 50)
+    {
+        return velX = 2;
+    }else if (velX <= -50)
+    {
+        return velX = -2;
+    }else if (velX >= 25)
+    {
+        return velX = 1;
+    }else if (velX <= -25)
+    {
+        return velX = -1;
+    }return 1;
+    
+    
+}
+
+//Mover para perto do video clear 
+void clearSprite()
+{
+    for(int i = 0; i < 32; i++){
+
+        setSprite(i,0,0,0,0);
+
+    }
+}
 
 int execPong()
 {
 
     gpuMapping();
     int16_t mg_per_lsb = 4;
-    int stateGame, buttons, velX = 1, velXMouse = 1, buttonValue = 15, life = 3, cima = 0, direita = 0, movVertical = 0;
+    int stateGame, buttons, velX = 1, velXMouse = 1, buttonValue = 15, life = 3, cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
     buttons = buttonRead();
 
     /* Inicializar os elementos do jogo */
@@ -159,74 +179,76 @@ int execPong()
     {
 
         /*Posiciona elementos e iniciar a maquina de estado da tela*/
-        stateGame = 1;
-
-        resetData(&ball, &barJ1, &barJ2, &scoreJ1, &scoreJ2);
-
-        buttons = buttonRead();
-        buttonValue = 15; // 1111 Binário todos os botões sem pressionar com lógica trocada
+        stateGame = 0;
+        scoreJ1 = 0;
+        scoreJ2 = 0;
+        resetData(&ball, &barJ1, &barJ2);
 
         /*Loop da patida do jogo*/
         while (checkEndGame(&scoreJ1, &scoreJ2))
         { // Enquanto o jogador não perdeu e não ganhou o jogo
 
-            if (buttons != 15)
-            {
+            buttons = buttonRead();
+           
+            if(buttons != 15){
 
                 buttonValue = buttons;
+
             }
 
-            changeState(&stateGame, &buttonValue, &buttons);
+            changeState(&stateGame, &buttonValue, buttons);
 
             /* switch para mudar a tela de acordo com o estado */
             if (stateGame == 0)
             { // Tela inicial
+                videoClear();
+                clearSprite();
+                while (stateGame == 0){
+
+                    Fhome();
+
+                    //Fazer thread para essa merda aq 
+                    buttons = buttonRead();
+           
+                    if(buttons != 15){
+
+                        buttonValue = buttons;
+
+                    }
+
+                    changeState(&stateGame, &buttonValue, buttons);
+
+                }
 
                 /*Desenhar elementos do jogo*/
-                resetData(&ball, &barJ1, &barJ2, &scoreJ1, &scoreJ2);
-                screenMenu();
+                resetData(&ball, &barJ1, &barJ2);
+                //screenMenu();
             }
             else if (stateGame == 1)
             { // Tela do jogo
 
-                /*Testes da outra branch
-                videoClear();
-                // gameField(blocksList, score, stateGame);
-                //spriteTest();
-                //Desconhecido,Sprite a ser selecionado,Bit ativacao IMPAR/PAR,CoordX,CoordY
-                //barJ1.coordX = 300;
-                //barJ1.coordY = 225;
-                //videoBox(79, 15, 81, 209, COLOR_CYAN, 1, 1); // esquerda
-                //videoBox(77, 207, 230, 209, COLOR_CYAN, 1, 1); // baixo
-                //videoBox(230, 15, 235, 209, COLOR_CYAN, 1, 1); // direita
-                //videoBox(77, 15, 230, 17, COLOR_CYAN, 1, 1); // cima
-                */
+            
+                // for (int i = 1; i <= 5000; i++) {
+                //     printf("%d\n", i);
+                // }
+                videoClearSet(11,2,70,58);
+                //generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
+                while(1){ if(isFull() == 0) { setSprite(1, 9, 1, (ball.ballPositionX*8)-4, (ball.ballPositionY*8)-4); break; } }
 
-                videoClear();
-                // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
-                while (1)
-                {
-                    if (isFull() == 0)
-                    {
-                        setSprite(1, 9, 1, ball.ballPositionX, ball.ballPositionY);
-                        break;
-                    }
-                }
-
-                /*Desenhar elementos do jogo*/
-                // gameField(blocksList, score, stateGame);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
                 // Esquerda
                 videoBox(10, 1, 11, 58, COLOR_CYAN, BLOCK_SIZE);
                 // Baixo
-                videoBox(10, 58, 71, 59, COLOR_CYAN, BLOCK_SIZE);
+                //videoBox(10, 58, 71, 59, COLOR_CYAN, BLOCK_SIZE);
                 // Direita
                 videoBox(70, 1, 71, 58, COLOR_CYAN, BLOCK_SIZE);
                 // Cima
-                videoBox(10, 1, 70, 2, COLOR_CYAN, BLOCK_SIZE);
+                //videoBox(10, 1, 70, 2, COLOR_CYAN, BLOCK_SIZE);
 
                 videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
+                //while(1){ if(isFull() == 0) { setSprite(2, 13, 1, ((barJ1.coordX - BAR_SIZE)*8),(barJ1.coordY - BAR_WIDHT)*8); break; } }
                 videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
+                //while(1){ if(isFull() == 0) { setSprite(3, 13, 1, (barJ2.coordX - BAR_SIZE)*8, (barJ2.coordY - BAR_WIDHT)*8); break; } }
                 /*Movimentação dos elementos do jogo*/
                 pthread_mutex_lock(&lock);
                 velX = axis_x * mg_per_lsb;
@@ -234,44 +256,16 @@ int execPong()
                 pthread_mutex_unlock(&lock);
                 pthread_mutex_lock(&lockMouse);
                 velXMouse = xMouse;
-                velXMouse = normalizeVelocity(velXMouse);
+                velXMouse = normalizeMouse(velXMouse);
                 pthread_mutex_unlock(&lockMouse);
-                printf("VELOCIDADE X ACCEL:%d\n", velX);
-                printf("VELOCIDADE X MOUSE:%d\n", velXMouse);
-                usleep(16666);
+                //printf("VELOCIDADE X ACCEL:%d\n", velX);
+                //printf("VELOCIDADE X MOUSE:%d\n", velXMouse);
+                //usleep(16666);
                 moveBar(&barJ1, velX);
                 moveBar(&barJ2, velXMouse);
-
-                ballRacketCollision(ball.ballPositionX, ball.ballPositionY, barJ1.coordX, barJ1.coordY, &cima, &direita, &movVertical);
-
-                if (cima == 1 && movVertical == 0)
-                {
-                    ball.ballPositionY += 1;
-                }
-                else if (movVertical == 0)
-                {
-                    ball.ballPositionY -= 1;
-                }
-
-                if (direita == 1 && movVertical == 0)
-                {
-                    ball.ballPositionX += 1;
-                }
-                else if (movVertical == 0)
-                {
-                    ball.ballPositionX -= 1;
-                }
-
-                if (movVertical == 1 && cima == 1)
-                {
-                    ball.ballPositionY += 1;
-                }
-                else if (movVertical == 1)
-                {
-                    ball.ballPositionY -= 1;
-                }
-
-                ballRacketCollision(ball.ballPositionX, ball.ballPositionY, barJ2.coordX, barJ2.coordY, &cima, &direita, &movVertical);
+                ballRacketCollision(&ball, &barJ1, &cima, &direita, &movVertical,0);
+                ballRacketCollision(&ball, &barJ2, &cima, &direita, &movVertical,1);
+                ballBorderCollision(&ball, &barJ1, &barJ2, &cima, &direita, &scoreJ1, &scoreJ2);
 
                 if (cima == 1 && movVertical == 0)
                 {
@@ -300,73 +294,53 @@ int execPong()
                     ball.ballPositionY -= 1;
                 }
 
-                ballBorderCollision(ball.ballPositionX, ball.ballPositionY, &cima, &direita, &life);
 
-                if (cima == 1 && movVertical == 0)
-                {
-                    ball.ballPositionY += 1;
-                }
-                else if (movVertical == 0)
-                {
-                    ball.ballPositionY -= 1;
-                }
-
-                if (direita == 1 && movVertical == 0)
-                {
-                    ball.ballPositionX += 1;
-                }
-                else if (movVertical == 0)
-                {
-                    ball.ballPositionX -= 1;
-                }
-
-                if (movVertical == 1 && cima == 1)
-                {
-                    ball.ballPositionY += 1;
-                }
-                else if (movVertical == 1)
-                {
-                    ball.ballPositionY -= 1;
-                }
-
-                // movimentação da bola
+                //usleep(450000);
             }
-            // moveBall(&ball, &barJ1);
-            // moveBall(&ball, &barJ2);
+            else if (stateGame == 2)
+            { // Estado de pausa
 
-            usleep(450000);
-        }
-        else if (stateGame == 2)
-        { // Estado de pausa
+                videoClear();
+                clearSprite();
+                while (stateGame == 2){
+                    // testar essa função
+                    pauseMenu(&stateGame, &buttonValue, buttons);
+                    //Fazer thread para essa merda aq 
+                    buttons = buttonRead();
+           
+                    if(buttons != 15){
+                        buttonValue = buttons;
+                    }
+                    changeState(&stateGame, &buttonValue, buttons);
+                }
 
-            /*Desenhar elementos do jogo*/
-            // gameField(score, stateGame);
-        }
-        else if (stateGame == 3)
-        { // Tela de pause/exit
 
-            /*Desenhar elementos do jogo*/
-            // gameField(scoreJ1, scoreJ2, stateGame);
-            // bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
+            }
+            else if (stateGame == 3)
+            { // Tela de pause/exit
+
+                /*Desenhar elementos do jogo*/
+                // gameField(scoreJ1, scoreJ2, stateGame);
+                // bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
+            }
         }
+        /*Finalização do jogo*/
+
+        // if (checkLose(&ball) == 0)
+        // { // Se o jogador perdeu
+        //     do
+        //     {
+        //         buttons = buttonRead(); // Aguarda o jogador apertar o botão 1 para voltar ao menu
+        //         // screenscreenGameOver(score);
+
+        //     } while (buttons != 1);
+        // }
+        // else
+        // { // Se o jogador ganhou
+        //     screen_victory();
+        // }
     }
-    /*Finalização do jogo*/
 
-    // if (checkLose(&ball) == 0)
-    // { // Se o jogador perdeu
-    //     do
-    //     {
-    //         buttons = buttonRead(); // Aguarda o jogador apertar o botão 1 para voltar ao menu
-    //         // screenscreenGameOver(score);
-
-    //     } while (buttons != 1);
-    // }
-    // else
-    // { // Se o jogador ganhou
-    //     screen_victory();
-    // }
-}
-
-closeGpuMapping();
-return 0;
+    closeGpuMapping();
+    return 0;
 }

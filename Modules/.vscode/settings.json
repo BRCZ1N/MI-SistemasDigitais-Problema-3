@@ -3,7 +3,10 @@
         "stdio.h": "c",
         "fcntl.h": "c",
         "prototype.h": "c",
-        "acelerometro.h": "c"
-    },
-    "C_Cpp.errorSquiggles": "disabled"
+        "acelerometro.h": "c",
+        "homescreen.h": "c",
+        "over.h": "c",
+        "pause.h": "c",
+        "stdint.h": "c"
+    }
 }
