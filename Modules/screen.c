@@ -1,7 +1,6 @@
 #include "prototype.h"
 
 void renderScreen(int frame, int width, int height, const uint32_t *bitmap) {
-    Color cor;
     for (int h= 0; h< frame; h++){
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {

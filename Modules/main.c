@@ -203,22 +203,28 @@ int execPong()
             { // Tela inicial
                 videoClear();
                 clearSprite();
-                while (stateGame == 0){
+                Fhome();
+                // while (stateGame == 0){
 
-                    Fhome();
+                //     Fhome();
 
-                    //Fazer thread para essa merda aq 
-                    buttons = buttonRead();
+                //     //Fazer thread para essa merda aq 
+                //     buttons = buttonRead();
            
-                    if(buttons != 15){
+                //     if(buttons != 15){
 
-                        buttonValue = buttons;
+                //         buttonValue = buttons;
 
-                    }
+                //     }
+                //     if(buttons != 15 && ){
 
-                    changeState(&stateGame, &buttonValue, buttons);
+                //         buttonValue = buttons;
 
-                }
+                //     }
+
+                //     changeState(&stateGame, &buttonValue, buttons);
+
+                // }
 
                 /*Desenhar elementos do jogo*/
                 resetData(&ball, &barJ1, &barJ2);
@@ -233,7 +239,10 @@ int execPong()
                 // }
                 videoClearSet(11,2,70,58);
                 //generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
-                while(1){ if(isFull() == 0) { setSprite(1, 9, 1, (ball.ballPositionX*8)-4, (ball.ballPositionY*8)-4); break; } }
+
+                changeSprite(1);
+                while(1){ if(isFull() == 0) { setSprite(1, 1, 1, 320, 240); break; } }
+                //while(1){ if(isFull() == 0) { setSprite(1, 9, 1, (ball.ballPositionX*8)-4, (ball.ballPositionY*8)-4); break; } }
 
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
                 // Esquerda
