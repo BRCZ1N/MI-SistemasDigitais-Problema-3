@@ -28,7 +28,6 @@
 #include "pMM.h"
 
 
-
 int execPong();
 void resetData(Ball *ball, Bar *barJ1, Bar *barJ2);
 void ballRacketCollision(Ball *ball, Bar *bar, int *vert, int *hori, int *movVertical, int isTopBar);
@@ -39,6 +38,7 @@ void gameField(int stateGame);
 void generateChar(int coordX, int coordY, char caracter, short cor); 
 void changeGameState(int *pointer_state, int *pointer_buttons, int buttons); 
 int buttonRead(); 
+void changeStateExec();
 void generateBall (int coordX, int coordY, short cor);
 void screenGameOver();
 void changePauseState(int *pointerStateGame, int *pointerButtons); 
@@ -52,19 +52,16 @@ void videoBox(int initial_x, int initial_y, int end_x, int end_y, int color, int
 int charToIndex(char c);
 void printChar(int coordX, int coordY, char caracter, short color);
 void screenGamePause();
-
 void Fover(int player);
 void Fpause(int estado);
 void Fhome();
 void renderScreen(int mode, int width, int height, const uint32_t *bitmap);
 void pauseMenu(int *pointerStateGame, int *pointerButtons, int buttons);
-
-
-
 // Variáveis globais para o acelerômetro
 extern int16_t axis_x; // Eixo X do acelerômetro.
 extern pthread_mutex_t lock; // Mutex para controle de acesso a recursos compartilhados.
 extern int16_t xMouse;
+extern pthread_mutex_t lockMouse;
 //Funções da biblioteca
 extern int closeGpuMapping();
 extern int gpuMapping();

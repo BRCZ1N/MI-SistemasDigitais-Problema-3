@@ -1,8 +1,6 @@
 #include "prototype.h"
-int16_t axis_x;
-int16_t xMouse;
-pthread_mutex_t lock;
-pthread_mutex_t lockMouse;
+pthread_mutex_t lockStates;
+int stateGame, buttons, buttonValue = 15, currentOption = 0;
 
 /*
  * Função principal que inicializa o ambiente do jogo Tetris.
@@ -14,23 +12,25 @@ pthread_mutex_t lockMouse;
  */
 int main()
 {
-
-    pthread_t thread1, thread2, thread3;
+    pthread_t thread1, thread2, thread3, thread4;
 
     pthread_mutex_init(&lock, NULL);
+    pthread_mutex_init(&lockMouse, NULL);
+    pthread_mutex_init(&lockStates, NULL);
 
     pthread_create(&thread1, NULL, execAccel, NULL);
-
     pthread_create(&thread2, NULL, execPong, NULL);
-
     pthread_create(&thread3, NULL, execMouse, NULL);
-
+    pthread_create(&thread4, NULL, changeStateExec, NULL);
 
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
     pthread_join(thread3, NULL);
+    pthread_join(thread4, NULL);
 
     pthread_mutex_destroy(&lock);
+    pthread_mutex_destroy(&lockMouse);
+    pthread_mutex_destroy(&lockStates);
 
     return 0;
 }
@@ -51,65 +51,25 @@ int main()
 // {
 
 //     int16_t mg_per_lsb = 4;
-//     int dx = 0, dy = 1, moved = 1, scoreJ1, scoreJ2, hscore = 0, old_score, buttons;
-//     gpuMapping();
-
-//     while (1)
-//     {
-//         int stateGame = 1;
-
-//         videoClear();
-
-//         while (!checkEndGame(&scoreJ1, &scoreJ2))
-//         {
-//             buttons = buttonRead();
-//             // gameField(score, hscore);
-//             changeState(&stateGame, &buttons);
-
-//             // if (stateGame == 1)
-//             // {
-//             //     pthread_mutex_lock(&lock);
-//             //     if (axis_x * mg_per_lsb >= 100)
-//             //     {
-
-//             //         dx = 1;
-//             //     }
-//             //     else if (axis_x * mg_per_lsb <= -100)
-//             //     {
-
-//             //         dx = -1;
-//             //     }
-//             //     else
-//             //     {
-
-//             //         dx = 0;
-//             //     }
-//             //     pthread_mutex_unlock(&lock);
-//             // }
-//             // else
-//             // {
-//             //     screenGamePause();
-//             // }
-//         }
-
-//         videoClear();
-//         screenGameOver();
-//         usleep(650000);
-//         if (score > hscore)
-//         {
-//             hscore = score;
-//         }
-//     }
-//     closeGpuMapping();
-// }
-
-int checkEndGame(int *scoreJ1, int *scoreJ2)
+//
+int checkEndGame(int scoreJ1, int scoreJ2)
 {
-    if (*scoreJ1 < 3 || *scoreJ2 < 3)
-        return 1;
-    return 0;
-}
+    if (scoreJ1 == 3)
+    {
 
+        return 1;
+    }
+    else if (scoreJ2 == 3)
+    {
+
+        return 0;
+    }
+    else
+    {
+
+        return -1;
+    }
+}
 
 int normalizeVelocity(int velX)
 {
@@ -117,56 +77,67 @@ int normalizeVelocity(int velX)
         velX /= 10;
     return velX;
 }
-int normalizeMouse(int velX){
-    if(velX>=400){
+int normalizeMouse(int velX)
+{
+    if (velX >= 400)
+    {
         return velX = 8;
-    }else if(velX <= -400){
+    }
+    else if (velX <= -400)
+    {
         return velX = -8;
-    }else if(velX >= 200){
+    }
+    else if (velX >= 200)
+    {
         return velX = 6;
-    }else if (velX <= -200)
+    }
+    else if (velX <= -200)
     {
         return velX = -6;
-    }else if (velX >= 100)
+    }
+    else if (velX >= 100)
     {
         return velX = 4;
-    }else if (velX <= -100)
+    }
+    else if (velX <= -100)
     {
         return velX = -4;
-    }else if (velX >= 50)
+    }
+    else if (velX >= 50)
     {
         return velX = 2;
-    }else if (velX <= -50)
+    }
+    else if (velX <= -50)
     {
         return velX = -2;
-    }else if (velX >= 25)
+    }
+    else if (velX >= 25)
     {
         return velX = 1;
-    }else if (velX <= -25)
+    }
+    else if (velX <= -25)
     {
         return velX = -1;
-    }return 1;
-    
-    
+    }
+    return 1;
 }
 
-//Mover para perto do video clear 
+// Mover para perto do video clear
 void clearSprite()
 {
-    for(int i = 0; i < 32; i++){
+    for (int i = 0; i < 32; i++)
+    {
 
-        setSprite(i,0,0,0,0);
-
+        setSprite(i, 0, 0, 0, 0);
     }
 }
 
 int execPong()
 {
 
-    gpuMapping();
     int16_t mg_per_lsb = 4;
-    int stateGame, buttons, velX = 1, velXMouse = 1, buttonValue = 15, life = 3, cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
-    buttons = buttonRead();
+    int flagGameOver = -1, velX = 1, velXMouse = 1, cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
+    // buttons = buttonRead();
 
     /* Inicializar os elementos do jogo */
     int scoreJ1, scoreJ2;
@@ -179,24 +150,24 @@ int execPong()
     {
 
         /*Posiciona elementos e iniciar a maquina de estado da tela*/
-        stateGame = 0;
+        stateGame = 1;
         scoreJ1 = 0;
         scoreJ2 = 0;
         resetData(&ball, &barJ1, &barJ2);
 
         /*Loop da patida do jogo*/
-        while (checkEndGame(&scoreJ1, &scoreJ2))
+        while (1)
         { // Enquanto o jogador não perdeu e não ganhou o jogo
 
-            buttons = buttonRead();
-           
-            if(buttons != 15){
+            // buttons = buttonRead();
 
-                buttonValue = buttons;
+            // if (buttons != 15)
+            // {
 
-            }
+            //     buttonValue = buttons;
+            // }
 
-            changeState(&stateGame, &buttonValue, buttons);
+            // changeState(&stateGame, &buttonValue, buttons);
 
             /* switch para mudar a tela de acordo com o estado */
             if (stateGame == 0)
@@ -208,72 +179,81 @@ int execPong()
 
                 //     Fhome();
 
-                //     //Fazer thread para essa merda aq 
+                //     //Fazer thread para essa merda aq
                 //     buttons = buttonRead();
-           
+
                 //     if(buttons != 15){
 
                 //         buttonValue = buttons;
 
                 //     }
-                //     if(buttons != 15 && ){
-
-                //         buttonValue = buttons;
-
-                //     }
-
                 //     changeState(&stateGame, &buttonValue, buttons);
 
                 // }
 
                 /*Desenhar elementos do jogo*/
                 resetData(&ball, &barJ1, &barJ2);
-                //screenMenu();
+                // screenMenu();
             }
             else if (stateGame == 1)
             { // Tela do jogo
 
-            
-                // for (int i = 1; i <= 5000; i++) {
-                //     printf("%d\n", i);
-                // }
-                videoClearSet(11,2,70,58);
-                //generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
+                videoClearSet(11, 2, 70, 58);
+                // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
 
                 changeSprite(1);
-                while(1){ if(isFull() == 0) { setSprite(1, 1, 1, 320, 240); break; } }
-                //while(1){ if(isFull() == 0) { setSprite(1, 9, 1, (ball.ballPositionX*8)-4, (ball.ballPositionY*8)-4); break; } }
+                while (1)
+                {
+                    if (isFull() == 0)
+                    {
+                        setSprite(1, 1, 1, 320, 240);
+                        break;
+                    }
+                }
+                // while(1){ if(isFull() == 0) { setSprite(1, 9, 1, (ball.ballPositionX*8)-4, (ball.ballPositionY*8)-4); break; } }
 
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
                 // Esquerda
                 videoBox(10, 1, 11, 58, COLOR_CYAN, BLOCK_SIZE);
                 // Baixo
-                //videoBox(10, 58, 71, 59, COLOR_CYAN, BLOCK_SIZE);
+                // videoBox(10, 58, 71, 59, COLOR_CYAN, BLOCK_SIZE);
                 // Direita
                 videoBox(70, 1, 71, 58, COLOR_CYAN, BLOCK_SIZE);
                 // Cima
-                //videoBox(10, 1, 70, 2, COLOR_CYAN, BLOCK_SIZE);
+                // videoBox(10, 1, 70, 2, COLOR_CYAN, BLOCK_SIZE);
 
                 videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
-                //while(1){ if(isFull() == 0) { setSprite(2, 13, 1, ((barJ1.coordX - BAR_SIZE)*8),(barJ1.coordY - BAR_WIDHT)*8); break; } }
+                // while(1){ if(isFull() == 0) { setSprite(2, 13, 1, ((barJ1.coordX - BAR_SIZE)*8),(barJ1.coordY - BAR_WIDHT)*8); break; } }
                 videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
-                //while(1){ if(isFull() == 0) { setSprite(3, 13, 1, (barJ2.coordX - BAR_SIZE)*8, (barJ2.coordY - BAR_WIDHT)*8); break; } }
+                // while(1){ if(isFull() == 0) { setSprite(3, 13, 1, (barJ2.coordX - BAR_SIZE)*8, (barJ2.coordY - BAR_WIDHT)*8); break; } }
                 /*Movimentação dos elementos do jogo*/
                 pthread_mutex_lock(&lock);
-                velX = axis_x * mg_per_lsb;
-                velX = normalizeVelocity(velX);
+                // velX = axis_x * mg_per_lsb;
+                // velX = normalizeVelocity(velX);
+                if (axis_x * mg_per_lsb >= 100)
+                {
+
+                    velX = 1;
+                }
+                else if (axis_x * mg_per_lsb <= -100)
+                {
+
+                    velX = -1;
+                }
+                else
+                {
+
+                    velX = 0;
+                }
                 pthread_mutex_unlock(&lock);
                 pthread_mutex_lock(&lockMouse);
                 velXMouse = xMouse;
                 velXMouse = normalizeMouse(velXMouse);
                 pthread_mutex_unlock(&lockMouse);
-                //printf("VELOCIDADE X ACCEL:%d\n", velX);
-                //printf("VELOCIDADE X MOUSE:%d\n", velXMouse);
-                //usleep(16666);
                 moveBar(&barJ1, velX);
                 moveBar(&barJ2, velXMouse);
-                ballRacketCollision(&ball, &barJ1, &cima, &direita, &movVertical,0);
-                ballRacketCollision(&ball, &barJ2, &cima, &direita, &movVertical,1);
+                ballRacketCollision(&ball, &barJ1, &cima, &direita, &movVertical, 0);
+                ballRacketCollision(&ball, &barJ2, &cima, &direita, &movVertical, 1);
                 ballBorderCollision(&ball, &barJ1, &barJ2, &cima, &direita, &scoreJ1, &scoreJ2);
 
                 if (cima == 1 && movVertical == 0)
@@ -302,54 +282,116 @@ int execPong()
                 {
                     ball.ballPositionY -= 1;
                 }
-
-
-                //usleep(450000);
             }
             else if (stateGame == 2)
             { // Estado de pausa
 
                 videoClear();
                 clearSprite();
-                while (stateGame == 2){
-                    // testar essa função
-                    pauseMenu(&stateGame, &buttonValue, buttons);
-                    //Fazer thread para essa merda aq 
-                    buttons = buttonRead();
-           
-                    if(buttons != 15){
-                        buttonValue = buttons;
+                currentOption = 0;
+                int previousCurrentOption = -1;
+                while (stateGame == 2)
+                { // Loop enquanto o jogo está em pausa
+                    // Chama Fpause com a opção atual
+                    if (previousCurrentOption != currentOption)
+                    {
+                        Fpause(currentOption + 1);
                     }
-                    changeState(&stateGame, &buttonValue, buttons);
+                    previousCurrentOption = currentOption;
+
+                    // Verifica movimento para cima (botão 1 pressionado)
+                    if (buttonValue == 14 && buttons == 15)
+                    {
+                        currentOption = (currentOption - 1 + 3) % 3; // Cicla para cima
+                    }
+                    // Verifica movimento para baixo (botão 2 pressionado)
+                    else if (buttonValue == 13 && buttons == 15)
+                    {
+                        currentOption = (currentOption + 1) % 3; // Cicla para baixo
+                    }
                 }
-
-
             }
             else if (stateGame == 3)
-            { // Tela de pause/exit
+            {
 
-                /*Desenhar elementos do jogo*/
-                // gameField(scoreJ1, scoreJ2, stateGame);
-                // bola9x9(ball.ballPositionX, ball.ballPositionY, 0xFC18);
+                scoreJ1 = 0;
+                scoreJ2 = 0;
+                resetData(&ball, &barJ1, &barJ2);
+            }
+            else if (stateGame == 4)
+            {
+                Fover(flagGameOver);
             }
         }
-        /*Finalização do jogo*/
-
-        // if (checkLose(&ball) == 0)
-        // { // Se o jogador perdeu
-        //     do
-        //     {
-        //         buttons = buttonRead(); // Aguarda o jogador apertar o botão 1 para voltar ao menu
-        //         // screenscreenGameOver(score);
-
-        //     } while (buttons != 1);
-        // }
-        // else
-        // { // Se o jogador ganhou
-        //     screen_victory();
-        // }
     }
 
     closeGpuMapping();
     return 0;
+}
+
+void changeStateExec()
+{
+    gpuMapping(); // Colocada aqui para fazer com que exista o mapeamento do botão !!!!!!
+    while (1)
+    {
+
+        buttons = buttonRead();
+
+        if (buttons != 15)
+        {
+            buttonValue = buttons;
+        }
+
+        switch (stateGame)
+        {
+
+        case 0:
+
+            if (buttonValue == 14 && buttons == 15)
+            {
+
+                stateGame = 1;
+            }
+
+            break;
+
+        case 1:
+
+            if (buttonValue == 13 && buttons == 15)
+            {
+
+                stateGame = 2;
+            }
+
+        case 2:
+
+            if (buttonValue == 11 && buttons == 15 && currentOption == 0)
+            {
+
+                stateGame = 3;
+            }
+            else if (buttonValue == 11 && buttons == 15 && currentOption == 1)
+            {
+
+                stateGame = 0;
+            }
+            else if (buttonValue == 11 && buttons == 15 && currentOption == 2)
+            {
+
+                stateGame = 1;
+            }
+
+            break;
+
+        case 3:
+            usleep(10000);
+            stateGame = 1;
+            break;
+
+        case 4:
+            usleep(10000);
+            stateGame = 1;
+            break;
+        }
+    }
 }

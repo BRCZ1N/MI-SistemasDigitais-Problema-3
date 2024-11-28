@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include "prototype.h"
 
 // Definições
 #define LEFT -1
@@ -12,8 +13,6 @@
 #define MOVE_EVENT 2      // Eventos consecutivos necessários
 
 // Variáveis globais
-pthread_mutex_t lock; // Mutex para proteger acesso a variáveis globais
-int xMouse = 0;       // Posição horizontal do mouse
 int count_to_x = 0;   // Contador para filtro de movimentação
 
 // Função para processar a movimentação horizontal
@@ -59,7 +58,7 @@ void *execMouse(void *args) {
             dx = 0; // Ignora movimentos insignificantes
         }
 
-        pthread_mutex_lock(&lock);
+        pthread_mutex_lock(&lockMouse);
         int event = processHorizontalMove(dx); // Processa o evento horizontal
         if (event == LEFT) {
             printf("Movimento para a ESQUERDA detectado\n");
@@ -69,7 +68,7 @@ void *execMouse(void *args) {
 
         // Atualiza a posição horizontal do mouse
         xMouse += dx;
-        pthread_mutex_unlock(&lock);
+        pthread_mutex_unlock(&lockMouse);
 
         // Pequeno delay para suavizar leituras
         usleep(5000); // 5ms
