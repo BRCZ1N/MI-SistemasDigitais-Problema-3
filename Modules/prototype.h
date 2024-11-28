@@ -26,6 +26,8 @@
 #include "pRM.h"
 #include "pRT.h"
 #include "pMM.h"
+#include "gaivota0.h"
+#include "gaivota1.h"
 
 
 int execPong();

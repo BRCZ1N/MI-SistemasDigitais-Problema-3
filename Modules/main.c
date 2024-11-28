@@ -71,7 +71,6 @@ int checkEndGame(int scoreJ1, int scoreJ2)
     }
 }
 
-
 int normalizeValue(int value, int scale_factor)
 {
     const int thresholds[] = {400, 200, 100, 50, 25};
@@ -106,12 +105,8 @@ void clearSprite()
 int execPong()
 {
     gpuMapping();
-    changeSprite(5, seagull_data[0]);
-    changeSprite(6, seagull_data);
-    changeSprite(7, seagull_data[0]);
-    changeSprite(8, seagull_data[1]);
-
-
+    changeSprite(5, gaivota0);
+    changeSprite(6, gaivota1);
     int16_t mg_per_lsb = 4;
     int flagGameOver = -1, velX = 1, velXMouse = 1, cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
     // buttons = buttonRead();
@@ -151,39 +146,18 @@ int execPong()
                 videoClear();
                 clearSprite();
                 Fhome();
-                // while (stateGame == 0){
-
-                //     Fhome();
-
-                //     //Fazer thread para essa merda aq
-                //     buttons = buttonRead();
-
-                //     if(buttons != 15){
-
-                //         buttonValue = buttons;
-
-                //     }
-                //     changeState(&stateGame, &buttonValue, buttons);
-
-                // }
-
-                /*Desenhar elementos do jogo*/
                 resetData(&ball, &barJ1, &barJ2);
-                // screenMenu();
             }
             else if (stateGame == 1)
             { // Tela do jogo
 
                 videoClearSet(11, 2, 70, 58);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
-                
-               
-
 
                 while (1)
                 {
                     if (isFull() == 0)
-                    {   // registrador, sprite, offset, x, y
+                    { // registrador, sprite, offset, x, y
                         // setSprite(1, 1, 1, 280, 200);
                         // setSprite(2, 2, 1, 260, 200);
                         // setSprite(3, 3, 1, 240, 200);
@@ -210,14 +184,11 @@ int execPong()
                         // setSprite(24, 24, 1, 140, 240); // Nova linha
                         setSprite(5, 5, 1, 200, 260); // Nova linha
                         setSprite(6, 6, 1, 220, 260); // Nova linha
-                        setSprite(7, 7, 1, 240, 260); // Nova linha
-                        setSprite(8, 8, 1, 260, 260); // Nova linha
+                        // setSprite(7, 7, 1, 240, 260); // Nova linha
+                        // setSprite(8, 8, 1, 260, 260); // Nova linha
                         // setSprite(29, 29, 1, 200, 260); // Nova linha
                         // setSprite(30, 30, 1, 180, 260); // Nova linha
                         // setSprite(31, 31, 1, 160, 260); // Nova linha
-
-
-
 
                         break;
                     }
@@ -240,8 +211,23 @@ int execPong()
                 // while(1){ if(isFull() == 0) { setSprite(3, 13, 1, (barJ2.coordX - BAR_SIZE)*8, (barJ2.coordY - BAR_WIDHT)*8); break; } }
                 /*Movimentação dos elementos do jogo*/
                 pthread_mutex_lock(&lock);
-                velX = axis_x * mg_per_lsb;
-                velX = normalizeValue(velX,10);
+                // velX = axis_x * mg_per_lsb;
+                // velX = normalizeValue(velX,10);
+                if (axis_x * mg_per_lsb >= 100)
+                {
+
+                    velX = 1;
+                }
+                else if (axis_x * mg_per_lsb <= -100)
+                {
+
+                    velX = -1;
+                }
+                else
+                {
+
+                    velX = 0;
+                }
                 pthread_mutex_unlock(&lock);
                 pthread_mutex_lock(&lockMouse);
                 velXMouse = xMouse;
@@ -286,19 +272,16 @@ int execPong()
                 videoClear();
                 clearSprite();
                 currentOption = 0;
-                int previousCurrentOption = -1;
                 while (stateGame == 2)
                 { // Loop enquanto o jogo está em pausa
-                    // Chama Fpause com a opção atual
-                    if (previousCurrentOption != currentOption)
-                    {
-                        Fpause(currentOption + 1);
-                    }
-                    previousCurrentOption = currentOption;
+                  // Chama Fpause com a opção atual
+
+                    Fpause(currentOption + 1);
 
                     // Verifica movimento para cima (botão 1 pressionado)
-                    
-                
+
+                    buttonValue = 15;
+
                     if (buttonValue == 14 && buttons == 15)
                     {
                         currentOption = (currentOption - 1 + 3) % 3; // Cicla para cima
@@ -313,13 +296,14 @@ int execPong()
             else if (stateGame == 3)
             {
 
-                printf("Entrei nesse estado mediocre");
+                // Restart
                 scoreJ1 = 0;
                 scoreJ2 = 0;
                 resetData(&ball, &barJ1, &barJ2);
             }
             else if (stateGame == 4)
             {
+                // GameOver
                 Fover(flagGameOver);
             }
         }
