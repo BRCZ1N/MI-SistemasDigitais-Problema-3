@@ -71,55 +71,26 @@ int checkEndGame(int scoreJ1, int scoreJ2)
     }
 }
 
-int normalizeVelocity(int velX)
+
+int normalizeValue(int value, int scale_factor)
 {
-    while (velX >= 10 || velX <= -10)
-        velX /= 10;
-    return velX;
-}
-int normalizeMouse(int velX)
-{
-    if (velX >= 400)
+    const int thresholds[] = {400, 200, 100, 50, 25};
+    const int normalized[] = {8, 6, 4, 2, 1};
+
+    // Escala o valor para ajustar a magnitude
+    value = value / scale_factor;
+
+    for (int i = 0; i < 5; i++)
     {
-        return velX = 8;
+        if (value >= thresholds[i])
+        {
+            return normalized[i];
+        }
+        else if (value <= -thresholds[i])
+        {
+            return -normalized[i];
+        }
     }
-    else if (velX <= -400)
-    {
-        return velX = -8;
-    }
-    else if (velX >= 200)
-    {
-        return velX = 6;
-    }
-    else if (velX <= -200)
-    {
-        return velX = -6;
-    }
-    else if (velX >= 100)
-    {
-        return velX = 4;
-    }
-    else if (velX <= -100)
-    {
-        return velX = -4;
-    }
-    else if (velX >= 50)
-    {
-        return velX = 2;
-    }
-    else if (velX <= -50)
-    {
-        return velX = -2;
-    }
-    else if (velX >= 25)
-    {
-        return velX = 1;
-    }
-    else if (velX <= -25)
-    {
-        return velX = -1;
-    }
-    return 1;
 }
 
 // Mover para perto do video clear
@@ -148,9 +119,9 @@ int execPong()
     /*Loop principal do jogo*/
     while (1)
     {
-
+        gpuMapping();
         /*Posiciona elementos e iniciar a maquina de estado da tela*/
-        stateGame = 1;
+        stateGame = 0;
         scoreJ1 = 0;
         scoreJ2 = 0;
         resetData(&ball, &barJ1, &barJ2);
@@ -200,13 +171,13 @@ int execPong()
 
                 videoClearSet(11, 2, 70, 58);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
-
-                changeSprite(1);
+                
+                changeSprite(2, gaivota[1]);
                 while (1)
                 {
                     if (isFull() == 0)
                     {
-                        setSprite(1, 1, 1, 320, 240);
+                        setSprite(3, 1, 3, 280, 200);
                         break;
                     }
                 }
@@ -228,27 +199,12 @@ int execPong()
                 // while(1){ if(isFull() == 0) { setSprite(3, 13, 1, (barJ2.coordX - BAR_SIZE)*8, (barJ2.coordY - BAR_WIDHT)*8); break; } }
                 /*Movimentação dos elementos do jogo*/
                 pthread_mutex_lock(&lock);
-                // velX = axis_x * mg_per_lsb;
-                // velX = normalizeVelocity(velX);
-                if (axis_x * mg_per_lsb >= 100)
-                {
-
-                    velX = 1;
-                }
-                else if (axis_x * mg_per_lsb <= -100)
-                {
-
-                    velX = -1;
-                }
-                else
-                {
-
-                    velX = 0;
-                }
+                velX = axis_x * mg_per_lsb;
+                velX = normalizeValue(velX,10);
                 pthread_mutex_unlock(&lock);
                 pthread_mutex_lock(&lockMouse);
                 velXMouse = xMouse;
-                velXMouse = normalizeMouse(velXMouse);
+                velXMouse = normalizeValue(velXMouse, 1);
                 pthread_mutex_unlock(&lockMouse);
                 moveBar(&barJ1, velX);
                 moveBar(&barJ2, velXMouse);
@@ -300,6 +256,8 @@ int execPong()
                     previousCurrentOption = currentOption;
 
                     // Verifica movimento para cima (botão 1 pressionado)
+                    
+                
                     if (buttonValue == 14 && buttons == 15)
                     {
                         currentOption = (currentOption - 1 + 3) % 3; // Cicla para cima
@@ -314,6 +272,7 @@ int execPong()
             else if (stateGame == 3)
             {
 
+                printf("Entrei nesse estado mediocre");
                 scoreJ1 = 0;
                 scoreJ2 = 0;
                 resetData(&ball, &barJ1, &barJ2);
@@ -325,7 +284,6 @@ int execPong()
         }
     }
 
-    closeGpuMapping();
     return 0;
 }
 
@@ -336,7 +294,6 @@ void changeStateExec()
     {
 
         buttons = buttonRead();
-
         if (buttons != 15)
         {
             buttonValue = buttons;
