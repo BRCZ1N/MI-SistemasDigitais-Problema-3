@@ -105,6 +105,12 @@ void clearSprite()
 
 int execPong()
 {
+    gpuMapping();
+    changeSprite(5, seagull_data[0]);
+    changeSprite(6, seagull_data);
+    changeSprite(7, seagull_data[0]);
+    changeSprite(8, seagull_data[1]);
+
 
     int16_t mg_per_lsb = 4;
     int flagGameOver = -1, velX = 1, velXMouse = 1, cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
@@ -119,7 +125,6 @@ int execPong()
     /*Loop principal do jogo*/
     while (1)
     {
-        gpuMapping();
         /*Posiciona elementos e iniciar a maquina de estado da tela*/
         stateGame = 0;
         scoreJ1 = 0;
@@ -172,12 +177,48 @@ int execPong()
                 videoClearSet(11, 2, 70, 58);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
                 
-                changeSprite(2, gaivota[1]);
+               
+
+
                 while (1)
                 {
                     if (isFull() == 0)
-                    {
-                        setSprite(3, 1, 3, 280, 200);
+                    {   // registrador, sprite, offset, x, y
+                        // setSprite(1, 1, 1, 280, 200);
+                        // setSprite(2, 2, 1, 260, 200);
+                        // setSprite(3, 3, 1, 240, 200);
+                        // setSprite(4, 4, 1, 220, 200);
+                        // setSprite(5, 5, 1, 200, 200);
+                        // setSprite(6, 6, 1, 180, 200);
+                        // setSprite(7, 7, 1, 160, 200);
+                        // setSprite(8, 8, 1, 140, 200);
+                        // setSprite(9, 9, 1, 280, 220);  // Nova linha
+                        // setSprite(10, 10, 1, 260, 220); // Nova linha
+                        // setSprite(11, 11, 1, 240, 220); // Nova linha
+                        // setSprite(12, 12, 1, 220, 220); // Nova linha
+                        // setSprite(13, 13, 1, 200, 220); // Nova linha
+                        // setSprite(14, 14, 1, 180, 220); // Nova linha
+                        // setSprite(15, 15, 1, 160, 220); // Nova linha
+                        // setSprite(16, 16, 1, 140, 220); // Nova linha
+                        // setSprite(17, 17, 1, 280, 240); // Nova linha
+                        // setSprite(18, 18, 1, 260, 240); // Nova linha
+                        // setSprite(19, 19, 1, 240, 240); // Nova linha
+                        // setSprite(20, 20, 1, 220, 240); // Nova linha
+                        // setSprite(21, 21, 1, 200, 240); // Nova linha
+                        // setSprite(22, 22, 1, 180, 240); // Nova linha
+                        // setSprite(23, 23, 1, 160, 240); // Nova linha
+                        // setSprite(24, 24, 1, 140, 240); // Nova linha
+                        setSprite(5, 5, 1, 200, 260); // Nova linha
+                        setSprite(6, 6, 1, 220, 260); // Nova linha
+                        setSprite(7, 7, 1, 240, 260); // Nova linha
+                        setSprite(8, 8, 1, 260, 260); // Nova linha
+                        // setSprite(29, 29, 1, 200, 260); // Nova linha
+                        // setSprite(30, 30, 1, 180, 260); // Nova linha
+                        // setSprite(31, 31, 1, 160, 260); // Nova linha
+
+
+
+
                         break;
                     }
                 }
