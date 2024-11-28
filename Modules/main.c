@@ -1,6 +1,11 @@
 #include "prototype.h"
 pthread_mutex_t lockStates;
 int stateGame, buttons, buttonValue = 15, currentOption = 0;
+int scoreJ1, scoreJ2;
+Ball ball;
+Bar barJ1;
+Bar barJ2;
+int flagGameOver = 0, flagReset = 0;
 
 /*
  * Função principal que inicializa o ambiente do jogo Tetris.
@@ -106,16 +111,12 @@ int execPong()
 {
     gpuMapping();
     changeSprite(5, gaivota0);
-    changeSprite(6, gaivota1);
+    changeSprite(6, gaivota0);
     int16_t mg_per_lsb = 4;
-    int flagGameOver = -1, velX = 1, velXMouse = 1, cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
+    int velX = 1, velXMouse = 1, cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
     // buttons = buttonRead();
 
     /* Inicializar os elementos do jogo */
-    int scoreJ1, scoreJ2;
-    Ball ball;
-    Bar barJ1;
-    Bar barJ2;
 
     /*Loop principal do jogo*/
     while (1)
@@ -151,49 +152,60 @@ int execPong()
             else if (stateGame == 1)
             { // Tela do jogo
 
+                if (flagReset)
+                {
+                    scoreJ1 = 0;
+                    scoreJ2 = 0;
+                    resetData(&ball, &barJ1, &barJ2);
+                    flagReset = 0;
+                }
                 videoClearSet(11, 2, 70, 58);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
 
+                // Definir um array com as informações dos sprites (sprite, offset, x, y)
+                int sprites[][4] = {
+                    {5, 6, 10, 290}, // Sprite 1
+                    {6, 6, 18, 320}, // Sprite 2
+                    {7, 6, 26, 350}, // Sprite 3
+                    {8, 6, 18, 140}, // Sprite 4
+                    {9, 6, 26, 170}, // Sprite 5
+                    {10, 6, 10, 110} // Sprite 6
+                };
+
+                // Verificar se a função isFull() retorna 0 e chamar setSprite() para cada sprite
+                while (isFull() == 0)
+                {
+                    for (int i = 0; i < sizeof(sprites) / sizeof(sprites[0]); i++)
+                    {
+                        setSprite(sprites[i][0], sprites[i][1], 1, sprites[i][2], sprites[i][3]);
+                    }
+                    break; // Interromper o loop após definir todos os sprites
+                }
+
+                while (scoreJ1 != 3 || scoreJ2 != 3)
+                {
+                    if (scoreJ1 == 1)
+                    {
+                        while (1)
+                        {
+                            if (isFull() == 0)
+                            {
+                                setSprite(5, 5, 0, 9, 110);
+
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
                 while (1)
                 {
                     if (isFull() == 0)
-                    { // registrador, sprite, offset, x, y
-                        // setSprite(1, 1, 1, 280, 200);
-                        // setSprite(2, 2, 1, 260, 200);
-                        // setSprite(3, 3, 1, 240, 200);
-                        // setSprite(4, 4, 1, 220, 200);
-                        // setSprite(5, 5, 1, 200, 200);
-                        // setSprite(6, 6, 1, 180, 200);
-                        // setSprite(7, 7, 1, 160, 200);
-                        // setSprite(8, 8, 1, 140, 200);
-                        // setSprite(9, 9, 1, 280, 220);  // Nova linha
-                        // setSprite(10, 10, 1, 260, 220); // Nova linha
-                        // setSprite(11, 11, 1, 240, 220); // Nova linha
-                        // setSprite(12, 12, 1, 220, 220); // Nova linha
-                        // setSprite(13, 13, 1, 200, 220); // Nova linha
-                        // setSprite(14, 14, 1, 180, 220); // Nova linha
-                        // setSprite(15, 15, 1, 160, 220); // Nova linha
-                        // setSprite(16, 16, 1, 140, 220); // Nova linha
-                        // setSprite(17, 17, 1, 280, 240); // Nova linha
-                        // setSprite(18, 18, 1, 260, 240); // Nova linha
-                        // setSprite(19, 19, 1, 240, 240); // Nova linha
-                        // setSprite(20, 20, 1, 220, 240); // Nova linha
-                        // setSprite(21, 21, 1, 200, 240); // Nova linha
-                        // setSprite(22, 22, 1, 180, 240); // Nova linha
-                        // setSprite(23, 23, 1, 160, 240); // Nova linha
-                        // setSprite(24, 24, 1, 140, 240); // Nova linha
-                        setSprite(5, 5, 1, 200, 260); // Nova linha
-                        setSprite(6, 6, 1, 220, 260); // Nova linha
-                        // setSprite(7, 7, 1, 240, 260); // Nova linha
-                        // setSprite(8, 8, 1, 260, 260); // Nova linha
-                        // setSprite(29, 29, 1, 200, 260); // Nova linha
-                        // setSprite(30, 30, 1, 180, 260); // Nova linha
-                        // setSprite(31, 31, 1, 160, 260); // Nova linha
-
+                    {
+                        setSprite(11, 9, 1, (ball.ballPositionX * 8) - 4, (ball.ballPositionY * 8) - 4);
                         break;
                     }
                 }
-                // while(1){ if(isFull() == 0) { setSprite(1, 9, 1, (ball.ballPositionX*8)-4, (ball.ballPositionY*8)-4); break; } }
 
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
                 // Esquerda
@@ -205,10 +217,6 @@ int execPong()
                 // Cima
                 // videoBox(10, 1, 70, 2, COLOR_CYAN, BLOCK_SIZE);
 
-                videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
-                // while(1){ if(isFull() == 0) { setSprite(2, 13, 1, ((barJ1.coordX - BAR_SIZE)*8),(barJ1.coordY - BAR_WIDHT)*8); break; } }
-                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
-                // while(1){ if(isFull() == 0) { setSprite(3, 13, 1, (barJ2.coordX - BAR_SIZE)*8, (barJ2.coordY - BAR_WIDHT)*8); break; } }
                 /*Movimentação dos elementos do jogo*/
                 pthread_mutex_lock(&lock);
                 // velX = axis_x * mg_per_lsb;
@@ -233,11 +241,18 @@ int execPong()
                 velXMouse = xMouse;
                 velXMouse = normalizeValue(velXMouse, 1);
                 pthread_mutex_unlock(&lockMouse);
+                int previousVelAccel = velX;
+                int previousVelMouse = velXMouse;
                 moveBar(&barJ1, velX);
                 moveBar(&barJ2, velXMouse);
                 ballRacketCollision(&ball, &barJ1, &cima, &direita, &movVertical, 0);
                 ballRacketCollision(&ball, &barJ2, &cima, &direita, &movVertical, 1);
                 ballBorderCollision(&ball, &barJ1, &barJ2, &cima, &direita, &scoreJ1, &scoreJ2);
+            
+                videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
+                // while(1){ if(isFull() == 0) { setSprite(2, 13, 1, ((barJ1.coordX - BAR_SIZE)*8),(barJ1.coordY - BAR_WIDHT)*8); break; } }
+                videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
+                // while(1){ if(isFull() == 0) { setSprite(3, 13, 1, (barJ2.coordX - BAR_SIZE)*8, (barJ2.coordY - BAR_WIDHT)*8); break; } }
 
                 if (cima == 1 && movVertical == 0)
                 {
@@ -265,6 +280,15 @@ int execPong()
                 {
                     ball.ballPositionY -= 1;
                 }
+
+                int flagGameOver = checkEndGame(scoreJ1,scoreJ2);
+                if (flagGameOver == 1 || flagGameOver == 0)
+                {
+                    scoreJ1 = 0;
+                    scoreJ2 = 0;
+                    resetData(&ball, &barJ1, &barJ2);
+                    Fover(flagGameOver);
+                }
             }
             else if (stateGame == 2)
             { // Estado de pausa
@@ -280,31 +304,18 @@ int execPong()
 
                     // Verifica movimento para cima (botão 1 pressionado)
 
-                    buttonValue = 15;
-
                     if (buttonValue == 14 && buttons == 15)
                     {
                         currentOption = (currentOption - 1 + 3) % 3; // Cicla para cima
+                        buttonValue = 15;
                     }
                     // Verifica movimento para baixo (botão 2 pressionado)
                     else if (buttonValue == 13 && buttons == 15)
                     {
                         currentOption = (currentOption + 1) % 3; // Cicla para baixo
+                        buttonValue = 15;
                     }
                 }
-            }
-            else if (stateGame == 3)
-            {
-
-                // Restart
-                scoreJ1 = 0;
-                scoreJ2 = 0;
-                resetData(&ball, &barJ1, &barJ2);
-            }
-            else if (stateGame == 4)
-            {
-                // GameOver
-                Fover(flagGameOver);
             }
         }
     }
@@ -331,7 +342,6 @@ void changeStateExec()
 
             if (buttonValue == 14 && buttons == 15)
             {
-
                 stateGame = 1;
             }
 
@@ -349,30 +359,28 @@ void changeStateExec()
 
             if (buttonValue == 11 && buttons == 15 && currentOption == 0)
             {
-
-                stateGame = 3;
+                stateGame = 0;
             }
             else if (buttonValue == 11 && buttons == 15 && currentOption == 1)
             {
-
-                stateGame = 0;
+                stateGame = 1;
             }
             else if (buttonValue == 11 && buttons == 15 && currentOption == 2)
             {
 
-                stateGame = 1;
+                stateGame = 3;
             }
 
             break;
 
         case 3:
-            usleep(10000);
+
             stateGame = 1;
             break;
 
         case 4:
-            usleep(10000);
-            stateGame = 1;
+
+            stateGame = 0;
             break;
         }
     }

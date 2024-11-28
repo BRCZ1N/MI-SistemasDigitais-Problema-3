@@ -35,7 +35,7 @@ int processHorizontalMove(int dx) {
 
 // Função para execução contínua da leitura do mouse
 void *execMouse(void *args) {
-    const char *device = "/dev/input/mouse0";
+    const char *device = "/dev/input/mice";
     int fd = open(device, O_RDONLY); // Abrindo o dispositivo do mouse
     if (fd == -1) {
         perror("Erro ao abrir o dispositivo do mouse");
