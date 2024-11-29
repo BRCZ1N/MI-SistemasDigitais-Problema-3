@@ -126,10 +126,10 @@ void clearSpritePos(int slot)
 int execPong()
 {
     gpuMapping();
-    clearSpritePos(12);
     clearSpritePos(6);
-    changeSprite(12, gaivota0);
-    changeSprite(6, pombo_data);
+    clearSpritePos(7);
+    changeSprite(6, gaivota0);
+    changeSprite(7, pombo_data);
     // changeSprite(8, gaivota);
 
     int16_t mg_per_lsb = 4;
@@ -166,8 +166,8 @@ int execPong()
                 flagReset = 0;
                 videoClearSet(11, 2, 70, 58);
 
-                // setarGaivotas(scoreJ1);
-                // setarGaivotas(scoreJ2);
+                //setarGaivotas(scoreJ1);
+                //setarGaivotas(scoreJ2);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
 
                 // Definir um array com as informações dos sprites (sprite, offset, x, y)
@@ -362,9 +362,9 @@ void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int co
         {
             if (isFull() == 0)
             {
-                setSprite(firstReg, regFrame, 1, coordX + (offSet * i), coordY + (offSet * i));
+                setSprite(firstReg, regFrame, 1, coordX + (offSet), coordY + (offSet));
                 usleep(50000);
-                setSprite(firstReg + 1, regFrame + 1, 1, coordX + (offSet * i), coordY + (offSet * i));
+                setSprite(firstReg, regFrame + 1, 1, coordX + (offSet), coordY + (offSet));
                 usleep(50000);
             }
             break;
@@ -374,8 +374,17 @@ void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int co
 
 void lifeAnimation()
 {
-    setDoubleFrameAnimation(scoreJ1, 6, 320, 240, 10, 6);
-    setDoubleFrameAnimation(scoreJ2, 6, 320, 240, 10, 6);
+    while(1){
+
+        if(stateGame == 1){
+
+            setDoubleFrameAnimation(scoreJ1, 6, 320, 240, 10, 6);
+            setDoubleFrameAnimation(scoreJ2, 8, 350, 270, 10, 6);
+
+        }
+
+    }
+    
 }
 
 void changeMultipleSprites(){
