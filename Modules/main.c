@@ -181,23 +181,26 @@ int execPong()
                     }
                     break; // Interromper o loop após definir todos os sprites
                 }
-
-                while (scoreJ1 != 3 || scoreJ2 != 3)
+                void updateScoreSprite(int score, int baseSpriteId)
                 {
-                    if (scoreJ1 == 1)
+                    if (isFull() == 0)
                     {
-                        while (1)
-                        {
-                            if (isFull() == 0)
-                            {
-                                setSprite(5, 5, 0, 9, 110);
-
-                                break;
-                            }
-                        }
+                        setSprite(baseSpriteId + score, 5, 0, 9, 110);
                     }
-                    break;
                 }
+
+                while (scoreJ1 != 3 && scoreJ2 != 3)
+                { // Corrigido: usar "&&" porque o jogo termina quando qualquer jogador chega a 3 pontos
+                    if (scoreJ1 >= 1 && scoreJ1 <= 3)
+                    {
+                        updateScoreSprite(scoreJ1, 4); // Base para J1 é 4 (ajustado)
+                    }
+                    if (scoreJ2 >= 1 && scoreJ2 <= 3)
+                    {
+                        updateScoreSprite(scoreJ2, 7); // Base para J2 é 7 (ajustado)
+                    }
+                }
+
                 while (1)
                 {
                     if (isFull() == 0)
@@ -248,7 +251,7 @@ int execPong()
                 ballRacketCollision(&ball, &barJ1, &cima, &direita, &movVertical, 0);
                 ballRacketCollision(&ball, &barJ2, &cima, &direita, &movVertical, 1);
                 ballBorderCollision(&ball, &barJ1, &barJ2, &cima, &direita, &scoreJ1, &scoreJ2);
-            
+
                 videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
                 // while(1){ if(isFull() == 0) { setSprite(2, 13, 1, ((barJ1.coordX - BAR_SIZE)*8),(barJ1.coordY - BAR_WIDHT)*8); break; } }
                 videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
@@ -281,7 +284,7 @@ int execPong()
                     ball.ballPositionY -= 1;
                 }
 
-                int flagGameOver = checkEndGame(scoreJ1,scoreJ2);
+                int flagGameOver = checkEndGame(scoreJ1, scoreJ2);
                 if (flagGameOver == 1 || flagGameOver == 0)
                 {
                     scoreJ1 = 0;
