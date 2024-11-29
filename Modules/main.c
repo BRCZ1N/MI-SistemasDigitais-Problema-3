@@ -17,7 +17,7 @@ int flagGameOver = -1, flagReset = 0;
  */
 int main()
 {
-    pthread_t thread1, thread2, thread3, thread4;
+    pthread_t thread1, thread2, thread3, thread4, thread5;
 
     pthread_mutex_init(&lock, NULL);
     pthread_mutex_init(&lockMouse, NULL);
@@ -27,11 +27,13 @@ int main()
     pthread_create(&thread2, NULL, execPong, NULL);
     pthread_create(&thread3, NULL, execMouse, NULL);
     pthread_create(&thread4, NULL, changeStateExec, NULL);
+    pthread_create(&thread5, NULL, lifeAnimation, NULL);
 
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
     pthread_join(thread3, NULL);
     pthread_join(thread4, NULL);
+    pthread_join(thread5, NULL);
 
     pthread_mutex_destroy(&lock);
     pthread_mutex_destroy(&lockMouse);
@@ -107,24 +109,19 @@ void clearSprite()
     }
 }
 
-void clearSpritePos(int slot){
+void clearSpritePos(int slot)
+{
 
     for (int i = 0; i < 20; i++)
     {
 
-        for(int j = 0; j < 20; j++){
-
+        for (int j = 0; j < 20; j++)
+        {
 
             setSpriteMemory(slot, 0b000000000, j, i);
-
         }
-
     }
-
 }
-
-
-
 
 int execPong()
 {
@@ -169,8 +166,8 @@ int execPong()
                 flagReset = 0;
                 videoClearSet(11, 2, 70, 58);
 
-                setarGaivotas(scoreJ1);
-                setarGaivotas(scoreJ2);
+                // setarGaivotas(scoreJ1);
+                // setarGaivotas(scoreJ2);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
 
                 // Definir um array com as informações dos sprites (sprite, offset, x, y)
@@ -187,9 +184,6 @@ int execPong()
                 //     // {14, 14, 10, 170}, // Sprite 9
                 // }
 
-
-            
-
                 // // Verificar se a função isFull() retorna 0 e chamar setSprite() para cada sprite
                 // if (isFull() == 0)
                 // {
@@ -200,7 +194,6 @@ int execPong()
                 //     setSprite(12, 12, 1, 320, 240);
                 //     setSprite(6, 6, 1, 300, 240);
                 //     // setSprite(8, 8, 1, 340, 240);
-
 
                 //     break; // Interromper o loop após definir todos os sprites
                 // }
@@ -222,7 +215,6 @@ int execPong()
                 //     break;
                 // }
 
-                
                 while (1)
                 {
                     if (isFull() == 0)
@@ -307,7 +299,6 @@ int execPong()
                 }
 
                 flagGameOver = checkEndGame(scoreJ1, scoreJ2);
-                
             }
             else if (stateGame == 2)
             { // Estado de pausa
@@ -360,22 +351,38 @@ int execPong()
     return 0;
 }
 
- void setarGaivotas(int scoreJogador){
+// Função para 2 frames de animação
+void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int coordY, int offSet, int regFrame)
+{
 
-    for (int i = 3; i <= scoreJogador; i++ ){
+    for (int i = 0; i < maxIterations; i++)
+    {
 
-        while (1){
-            if (isFull() == 0){
-                setSprite(i+11, 6, 1, 320, 240);
+        while (1)
+        {
+            if (isFull() == 0)
+            {
+                setSprite(firstReg, regFrame, 1, coordX + (offSet * i), coordY + (offSet * i));
                 usleep(50000);
-                setSprite(i+11, 12, 1, 320, 240);
+                setSprite(firstReg + 1, regFrame + 1, 1, coordX + (offSet * i), coordY + (offSet * i));
                 usleep(50000);
             }
-            break; 
+            break;
         }
     }
+}
 
- }
+void lifeAnimation()
+{
+    setDoubleFrameAnimation(scoreJ1, 6, 320, 240, 10, 6);
+    setDoubleFrameAnimation(scoreJ2, 6, 320, 240, 10, 6);
+}
+
+void changeMultipleSprites(){
+
+
+    
+}
 
 void changeStateExec()
 {
@@ -434,7 +441,7 @@ void changeStateExec()
             break;
 
         case 3:
- 
+
             stateGame = 1;
 
             break;

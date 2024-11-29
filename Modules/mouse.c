@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <linux/input.h>
 #include "prototype.h"
 
 // Definições
