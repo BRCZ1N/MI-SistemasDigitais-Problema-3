@@ -111,7 +111,7 @@ void ballBorderCollision(Ball *ball, Bar *barJ1, Bar *barJ2, int *vert, int *hor
     if (ball->ballPositionY + 1 == TOP_MARGIN + BORDER_WEIGHT)
     {
 
-        *scoreJ1 += 1;
+        *scoreJ1 -= 1;
         resetData(ball,barJ1,barJ2);
 
     }
@@ -123,7 +123,7 @@ void ballBorderCollision(Ball *ball, Bar *barJ1, Bar *barJ2, int *vert, int *hor
     // Colisão com o chão = perde uma vida
     if (ball->ballPositionY- 1 == BOTTOM_MARGIN + BORDER_WEIGHT){
 
-        *scoreJ2 += 1;
+        *scoreJ2 -= 1;
         resetData(ball,barJ1,barJ2);
     
     }

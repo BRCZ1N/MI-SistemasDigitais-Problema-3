@@ -27,7 +27,7 @@
 #include "pRT.h"
 #include "pMM.h"
 #include "gaivota0.h"
-#include "gaivota1.h"
+#include "pombo.h"
 
 
 int execPong();
@@ -71,7 +71,7 @@ extern const uint32_t gaivota[2][400];
 
 extern int closeGpuMapping();
 extern int gpuMapping();
-extern void setSprite(int registrador, int x, int y, int offset, int activation_bit);
+extern void setSprite(int registrador, int offset, int activation_bit, int x, int y);
 extern void setBackgroundColor(int R, int G, int B);
 extern void setBackgroundBlock(int column, int line, int R, int G, int B);
 extern void setPolygon(int address, int opcode, int color, int form, int mult, int ref_point_x, int ref_point_y);

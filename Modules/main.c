@@ -5,7 +5,7 @@ int scoreJ1, scoreJ2;
 Ball ball;
 Bar barJ1;
 Bar barJ2;
-int flagGameOver = 0, flagReset = 0;
+int flagGameOver = -1, flagReset = 0;
 
 /*
  * Função principal que inicializa o ambiente do jogo Tetris.
@@ -59,12 +59,12 @@ int main()
 //
 int checkEndGame(int scoreJ1, int scoreJ2)
 {
-    if (scoreJ1 == 3)
+    if (scoreJ1 == 0)
     {
 
         return 1;
     }
-    else if (scoreJ2 == 3)
+    else if (scoreJ2 == 0)
     {
 
         return 0;
@@ -107,11 +107,34 @@ void clearSprite()
     }
 }
 
+void clearSpritePos(int slot){
+
+    for (int i = 0; i < 20; i++)
+    {
+
+        for(int j = 0; j < 20; j++){
+
+
+            setSpriteMemory(slot, 0b000000000, j, i);
+
+        }
+
+    }
+
+}
+
+
+
+
 int execPong()
 {
     gpuMapping();
-    changeSprite(5, gaivota0);
-    changeSprite(6, gaivota0);
+    clearSpritePos(12);
+    clearSpritePos(6);
+    changeSprite(12, gaivota0);
+    changeSprite(6, pombo_data);
+    // changeSprite(8, gaivota);
+
     int16_t mg_per_lsb = 4;
     int velX = 1, velXMouse = 1, cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
     // buttons = buttonRead();
@@ -123,23 +146,13 @@ int execPong()
     {
         /*Posiciona elementos e iniciar a maquina de estado da tela*/
         stateGame = 0;
-        scoreJ1 = 0;
-        scoreJ2 = 0;
+        scoreJ1 = 3;
+        scoreJ2 = 3;
         resetData(&ball, &barJ1, &barJ2);
 
         /*Loop da patida do jogo*/
         while (1)
         { // Enquanto o jogador não perdeu e não ganhou o jogo
-
-            // buttons = buttonRead();
-
-            // if (buttons != 15)
-            // {
-
-            //     buttonValue = buttons;
-            // }
-
-            // changeState(&stateGame, &buttonValue, buttons);
 
             /* switch para mudar a tela de acordo com o estado */
             if (stateGame == 0)
@@ -152,55 +165,64 @@ int execPong()
             else if (stateGame == 1)
             { // Tela do jogo
 
-                if (flagReset)
-                {
-                    scoreJ1 = 0;
-                    scoreJ2 = 0;
-                    resetData(&ball, &barJ1, &barJ2);
-                    flagReset = 0;
-                }
+                flagGameOver = -1;
+                flagReset = 0;
                 videoClearSet(11, 2, 70, 58);
+
+                setarGaivotas(scoreJ1);
+                setarGaivotas(scoreJ2);
                 // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
 
                 // Definir um array com as informações dos sprites (sprite, offset, x, y)
-                int sprites[][4] = {
-                    {5, 6, 10, 290}, // Sprite 1
-                    {6, 6, 18, 320}, // Sprite 2
-                    {7, 6, 26, 350}, // Sprite 3
-                    {8, 6, 18, 140}, // Sprite 4
-                    {9, 6, 26, 170}, // Sprite 5
-                    {10, 6, 10, 110} // Sprite 6
-                };
+                // int sprites[][4] = {
+                //     {12, 12, 10, 290}, // Sprite 1
+                //     {6, 6, 20, 200}, // Sprite 2
+                //     // {7, 6, 26, 350}, // Sprite 3
+                //     // {8, 6, 18, 140}, // Sprite 4
+                //     // {9, 6, 26, 170}, // Sprite 5
+                //     // {10, 6, 10, 110}, // Sprite 6
 
-                // Verificar se a função isFull() retorna 0 e chamar setSprite() para cada sprite
-                while (isFull() == 0)
-                {
-                    for (int i = 0; i < sizeof(sprites) / sizeof(sprites[0]); i++)
-                    {
-                        setSprite(sprites[i][0], sprites[i][1], 1, sprites[i][2], sprites[i][3]);
-                    }
-                    break; // Interromper o loop após definir todos os sprites
-                }
-                void updateScoreSprite(int score, int baseSpriteId)
-                {
-                    if (isFull() == 0)
-                    {
-                        setSprite(baseSpriteId + score, 5, 0, 9, 110);
-                    }
-                }
+                //     // {12, 12, 10, 130}, // Sprite 7
+                //     // {13, 13, 10, 150}, // Sprite 8
+                //     // {14, 14, 10, 170}, // Sprite 9
+                // }
 
-                while (scoreJ1 != 3 && scoreJ2 != 3)
-                { // Corrigido: usar "&&" porque o jogo termina quando qualquer jogador chega a 3 pontos
-                    if (scoreJ1 >= 1 && scoreJ1 <= 3)
-                    {
-                        updateScoreSprite(scoreJ1, 4); // Base para J1 é 4 (ajustado)
-                    }
-                    if (scoreJ2 >= 1 && scoreJ2 <= 3)
-                    {
-                        updateScoreSprite(scoreJ2, 7); // Base para J2 é 7 (ajustado)
-                    }
-                }
 
+            
+
+                // // Verificar se a função isFull() retorna 0 e chamar setSprite() para cada sprite
+                // if (isFull() == 0)
+                // {
+                //     // for (int i = 0; i < sizeof(sprites) / sizeof(sprites[0]); i++)
+                //     // {
+                //     //     setSprite(sprites[i][0], sprites[i][1], 1, sprites[i][2], sprites[i][3]);
+                //     // }
+                //     setSprite(12, 12, 1, 320, 240);
+                //     setSprite(6, 6, 1, 300, 240);
+                //     // setSprite(8, 8, 1, 340, 240);
+
+
+                //     break; // Interromper o loop após definir todos os sprites
+                // }
+
+                // while (scoreJ1 != 3 || scoreJ2 != 3)
+                // {
+                //     if (scoreJ1 == 1)
+                //     {
+                //         while (1)
+                //         {
+                //             if (isFull() == 0)
+                //             {
+                //                 setSprite(5, 5, 0, 9, 110);
+
+                //                 break;
+                //             }
+                //         }
+                //     }
+                //     break;
+                // }
+
+                
                 while (1)
                 {
                     if (isFull() == 0)
@@ -284,14 +306,8 @@ int execPong()
                     ball.ballPositionY -= 1;
                 }
 
-                int flagGameOver = checkEndGame(scoreJ1, scoreJ2);
-                if (flagGameOver == 1 || flagGameOver == 0)
-                {
-                    scoreJ1 = 0;
-                    scoreJ2 = 0;
-                    resetData(&ball, &barJ1, &barJ2);
-                    Fover(flagGameOver);
-                }
+                flagGameOver = checkEndGame(scoreJ1, scoreJ2);
+                
             }
             else if (stateGame == 2)
             { // Estado de pausa
@@ -320,11 +336,46 @@ int execPong()
                     }
                 }
             }
+            else if (stateGame == 3)
+            {
+
+                clearSprite();
+                videoClear();
+                scoreJ1 = scoreJ2 = 3;
+                resetData(&ball, &barJ1, &barJ2);
+            }
+            else if (stateGame == 4)
+            {
+
+                clearSprite();
+                videoClear();
+                scoreJ1 = scoreJ2 = 3;
+                resetData(&ball, &barJ1, &barJ2);
+                flagGameOver = -1;
+                Fover(flagGameOver);
+            }
         }
     }
 
     return 0;
 }
+
+ void setarGaivotas(int scoreJogador){
+
+    for (int i = 3; i <= scoreJogador; i++ ){
+
+        while (1){
+            if (isFull() == 0){
+                setSprite(i+11, 6, 1, 320, 240);
+                usleep(50000);
+                setSprite(i+11, 12, 1, 320, 240);
+                usleep(50000);
+            }
+            break; 
+        }
+    }
+
+ }
 
 void changeStateExec()
 {
@@ -357,6 +408,12 @@ void changeStateExec()
 
                 stateGame = 2;
             }
+            else if (flagGameOver == 1 || flagGameOver == 0)
+            {
+
+                stateGame = 4;
+            }
+            break;
 
         case 2:
 
@@ -377,13 +434,18 @@ void changeStateExec()
             break;
 
         case 3:
-
+ 
             stateGame = 1;
+
             break;
 
         case 4:
 
-            stateGame = 0;
+            if (flagGameOver)
+            {
+
+                stateGame = 0;
+            }
             break;
         }
     }
