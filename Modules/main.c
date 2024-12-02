@@ -1,7 +1,7 @@
 #include "prototype.h"
 pthread_mutex_t lockStates;
 int stateGame, buttons, buttonValue = 15, currentOption = 0;
-int scoreJ1, scoreJ2;
+int lifeJ1, lifeJ2;
 Ball ball;
 Bar barJ1;
 Bar barJ2;
@@ -59,14 +59,14 @@ int main()
 
 //     int16_t mg_per_lsb = 4;
 //
-int checkEndGame(int scoreJ1, int scoreJ2)
+int checkEndGame(int lifeJ1, int lifeJ2)
 {
-    if (scoreJ1 == 0)
+    if (lifeJ1 == 0)
     {
 
         return 1;
     }
-    else if (scoreJ2 == 0)
+    else if (lifeJ2 == 0)
     {
 
         return 0;
@@ -109,6 +109,12 @@ void clearSprite()
     }
 }
 
+void clearSpriteReg(int reg)
+{
+
+    setSprite(reg, 0, 0, 0, 0);
+}
+
 void clearSpritePos(int slot)
 {
 
@@ -143,8 +149,8 @@ int execPong()
     {
         /*Posiciona elementos e iniciar a maquina de estado da tela*/
         stateGame = 0;
-        scoreJ1 = 3;
-        scoreJ2 = 3;
+        lifeJ1 = 3;
+        lifeJ2 = 3;
         resetData(&ball, &barJ1, &barJ2);
 
         /*Loop da patida do jogo*/
@@ -166,9 +172,9 @@ int execPong()
                 flagReset = 0;
                 videoClearSet(11, 2, 70, 58);
 
-                //setarGaivotas(scoreJ1);
-                //setarGaivotas(scoreJ2);
-                // generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
+                // setarGaivotas(lifeJ1);
+                // setarGaivotas(lifeJ2);
+                //  generateBall(ball.ballPositionX, ball.ballPositionY, COLOR_WHITE);
 
                 // Definir um array com as informações dos sprites (sprite, offset, x, y)
                 // int sprites[][4] = {
@@ -198,9 +204,9 @@ int execPong()
                 //     break; // Interromper o loop após definir todos os sprites
                 // }
 
-                // while (scoreJ1 != 3 || scoreJ2 != 3)
+                // while (lifeJ1 != 3 || lifeJ2 != 3)
                 // {
-                //     if (scoreJ1 == 1)
+                //     if (lifeJ1 == 1)
                 //     {
                 //         while (1)
                 //         {
@@ -264,7 +270,7 @@ int execPong()
                 moveBar(&barJ2, velXMouse);
                 ballRacketCollision(&ball, &barJ1, &cima, &direita, &movVertical, 0);
                 ballRacketCollision(&ball, &barJ2, &cima, &direita, &movVertical, 1);
-                ballBorderCollision(&ball, &barJ1, &barJ2, &cima, &direita, &scoreJ1, &scoreJ2);
+                ballBorderCollision(&ball, &barJ1, &barJ2, &cima, &direita, &lifeJ1, &lifeJ2);
 
                 videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
                 // while(1){ if(isFull() == 0) { setSprite(2, 13, 1, ((barJ1.coordX - BAR_SIZE)*8),(barJ1.coordY - BAR_WIDHT)*8); break; } }
@@ -298,7 +304,7 @@ int execPong()
                     ball.ballPositionY -= 1;
                 }
 
-                flagGameOver = checkEndGame(scoreJ1, scoreJ2);
+                flagGameOver = checkEndGame(lifeJ1, lifeJ2);
             }
             else if (stateGame == 2)
             { // Estado de pausa
@@ -332,7 +338,7 @@ int execPong()
 
                 clearSprite();
                 videoClear();
-                scoreJ1 = scoreJ2 = 3;
+                lifeJ1 = lifeJ2 = 3;
                 resetData(&ball, &barJ1, &barJ2);
             }
             else if (stateGame == 4)
@@ -340,7 +346,7 @@ int execPong()
 
                 clearSprite();
                 videoClear();
-                scoreJ1 = scoreJ2 = 3;
+                lifeJ1 = lifeJ2 = 3;
                 resetData(&ball, &barJ1, &barJ2);
                 flagGameOver = -1;
                 Fover(flagGameOver);
@@ -362,35 +368,33 @@ void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int co
         {
             if (isFull() == 0)
             {
-                setSprite(firstReg, regFrame, 1, coordX + (offSet), coordY + (offSet));
+                setSprite(firstReg + i, regFrame, 1, coordX + (offSet), coordY + (offSet));
                 usleep(50000);
-                setSprite(firstReg, regFrame + 1, 1, coordX + (offSet), coordY + (offSet));
+                setSprite(firstReg + i, regFrame + 1, 1, coordX + (offSet), coordY + (offSet));
                 usleep(50000);
             }
             break;
         }
     }
+
+    for (int i = 0; i < 3 - maxIterations; i++)
+    {
+        clearSpriteReg(firstReg + i);
+    }
 }
 
 void lifeAnimation()
 {
-    while(1){
+    while (1)
+    {
 
-        if(stateGame == 1){
+        if (stateGame == 1)
+        {
 
-            setDoubleFrameAnimation(scoreJ1, 6, 320, 240, 10, 6);
-            setDoubleFrameAnimation(scoreJ2, 8, 350, 270, 10, 6);
-
+            setDoubleFrameAnimation(lifeJ1, 6, 320, 240, 5, 6);
+            setDoubleFrameAnimation(lifeJ2, 8, 350, 270, 5, 6);
         }
-
     }
-    
-}
-
-void changeMultipleSprites(){
-
-
-    
 }
 
 void changeStateExec()

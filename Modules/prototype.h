@@ -33,7 +33,7 @@
 int execPong();
 void resetData(Ball *ball, Bar *barJ1, Bar *barJ2);
 void ballRacketCollision(Ball *ball, Bar *bar, int *vert, int *hori, int *movVertical, int isTopBar);
-void ballBorderCollision(Ball *ball, Bar *barJ1, Bar *barJ2, int *vert, int *hori, int *scoreJ1, int *scoreJ2);
+void ballBorderCollision(Ball *ball, Bar *barJ1, Bar *barJ2, int *vert, int *hori, int *lifeJ1, int *lifeJ2);
 void *execMouse(void *args);
 void screenMenu();
 void gameField(int stateGame);
