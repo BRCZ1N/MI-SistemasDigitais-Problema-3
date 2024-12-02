@@ -361,37 +361,34 @@ int execPong()
     return 0;
 }
 
-void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int coordY, int offSet, int regFrame)
-{
-    // Deslocamentos para cada sprite em relação à coordenada inicial
-    int dx[] = {0, offSet, -offSet};  // Deslocamento horizontal para cada sprite
-    int dy[] = {0, offSet, -offSet};  // Deslocamento vertical para cada sprite
+// Função de animação de sprites (vidas)
+void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int coordY, int offSet, int regFrame) {
+    int dx[] = {0, offSet, -offSet};  // Deslocamento horizontal
+    int dy[] = {0, offSet, -offSet};  // Deslocamento vertical
 
-    // Laço para cada sprite (3 sprites)
-    for (int j = 0; j < 3; j++) {
-        while (1) {
-            if (isFull() == 0) {
-                // Cálculo da posição de cada sprite com deslocamento diferente
-                int spriteCoordX = coordX + dx[j]; // Coordenada X com deslocamento
-                int spriteCoordY = coordY + dy[j]; // Coordenada Y com deslocamento
+    // Anima as vidas restantes
+    for (int i = 0; i < 3; i++) {
+        if (i < maxIterations) {
+            // Animação para vidas ativas
+            while (1) {
+                if (isFull() == 0) {
+                    int spriteCoordX = coordX + dx[i];
+                    int spriteCoordY = coordY + dy[i];
+                    setSprite(firstReg + i, regFrame, 1, spriteCoordX, spriteCoordY);
+                    usleep(50000);
 
-                // Animação do sprite com dois frames
-                printf("Sprite %d na posição (%d, %d)\n", firstReg + j, spriteCoordX, spriteCoordY);  // Debug
-                setSprite(firstReg + j, regFrame, 1, spriteCoordX, spriteCoordY);
-                usleep(50000); // Atraso de 50 ms entre os frames
-
-                setSprite(firstReg + j, regFrame + 1, 1, spriteCoordX, spriteCoordY);
-                usleep(50000); // Atraso de 50 ms entre os frames
+                    setSprite(firstReg + i, regFrame + 1, 1, spriteCoordX, spriteCoordY);
+                    usleep(50000);
+                }
+                break;
             }
-            break; // Sai do loop assim que o primeiro sprite for animado
+        } else {
+            // Limpa os sprites além do número de vidas restantes
+            clearSpriteReg(firstReg + i);
         }
     }
-
-    // Limpeza dos registros após a animação, considerando o máximo de iterações
-    for (int i = 0; i < 3 - maxIterations; i++) {
-        clearSpriteReg(firstReg + i);
-    }
 }
+
 
 
 void lifeAnimation()
