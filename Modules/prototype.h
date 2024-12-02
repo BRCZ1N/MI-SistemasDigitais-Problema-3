@@ -36,6 +36,7 @@ void ballRacketCollision(Ball *ball, Bar *bar, int *vert, int *hori, int *movVer
 void ballBorderCollision(Ball *ball, Bar *barJ1, Bar *barJ2, int *vert, int *hori, int *lifeJ1, int *lifeJ2);
 void *execMouse(void *args);
 void screenMenu();
+void lifeAnimation();
 void gameField(int stateGame);
 void generateChar(int coordX, int coordY, char caracter, short cor); 
 void changeGameState(int *pointer_state, int *pointer_buttons, int buttons); 
@@ -77,5 +78,12 @@ extern void setBackgroundBlock(int column, int line, int R, int G, int B);
 extern void setPolygon(int address, int opcode, int color, int form, int mult, int ref_point_x, int ref_point_y);
 extern void setSpriteMemory(unsigned long spriteSlot, unsigned long cor,unsigned long x, unsigned long y);
 extern int isFull();
+
+// Função para atualizar a posição de uma barra
+void updateBarPosition(int coordX, int coordY, int width, int size, int color);
+
+// Atualiza a primeira barra
+void updateBars();
+
 
 #endif

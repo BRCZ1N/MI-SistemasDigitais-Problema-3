@@ -132,10 +132,10 @@ void clearSpritePos(int slot)
 int execPong()
 {
     gpuMapping();
-    clearSpritePos(6);
-    clearSpritePos(7);
-    changeSprite(6, gaivota0);
-    changeSprite(7, pombo_data);
+    clearSpritePos(2);
+    clearSpritePos(3);
+    changeSprite(2, gaivota0);
+    changeSprite(3, pombo_data);
     // changeSprite(8, gaivota);
 
     int16_t mg_per_lsb = 4;
@@ -170,8 +170,7 @@ int execPong()
 
                 flagGameOver = -1;
                 flagReset = 0;
-                videoClearSet(11, 2, 70, 58);
-
+                // videoClearSet(11, 2, 70, 58);
 
                 // setarGaivotas(lifeJ1);
                 // setarGaivotas(lifeJ2);
@@ -248,12 +247,12 @@ int execPong()
                 if (axis_x * mg_per_lsb >= 100)
                 {
 
-                    velX = 1;
+                    velX +=1;
                 }
                 else if (axis_x * mg_per_lsb <= -100)
                 {
 
-                    velX = -1;
+                    velX -=1;
                 }
                 else
                 {
@@ -273,12 +272,12 @@ int execPong()
                 ballRacketCollision(&ball, &barJ2, &cima, &direita, &movVertical, 1);
                 ballBorderCollision(&ball, &barJ1, &barJ2, &cima, &direita, &lifeJ1, &lifeJ2);
 
-                //Limpa a primeira barra
-                //videoClearSet(11, 2, 70, 5);
+                // Limpa a primeira barra
+                videoClearSet(11, 1, 70, 6);
                 videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
                 // while(1){ if(isFull() == 0) { setSprite(2, 13, 1, ((barJ1.coordX - BAR_SIZE)*8),(barJ1.coordY - BAR_WIDHT)*8); break; } }
-                //Limpa a segunda barra
-                //videoClearSet(11, 55, 70, 58);
+                // Limpa a segunda barra
+                videoClearSet(11, 54, 70, 57);
                 videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
                 // while(1){ if(isFull() == 0) { setSprite(3, 13, 1, (barJ2.coordX - BAR_SIZE)*8, (barJ2.coordY - BAR_WIDHT)*8); break; } }
 
@@ -362,42 +361,48 @@ int execPong()
     return 0;
 }
 
-// Função para 2 frames de animação
 void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int coordY, int offSet, int regFrame)
 {
+    // Deslocamentos para cada sprite em relação à coordenada inicial
+    int dx[] = {0, offSet, -offSet};  // Deslocamento horizontal para cada sprite
+    int dy[] = {0, offSet, -offSet};  // Deslocamento vertical para cada sprite
 
-    for (int i = 0; i < maxIterations; i++)
-    {
+    // Laço para cada sprite (3 sprites)
+    for (int j = 0; j < 3; j++) {
+        while (1) {
+            if (isFull() == 0) {
+                // Cálculo da posição de cada sprite com deslocamento diferente
+                int spriteCoordX = coordX + dx[j]; // Coordenada X com deslocamento
+                int spriteCoordY = coordY + dy[j]; // Coordenada Y com deslocamento
 
-        while (1)
-        {
-            if (isFull() == 0)
-            {
-                setSprite(firstReg + i, regFrame, 1, coordX + (offSet), coordY + (offSet));
-                usleep(50000);
-                setSprite(firstReg + i, regFrame + 1, 1, coordX + (offSet), coordY + (offSet));
-                usleep(50000);
+                // Animação do sprite com dois frames
+                printf("Sprite %d na posição (%d, %d)\n", firstReg + j, spriteCoordX, spriteCoordY);  // Debug
+                setSprite(firstReg + j, regFrame, 1, spriteCoordX, spriteCoordY);
+                usleep(50000); // Atraso de 50 ms entre os frames
+
+                setSprite(firstReg + j, regFrame + 1, 1, spriteCoordX, spriteCoordY);
+                usleep(50000); // Atraso de 50 ms entre os frames
             }
-            break;
+            break; // Sai do loop assim que o primeiro sprite for animado
         }
     }
 
-    for (int i = 0; i < 3 - maxIterations; i++)
-    {
+    // Limpeza dos registros após a animação, considerando o máximo de iterações
+    for (int i = 0; i < 3 - maxIterations; i++) {
         clearSpriteReg(firstReg + i);
     }
 }
+
 
 void lifeAnimation()
 {
     while (1)
     {
-
         if (stateGame == 1)
         {
-
-            setDoubleFrameAnimation(lifeJ1, 6, 320, 240, 5, 6);
-            setDoubleFrameAnimation(lifeJ2, 8, 350, 270, 5, 6);
+     
+            setDoubleFrameAnimation(lifeJ1, 1, 30, 120, 20, 2);
+            setDoubleFrameAnimation(lifeJ2, 4, 30, 320, 20, 2);
         }
     }
 }
