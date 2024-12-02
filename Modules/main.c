@@ -247,12 +247,12 @@ int execPong()
                 if (axis_x * mg_per_lsb >= 100)
                 {
 
-                    velX +=1;
+                    velX = 1;
                 }
                 else if (axis_x * mg_per_lsb <= -100)
                 {
 
-                    velX -=1;
+                    velX = -1;
                 }
                 else
                 {
@@ -362,16 +362,21 @@ int execPong()
 }
 
 // Função de animação de sprites (vidas)
-void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int coordY, int offSet, int regFrame) {
-    int dx[] = {0, offSet, -offSet};  // Deslocamento horizontal
-    int dy[] = {0, offSet, -offSet};  // Deslocamento vertical
+void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int coordY, int offSet, int regFrame)
+{
+    int dx[] = {0, offSet, offSet * 2}; // Deslocamento horizontal
+    int dy[] = {0, offSet, offSet * 2}; // Deslocamento vertical
 
     // Anima as vidas restantes
-    for (int i = 0; i < 3; i++) {
-        if (i < maxIterations) {
+    for (int i = 0; i < 3; i++)
+    {
+        if (i < maxIterations)
+        {
             // Animação para vidas ativas
-            while (1) {
-                if (isFull() == 0) {
+            while (1)
+            {
+                if (isFull() == 0)
+                {
                     int spriteCoordX = coordX + dx[i];
                     int spriteCoordY = coordY + dy[i];
                     setSprite(firstReg + i, regFrame, 1, spriteCoordX, spriteCoordY);
@@ -382,14 +387,14 @@ void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int co
                 }
                 break;
             }
-        } else {
+        }
+        else
+        {
             // Limpa os sprites além do número de vidas restantes
             clearSpriteReg(firstReg + i);
         }
     }
 }
-
-
 
 void lifeAnimation()
 {
@@ -397,7 +402,7 @@ void lifeAnimation()
     {
         if (stateGame == 1)
         {
-     
+
             setDoubleFrameAnimation(lifeJ1, 1, 30, 120, 20, 2);
             setDoubleFrameAnimation(lifeJ2, 4, 30, 320, 20, 2);
         }
