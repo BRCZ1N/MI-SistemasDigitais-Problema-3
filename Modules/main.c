@@ -171,6 +171,11 @@ int execPong()
                 flagGameOver = -1;
                 flagReset = 0;
                 videoClearSet(11, 2, 70, 58);
+                //Limpa a primeira barra
+                videoClearSet(11, 2, 70, 5);
+                //Limpa a segunda barra
+                videoClearSet(11, 55, 70, 58);
+
 
                 // setarGaivotas(lifeJ1);
                 // setarGaivotas(lifeJ2);
@@ -272,8 +277,12 @@ int execPong()
                 ballRacketCollision(&ball, &barJ2, &cima, &direita, &movVertical, 1);
                 ballBorderCollision(&ball, &barJ1, &barJ2, &cima, &direita, &lifeJ1, &lifeJ2);
 
+                //Limpa a primeira barra
+                //videoClearSet(11, 2, 70, 5);
                 videoBox(barJ1.coordX - BAR_SIZE, barJ1.coordY - BAR_WIDHT, barJ1.coordX + BAR_SIZE, barJ1.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
                 // while(1){ if(isFull() == 0) { setSprite(2, 13, 1, ((barJ1.coordX - BAR_SIZE)*8),(barJ1.coordY - BAR_WIDHT)*8); break; } }
+                //Limpa a segunda barra
+                //videoClearSet(11, 55, 70, 58);
                 videoBox(barJ2.coordX - BAR_SIZE, barJ2.coordY - BAR_WIDHT, barJ2.coordX + BAR_SIZE, barJ2.coordY + BAR_WIDHT, COLOR_WHITE, BLOCK_SIZE);
                 // while(1){ if(isFull() == 0) { setSprite(3, 13, 1, (barJ2.coordX - BAR_SIZE)*8, (barJ2.coordY - BAR_WIDHT)*8); break; } }
 
