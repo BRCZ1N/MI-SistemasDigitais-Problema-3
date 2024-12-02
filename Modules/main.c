@@ -171,10 +171,6 @@ int execPong()
                 flagGameOver = -1;
                 flagReset = 0;
                 videoClearSet(11, 2, 70, 58);
-                //Limpa a primeira barra
-                videoClearSet(11, 2, 70, 5);
-                //Limpa a segunda barra
-                videoClearSet(11, 55, 70, 58);
 
 
                 // setarGaivotas(lifeJ1);
