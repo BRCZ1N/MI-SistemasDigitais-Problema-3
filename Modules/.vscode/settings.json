@@ -3,6 +3,10 @@
         "stdio.h": "c",
         "fcntl.h": "c",
         "prototype.h": "c",
-        "acelerometro.h": "c"
+        "acelerometro.h": "c",
+        "homescreen.h": "c",
+        "over.h": "c",
+        "pause.h": "c",
+        "stdint.h": "c"
     }
 }
