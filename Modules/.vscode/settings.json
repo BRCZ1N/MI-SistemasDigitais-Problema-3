@@ -7,6 +7,9 @@
         "homescreen.h": "c",
         "over.h": "c",
         "pause.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "gaivota1.h": "c",
+        "seagull.h": "c",
+        "pombo.h": "c"
     }
 }
