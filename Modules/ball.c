@@ -42,61 +42,55 @@ void resetData(Ball *ball, Bar *barJ1, Bar *barJ2)
 
 void ballRacketCollision(Ball *ball, Bar *bar, int *vert, int *hori, int *movVertical, int isTopBar)
 {
-    // Define uma faixa de Y para o range de colisão na raquete
-    int racketStartY = bar->coordY - 3;  // Começo da faixa Y da raquete (ajustado para permitir um range)
-    int racketEndY = bar->coordY + 2;    // Fim da faixa Y da raquete (ajustado para permitir um range)
+    // Ajusta a faixa Y dependendo se é a raquete superior ou inferior
+    int racketStartY, racketEndY;
 
-    // Define uma faixa de X para o range de colisão na raquete
-    int racketStartX = bar->coordX - 4;  // Começo da faixa X da raquete (ajustado para permitir um range)
-    int racketEndX = bar->coordX + RACKET_WIDTH + 4; // Fim da faixa X da raquete (ajustado para permitir um range)
+    if (isTopBar) {
+        // Raquete superior: a colisão ocorre acima, portanto, o intervalo Y é ajustado de forma "normal"
+        racketStartY = bar->coordY - 6;  // Começo da faixa Y da raquete
+        racketEndY = bar->coordY + 4;    // Fim da faixa Y da raquete
+    } else {
+        // Raquete inferior: a colisão ocorre abaixo, então o intervalo Y é invertido
+        racketStartY = bar->coordY - 4;  // Começo da faixa Y da raquete (ajustado para raquete inferior)
+        racketEndY = bar->coordY + 6;    // Fim da faixa Y da raquete
+    }
 
+    // Define a faixa X para o range de colisão na raquete
+    int racketStartX = bar->coordX - RACKET_WIDTH - 4;  // Começo da faixa X da raquete
+    int racketEndX = bar->coordX + RACKET_WIDTH + 4; // Fim da faixa X da raquete
 
-    
-    //videoBox(racketStartX, racketStartY, bar->coordX + (RACKET_WIDTH / 3), racketEndY, COLOR_BLUE,1);
-    //videoBox(racketStartX, racketStartY, bar->coordX + (RACKET_WIDTH / 3), racketEndY, COLOR_GREEN,1);
-    //videoBox(bar->coordX + (RACKET_WIDTH / 3) * 2, racketStartY, racketEndX, racketEndY, COLOR_CYAN, 1);
-    // Verificando colisão com a parte inicial da raquete (esquerda)
-    if (ball->ballPositionX >= racketStartX && ball->ballPositionX < bar->coordX + (RACKET_WIDTH / 3))
-    {
+    // Verifica se a bola está dentro da área da raquete (considerando X e Y)
+    if (ball->ballPositionX >= racketStartX && ball->ballPositionX <= racketEndX &&
+        ball->ballPositionY >= racketStartY && ball->ballPositionY <= racketEndY) {
 
-        // Verifica se a bola está dentro do intervalo Y da raquete
-        if (ball->ballPositionY >= racketStartY && ball->ballPositionY <= racketEndY)
-        {
-            printf("COLISAO NO INICIO\n");
-            *vert = (isTopBar) ? 1 : -1;  // Inverte direção vertical dependendo da barra
-            *hori = (isTopBar) ? -1 : 1;  // Direção horizontal invertida
+        // Determina a direção vertical dependendo da raquete (superior ou inferior)
+        *vert = (isTopBar) ? 1 : -1;
+
+        // Divide a raquete em 3 partes, levando em consideração a largura total da raquete
+        int partWidth = RACKET_WIDTH / 3;  // Largura de cada parte da raquete
+
+        // Colisão com a parte esquerda da raquete
+        if (ball->ballPositionX < racketStartX + partWidth) {
+            printf("COLISAO NA LATERAL ESQUERDA\n");
+            *hori = (isTopBar) ? -1 : 1;  // Inverte a direção horizontal
             *movVertical = 0;  // Não há movimento vertical após o impacto
         }
-    }
-
-    // Verificando colisão com a parte central da raquete
-    else if (ball->ballPositionX >= bar->coordX + (RACKET_WIDTH / 3) && ball->ballPositionX < bar->coordX + (RACKET_WIDTH / 3) * 2)
-    {
-        
-        // Verifica se a bola está dentro do intervalo Y da raquete
-        if (ball->ballPositionY >= racketStartY && ball->ballPositionY <= racketEndY)
-        {
-            printf("COLISAO NO CENTRO\n");
-            *vert = (isTopBar) ? 1 : -1;  // Direção vertical invertida dependendo da barra
-            *movVertical = 1;  // Bola mantém movimento vertical (subindo ou descendo)
-            *hori = 0;  // Bola não altera direção horizontal
+        // Colisão com a parte central da raquete
+        else if (ball->ballPositionX >= racketStartX + partWidth && ball->ballPositionX < racketStartX + 2 * partWidth) {
+            printf("COLISAO NA PARTE CENTRAL\n");
+            *hori = 0;  // Não há mudança na direção horizontal
+            *movVertical = 1;  // Mantém movimento vertical (subindo ou descendo)
         }
-    }
-
-    // Verificando colisão com a parte final da raquete (direita)
-    else if (ball->ballPositionX >= bar->coordX + (RACKET_WIDTH / 3) * 2 && ball->ballPositionX <= racketEndX)
-    {
-      
-        // Verifica se a bola está dentro do intervalo Y da raquete
-        if (ball->ballPositionY >= racketStartY && ball->ballPositionY <= racketEndY)
-        {
-            printf("COLISAO NO FINAL\n");
-            *vert = (isTopBar) ? 1 : -1;  // Direção vertical invertida dependendo da barra
-            *hori = (isTopBar) ? 1 : -1;  // Direção horizontal invertida dependendo da barra
+        // Colisão com a parte direita da raquete
+        else if (ball->ballPositionX >= racketStartX + 2 * partWidth && ball->ballPositionX <= racketEndX) {
+            printf("COLISAO NA LATERAL DIREITA\n");
+            *hori = (isTopBar) ? 1 : -1;  // Inverte a direção horizontal
             *movVertical = 0;  // Não há movimento vertical após o impacto
         }
     }
 }
+
+
 
 
 

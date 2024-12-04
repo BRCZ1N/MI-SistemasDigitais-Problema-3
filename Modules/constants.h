@@ -18,8 +18,8 @@
 #define RIGHT_MARGIN 68
 #define WIDTH 319
 #define HEIGHT 239
-#define RACKET_HEIGHT 2
-#define RACKET_WIDTH 2
+#define RACKET_HEIGHT 4
+#define RACKET_WIDTH 4
 #define BASE_THRESHOLD 100   // Limite base para determinar o movimento
 #define MAX_VEL_CHANGE 5     // Limite máximo de mudança de velocidade por ciclo
 #define SMOOTHING_FACTOR 0.2 // Fator de suavização para diminuir o impacto do movimento
