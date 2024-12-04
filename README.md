@@ -1,5 +1,8 @@
 
-<h1 align="center"> <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=900&size=36&duration=2500&pause=250&color=F7F7F7&background=0D111700&center=true&vCenter=true&multiline=true&width=810&height=100&lines=Tetris+Experimental;Desafios+de+Renderiza%C3%A7%C3%A3o+com+GPU+Simples" alt="Typing SVG" /></a> 
+<h1 align="center"> 
+  <a href="https://git.io/typing-svg">
+    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=900&size=36&duration=2500&pause=250&color=F7F7F7&background=0D111700&center=true&vCenter=true&multiline=true&width=810&height=100&lines=Beach+Pong+Experimental;Desafios+de+Renderiza%C3%A7%C3%A3o+em+FPGA" alt="Typing SVG" />
+  </a> 
 </h1>
 
 <div align="center" id="sobre-o-projeto"> 
