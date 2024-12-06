@@ -148,122 +148,7 @@ A metodologia deste projeto consistiu em desenvolver um novo jogo utilizando rec
 
 As etapas do projeto serão detalhadas nas sessões posteriores, onde serão demonstrados o processo de implementação das funções, os testes realizados para validar o funcionamento das bibliotecas e a adaptação das funções gráficas para o ambiente de jogo. A otimização e os ajustes finais também serão discutidos, destacando as melhorias no desempenho gráfico e na interação com a GPU.
 
-### Funcionamento da GPU
-
-Para controlar a GPU, foi necessário entender a arquitetura e os modos de comunicação desta unidade gráfica. A GPU utiliza instruções de 64 bits e se comunica através dos barramentos de dados `DATA A` e `DATA B`. Abaixo, é detalhado o funcionamento da GPU:
-
-- **Instruções de 64 Bits**: A GPU opera com instruções de 64 bits, onde o campo `opcode` (4 bits) no início da palavra identifica o tipo de operação. Dependendo da instrução, a palavra é dividida entre `DATA A` e `DATA B`. Quando o sinal `START` recebe um nível lógico alto, os valores de `DATA A` e `DATA B` são inseridos nas filas FIFO de instrução, e a GPU processa os dados conforme a operação indicada.
-
-- **Controle de FIFO**: Um barramento de saída indica o estado das filas FIFO (se estão cheias), permitindo evitar a perda de instruções por excesso de inserção.
-
-- **Memórias de Sprites e Background**: 
-  - **Memória de Sprites**: Capaz de armazenar até 31 sprites simultâneas, cada sprite possui dados de cada pixel individualmente nos desenvolvemos mais três sprites que seriam usados no projeto final.
-  - **Memória de Background**: Armazena 4800 blocos de 8x8 pixels, formando uma grade de 80x60 que compõe o fundo da tela.
-  - **Registradores**: A GPU possui 32 registradores que guardam o endereço de cada sprite ativa. O registrador 1 é reservado para a cor de background.
-
-- **Saída em VGA**: A GPU gera uma saída no formato VGA (640x480 pixels), que é enviada diretamente à porta VGA da placa, sem necessidade de tratamento adicional.
-
-- **Gerenciamento de Polígonos**: A GPU é capaz de desenhar polígonos como quadrados ou triângulos de tamanhos predefinidos, selecionados via instrução.
-
-
-
-### Funções do jogo 
-
-Para integrar a GPU e aproveitar a  biblioteca, foram desenvolvidas funções previamente para esse novo jogo e elas funcionam de maneira similar ao produto desenvolvido no projeto 2.
-
-printChar:
-Esta função desenha um caractere específico em uma posição dada na tela, com uma cor especificada.
-
-Parâmetros:
-
-coordX: Coordenada X onde o caractere será desenhado.
-coordY: Coordenada Y onde o caractere será desenhado.
-caracter: O caractere a ser desenhado (alfabético ou numérico).
-color: A cor do caractere em formato hexadecimal.
-Funcionamento
-
-Converte o caractere em um índice usando a função charToIndex.
-Acessa o bitmap correspondente ao caractere a partir da matriz char_bitmaps.
-Converte a cor hexadecimal em RGB usando a função convertHexToRgb.
-Desenha blocos de fundo nas posições que correspondem aos bits definidos como 1 no bitmap.
-
-charToIndex:
-Converte um caractere alfabético ou numérico em um índice para acessar a matriz de bitmaps.
-
-Parâmetros:
-
-c: O caractere a ser convertido.
-Retorno
-
-Índices entre 0 e 35 para caracteres válidos:
-'A'-'Z': Índices 0 a 25.
-'a'-'z': Mapeados para os mesmos índices que 'A'-'Z'.
-'0'-'9': Índices 26 a 35.
-Índice 36 para caracteres inválidos.
-generateBox
-Descrição
-Desenha uma caixa colorida preenchida em uma posição específica.
-
-Parâmetros
-
-column: Coluna inicial para desenhar a caixa.
-line: Linha inicial para desenhar a caixa.
-R: Intensidade da componente vermelha (0 a 7).
-G: Intensidade da componente verde (0 a 7).
-B: Intensidade da componente azul (0 a 7).
-length: Comprimento do lado da caixa.
-Funcionamento
-Preenche a área da caixa com blocos de fundo usando a função setBackgroundBlock.
-
-convertHexToRgb:
-Converte um valor de cor hexadecimal em uma estrutura RGB.
-
-Parâmetros:
-
-colorHex: A cor no formato hexadecimal (0xRRGGBB).
-Retorno
-
-Estrutura Color com os componentes:
-red, green, blue: Valores ajustados para a escala de 0 a 7.
-videoClear
-Descrição
-Limpa toda a tela de vídeo, definindo todos os blocos como vazios.
-
-Funcionamento:
-
-Itera sobre todas as posições da tela (SCREEN_X por SCREEN_Y).
-Verifica se o bloco está pronto para ser atualizado (isFull).
-Define a cor como preta (0, 0, 0) e limpa o bloco.
-videoClearSet:
-Limpa uma região específica da tela, delimitada por coordenadas iniciais e finais.
-
-Parâmetros:
-
-x_inicial: Coordenada inicial em X.
-y_inicial: Coordenada inicial em Y.
-x_final: Coordenada final em X.
-y_final: Coordenada final em Y.
-Funcionamento
-Limpa os blocos dentro da região especificada, de maneira similar à função videoClear, mas limitada pelas coordenadas fornecidas.
-
-videoBox:
-Desenha uma caixa colorida em uma região específica da tela,usada para construir o campo do pong, utilizando o formato RGB para definir a cor.
-
-Parâmetros:
-
-initial_x: Coordenada inicial em X.
-initial_y: Coordenada inicial em Y.
-end_x: Coordenada final em X.
-end_y: Coordenada final em Y.
-color: Cor da caixa em formato hexadecimal (0xRRGGBB).
-blockLength: Comprimento do lado dos blocos que formam a caixa.
-Funcionamento
-
-Converte a cor hexadecimal em RGB com a função convertHexToRgb.
-Itera sobre as posições delimitadas por initial_x e end_x, initial_y e end_y.
-Desenha a caixa preenchida com os blocos coloridos.
-### A bola e as funções de colisão 
-- A função generateBall é responsável por exibir a bola na tela. Ela utiliza a função videoBox, que desenha pequenos retângulos na tela para criar uma representação visual da bola. A bola é definida como um pixel (ou um pequeno retângulo) no centro da tela, mas poderia ser expandida usando múltiplos retângulos para criar um formato mais complexo, utilizamos um sprite para representa-la e deixar mais agradavel visualmente.
+### Colisões
 
 - Existem dois tipos principais de colisões implementadas no jogo:
 
@@ -274,8 +159,8 @@ Etapas da verificação de colisão:
 
 Definir a faixa de colisão:
 
-A faixa horizontal é calculada usando a posição central da raquete (bar->coordX) com uma margem para cada lado.
-A faixa vertical é calculada com base na altura da raquete (bar->coordY) e uma margem acima e abaixo.
+A faixa horizontal é calculada usando a posição central da raquete com uma margem para cada lado.
+A faixa vertical é calculada com base na altura da raquete e uma margem acima e abaixo.
 Detectar colisões específicas:
 
 Se a bola colide com o início da raquete, ela muda de direção horizontal e vertical com um movimento mais inclinado.
