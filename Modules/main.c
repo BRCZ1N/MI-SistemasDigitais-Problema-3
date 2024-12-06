@@ -5,18 +5,19 @@ Ball ball;
 Bar barJ1;
 Bar barJ2;
 int flagGameOver = -1, flagReset = 0;
-struct input_event ev;
-int fd_mouse;
-int xsoma = 0, ysoma = 0;
-unsigned int click_reset = 0;
 
-int start = 1;
-int end;
-int restart;
-int stop;
-int x_avg = 0;
-int y_avg = 0;
-int smoothing_factor = 4; 
+// struct input_event ev;
+// int fd_mouse;
+// int xsoma = 0, ysoma = 0;
+// unsigned int click_reset = 0;
+
+// int start = 1;
+// int end;
+// int restart;
+// int stop;
+// int x_avg = 0;
+// int y_avg = 0;
+// int smoothing_factor = 4; 
 
 /*
  * Função principal que inicializa o ambiente do jogo Tetris.
@@ -47,24 +48,7 @@ int main(){
 
     return 0;
 }
-/**
- * Função principal do jogo Tetris que controla a lógica do jogo.
- *
- * Esta função é executada em uma thread separada e gerencia o fluxo
- * do jogo Tetris, incluindo a inicialização do tabuleiro, controle
- * dos tetrominos, verificação de condições de jogo, e exibição
- * do estado do jogo na tela. O loop principal continua até que o
- * jogo esteja terminado, e ele permite alternar entre pausar e
- * retomar o jogo.
- *
- * @note A função utiliza variáveis globais para o controle do estado
- *       do jogo e acesso a recursos de vídeo.
- */
-// void execTetris()
-// {
 
-//     int16_t mg_per_lsb = 4;
-//
 int checkEndGame(int lifeJ1, int lifeJ2)
 {
     if (lifeJ1 == 0)
@@ -201,20 +185,18 @@ int execPong()
                 // videoBox(10, 58, 71, 59, COLOR_CYAN, BLOCK_SIZE);
                 // Direita
                 videoBox(70, 1, 71, 58, COLOR_YELLOW, BLOCK_SIZE);
-                Fcenario();
+                //Fcenario();
                 // Cima
                 // videoBox(10, 1, 70, 2, COLOR_CYAN, BLOCK_SIZE);
 
                 /*Movimentação dos elementos do jogo*/
                 pthread_mutex_lock(&lock);
-                // velX = axis_x * mg_per_lsb;
-                // velX = normalizeValue(velX,10);
-                if (axis_x * mg_per_lsb >= 100)
+                if (axis_x * mg_per_lsb >= 150)
                 {
 
                     velX += 1;
                 }
-                else if (axis_x * mg_per_lsb <= -100)
+                else if (axis_x * mg_per_lsb <= -150)
                 {
 
                     velX -= 1;
@@ -225,12 +207,12 @@ int execPong()
                     velX = 0;
                 }
                 pthread_mutex_unlock(&lock);
-                int previousVelAccel = velX;
                 moveBar(&barJ1, velX);
-                moveBar(&barJ2, xsoma);
+                moveBar(&barJ2, xMouse);
                 ballRacketCollision(&ball, &barJ1, &cima, &direita, &movVertical, 0);
                 ballRacketCollision(&ball, &barJ2, &cima, &direita, &movVertical, 1);
                 ballBorderCollision(&ball, &barJ1, &barJ2, &cima, &direita, &lifeJ1, &lifeJ2);
+                //setPolygon(2010,10,10,2,20,20);
 
                 // usleep_simulado(95000);
                 // videoClearSet(11, 54, 70, 57);
@@ -287,8 +269,6 @@ int execPong()
                 }
 
                 flagGameOver = checkEndGame(lifeJ1, lifeJ2);
-                //printf("Vida J1: %d\n",lifeJ1);
-                //printf("Vida J2: %d\n",lifeJ2);
                 setDoubleFrameAnimation(lifeJ1, 1, 30, 120, 20, 2);
                 setDoubleFrameAnimation(lifeJ2, 4, 30, 320, 20, 2);
 
@@ -328,6 +308,7 @@ int execPong()
                 videoClear();
                 lifeJ1 = lifeJ2 = 3;
                 resetData(&ball, &barJ1, &barJ2);
+                cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
                 flagReset = 1;
             }
             else if (stateGame == 4)
@@ -336,6 +317,7 @@ int execPong()
                 videoClear();
                 lifeJ1 = lifeJ2 = 3;
                 resetData(&ball, &barJ1, &barJ2);
+                cima = 1, direita = 1, movVertical = 1, vert = 1, hori = 1;
                 if(flagGameOver != -1){
 
                     Fover(flagGameOver);
@@ -368,10 +350,10 @@ void setDoubleFrameAnimation(int maxIterations, int firstReg, int coordX, int co
                     int spriteCoordX = coordX;
                     int spriteCoordY = coordY + dy[i];
                     setSprite(firstReg + i, regFrame, 1, spriteCoordX, spriteCoordY);
-                    usleep_simulado(5000);
+                    usleep_simulado(10000);
 
                     setSprite(firstReg + i, regFrame + 1, 1, spriteCoordX, spriteCoordY);
-                    usleep_simulado(5000);
+                    usleep_simulado(10000);
                 }
                 break;
             }
@@ -467,54 +449,3 @@ void changeStateExec()
         }
     }
 }
-
-void* execMouse(void* arg) {
-    ssize_t n;
-    unsigned char data[3]; // Buffer para os 3 bytes de dados
-
-    int fd = open("/dev/input/mice", O_RDONLY); // Abrindo o dispositivo do mouse
-    if (fd == -1) {
-        perror("Erro ao abrir o dispositivo do mouse");
-        pthread_exit(NULL);
-    }
-
-    while (1) {
-        n = read(fd, data, sizeof(data)); // Lendo 3 bytes do dispositivo
-        if (n == (ssize_t)-1) {
-            perror("Error reading");
-            continue;
-        } else if (n != sizeof(data)) {
-            fprintf(stderr, "Error: read %ld bytes, expecting %ld\n", n, sizeof(data));
-            continue;
-        }
-
-        // Processando os dados de movimento
-        int x = (signed char)data[1]; // Movimento no eixo X
-        int y = (signed char)data[2]; // Movimento no eixo Y
-
-        // Aplicando suavização (média simples)
-        static int x_avg = 0;
-        static int y_avg = 0;
-        int smoothing_factor = 4;  // Controle da suavização, valores maiores = mais suavização
-
-        x_avg = (x_avg * (smoothing_factor - 1) + x) / smoothing_factor;
-        y_avg = (y_avg * (smoothing_factor - 1) + y) / smoothing_factor;
-
-        // Atualizar as somas acumuladas com os valores suavizados
-        xsoma += x_avg;
-        ysoma += y_avg;
-
-        // Limitar as coordenadas acumuladas para o intervalo de 0 a 80
-        if (xsoma < 0) xsoma = 0;
-        if (xsoma > 80) xsoma = 80;
-        if (ysoma < 0) ysoma = 0;
-        if (ysoma > 80) ysoma = 80;
-
-        // Exibir as coordenadas limitadas
-        printf("X: %d, Y: %d\n", xsoma, ysoma);
-    }
-
-    close(fd); // Fechar o descritor do arquivo
-    return NULL;
-}
-
