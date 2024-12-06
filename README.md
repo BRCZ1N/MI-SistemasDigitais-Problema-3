@@ -137,4 +137,244 @@ O sistema DE1-SoC é composto pelo HPS e pelo FPGA, ambos integrados no chip Cyc
 A compilação nativa ocorre quando o código é compilado no mesmo sistema em que será executado. Aqui, a compilação será realizada diretamente na placa, utilizando a linha de comando do Linux e as ferramentas de compilação integradas. O comando `gcc` invoca o GNU C Compiler, um compilador de código aberto muito usado para gerar executáveis no Linux.
 
 </div>
+## Metodologia
 
+A metodologia deste projeto consistiu em desenvolver um novo jogo utilizando recursos ja anteriormente explorados, tais como a biblioteca para interação com a GPU e o acelerometro. A partir dessas bibliotecas, várias funções foram adaptadas para uso no jogo, mantendo a compatibilidade com a estrutura original e garantindo uma integração otimizada com a GPU para exibição gráfica dos elementos do jogo e o acelerometro.
+
+As etapas do projeto serão detalhadas nas sessões posteriores, onde serão demonstrados o processo de implementação das funções, os testes realizados para validar o funcionamento das bibliotecas e a adaptação das funções gráficas para o ambiente de jogo. A otimização e os ajustes finais também serão discutidos, destacando as melhorias no desempenho gráfico e na interação com a GPU.
+
+### Funcionamento da GPU
+
+Para controlar a GPU, foi necessário entender a arquitetura e os modos de comunicação desta unidade gráfica. A GPU utiliza instruções de 64 bits e se comunica através dos barramentos de dados `DATA A` e `DATA B`. Abaixo, é detalhado o funcionamento da GPU:
+
+- **Instruções de 64 Bits**: A GPU opera com instruções de 64 bits, onde o campo `opcode` (4 bits) no início da palavra identifica o tipo de operação. Dependendo da instrução, a palavra é dividida entre `DATA A` e `DATA B`. Quando o sinal `START` recebe um nível lógico alto, os valores de `DATA A` e `DATA B` são inseridos nas filas FIFO de instrução, e a GPU processa os dados conforme a operação indicada.
+
+- **Controle de FIFO**: Um barramento de saída indica o estado das filas FIFO (se estão cheias), permitindo evitar a perda de instruções por excesso de inserção.
+
+- **Memórias de Sprites e Background**: 
+  - **Memória de Sprites**: Capaz de armazenar até 31 sprites simultâneas, cada sprite possui dados de cada pixel individualmente nos desenvolvemos mais três sprites que seriam usados no projeto final.
+  - **Memória de Background**: Armazena 4800 blocos de 8x8 pixels, formando uma grade de 80x60 que compõe o fundo da tela.
+  - **Registradores**: A GPU possui 32 registradores que guardam o endereço de cada sprite ativa. O registrador 1 é reservado para a cor de background.
+
+- **Saída em VGA**: A GPU gera uma saída no formato VGA (640x480 pixels), que é enviada diretamente à porta VGA da placa, sem necessidade de tratamento adicional.
+
+- **Gerenciamento de Polígonos**: A GPU é capaz de desenhar polígonos como quadrados ou triângulos de tamanhos predefinidos, selecionados via instrução.
+
+
+
+### Funções do jogo 
+
+Para integrar a GPU e aproveitar a  biblioteca, foram desenvolvidas funções previamente para esse novo jogo e elas funcionam de maneira similar ao produto desenvolvido no projeto 2.
+
+printChar:
+Esta função desenha um caractere específico em uma posição dada na tela, com uma cor especificada.
+
+Parâmetros:
+
+coordX: Coordenada X onde o caractere será desenhado.
+coordY: Coordenada Y onde o caractere será desenhado.
+caracter: O caractere a ser desenhado (alfabético ou numérico).
+color: A cor do caractere em formato hexadecimal.
+Funcionamento
+
+Converte o caractere em um índice usando a função charToIndex.
+Acessa o bitmap correspondente ao caractere a partir da matriz char_bitmaps.
+Converte a cor hexadecimal em RGB usando a função convertHexToRgb.
+Desenha blocos de fundo nas posições que correspondem aos bits definidos como 1 no bitmap.
+
+charToIndex:
+Converte um caractere alfabético ou numérico em um índice para acessar a matriz de bitmaps.
+
+Parâmetros:
+
+c: O caractere a ser convertido.
+Retorno
+
+Índices entre 0 e 35 para caracteres válidos:
+'A'-'Z': Índices 0 a 25.
+'a'-'z': Mapeados para os mesmos índices que 'A'-'Z'.
+'0'-'9': Índices 26 a 35.
+Índice 36 para caracteres inválidos.
+generateBox
+Descrição
+Desenha uma caixa colorida preenchida em uma posição específica.
+
+Parâmetros
+
+column: Coluna inicial para desenhar a caixa.
+line: Linha inicial para desenhar a caixa.
+R: Intensidade da componente vermelha (0 a 7).
+G: Intensidade da componente verde (0 a 7).
+B: Intensidade da componente azul (0 a 7).
+length: Comprimento do lado da caixa.
+Funcionamento
+Preenche a área da caixa com blocos de fundo usando a função setBackgroundBlock.
+
+convertHexToRgb:
+Converte um valor de cor hexadecimal em uma estrutura RGB.
+
+Parâmetros:
+
+colorHex: A cor no formato hexadecimal (0xRRGGBB).
+Retorno
+
+Estrutura Color com os componentes:
+red, green, blue: Valores ajustados para a escala de 0 a 7.
+videoClear
+Descrição
+Limpa toda a tela de vídeo, definindo todos os blocos como vazios.
+
+Funcionamento:
+
+Itera sobre todas as posições da tela (SCREEN_X por SCREEN_Y).
+Verifica se o bloco está pronto para ser atualizado (isFull).
+Define a cor como preta (0, 0, 0) e limpa o bloco.
+videoClearSet:
+Limpa uma região específica da tela, delimitada por coordenadas iniciais e finais.
+
+Parâmetros:
+
+x_inicial: Coordenada inicial em X.
+y_inicial: Coordenada inicial em Y.
+x_final: Coordenada final em X.
+y_final: Coordenada final em Y.
+Funcionamento
+Limpa os blocos dentro da região especificada, de maneira similar à função videoClear, mas limitada pelas coordenadas fornecidas.
+
+videoBox:
+Desenha uma caixa colorida em uma região específica da tela,usada para construir o campo do pong, utilizando o formato RGB para definir a cor.
+
+Parâmetros:
+
+initial_x: Coordenada inicial em X.
+initial_y: Coordenada inicial em Y.
+end_x: Coordenada final em X.
+end_y: Coordenada final em Y.
+color: Cor da caixa em formato hexadecimal (0xRRGGBB).
+blockLength: Comprimento do lado dos blocos que formam a caixa.
+Funcionamento
+
+Converte a cor hexadecimal em RGB com a função convertHexToRgb.
+Itera sobre as posições delimitadas por initial_x e end_x, initial_y e end_y.
+Desenha a caixa preenchida com os blocos coloridos.
+### A bola e as funções de colisão 
+- A função generateBall é responsável por exibir a bola na tela. Ela utiliza a função videoBox, que desenha pequenos retângulos na tela para criar uma representação visual da bola. A bola é definida como um pixel (ou um pequeno retângulo) no centro da tela, mas poderia ser expandida usando múltiplos retângulos para criar um formato mais complexo, utilizamos um sprite para representa-la e deixar mais agradavel visualmente.
+
+- Existem dois tipos principais de colisões implementadas no jogo:
+
+*Colisão com as Raquetes*
+A função ballRacketCollision é responsável por detectar se a bola colidiu com uma raquete. Essa detecção utiliza um sistema de intervalos para verificar se a bola está dentro da área de colisão da raquete (tanto no eixo X quanto no eixo Y). A raquete é dividida em três partes: início (esquerda), centro, e fim (direita), cada uma com um comportamento de colisão diferente.
+
+Etapas da verificação de colisão:
+
+Definir a faixa de colisão:
+
+A faixa horizontal é calculada usando a posição central da raquete (bar->coordX) com uma margem para cada lado.
+A faixa vertical é calculada com base na altura da raquete (bar->coordY) e uma margem acima e abaixo.
+Detectar colisões específicas:
+
+Se a bola colide com o início da raquete, ela muda de direção horizontal e vertical com um movimento mais inclinado.
+Se a bola colide com o centro, ela muda apenas a direção vertical.
+Se a bola colide com o fim, o comportamento é simétrico ao do início.
+*Colisão com a parede*
+A função ballBorderCollision verifica se a bola atingiu as bordas da tela (laterais, topo ou base).
+
+Quando a bola atinge as bordas laterais, ela inverte sua direção horizontal (hori).
+Quando a bola atinge o topo ou a base, o jogador correspondente perde uma vida, e os dados são reiniciados com a função resetData.
+
+### As raquetes 
+
+As raquetes são representadas como um bloco horizontal na tela feito por sprite , com coordenadas centrais e um tamanho fixo (BAR_SIZE). Sua posição no eixo X (coordX) é ajustada dinamicamente para permitir que o jogador mova a raquete lateralmente, enquanto a posição no eixo Y (coordY) permanece fixa.
+
+#### Estrutura da Raquete
+A raquete utiliza uma estrutura de dados chamada Bar, que contém:
+
+coordX: Coordenada central no eixo X.
+coordY: Coordenada fixa no eixo Y.
+BAR_SIZE: Metade do tamanho total da raquete.
+A raquete pode ser desenhada na tela utilizando uma função gráfica (como videoBox), mas este aspecto visual está desacoplado da lógica de movimento.
+
+#### Movimento da Raquete
+O movimento da raquete é gerenciado pela função moveBar, que ajusta a posição horizontal da raquete com base em um valor de aceleração (accelX). Este valor indica a direção e a magnitude do movimento. A função também verifica os limites da tela para impedir que a raquete ultrapasse as bordas.
+
+Algoritmo de Movimento
+A lógica do movimento é implementada em três etapas:
+
+Definir limites da raquete:
+
+São definidos os limites laterais (xStart e xEnd) que delimitam a área permitida para a raquete.
+Esses limites correspondem às bordas visíveis do jogo.
+Verificar se o movimento é permitido:
+
+A função verifica se o movimento proposto pela aceleração (accelX) manterá a raquete dentro dos limites.
+Se o movimento for válido, a coordenada coordX da raquete é atualizada.
+Corrigir a posição ao atingir os limites:
+
+Caso o movimento ultrapasse os limites laterais, a posição da raquete é ajustada automaticamente para o limite mais próximo.
+### Estados do game
+Um dos requisitos do game foi a necessidade de implementar estados para o game juntamente com um menu que fosse interativo para essas funções, e esses são os estados do jogo:
+#### Estado 0: Tela Inicial
+Descrição:
+
+Esse é o estado inicial do jogo, exibindo a tela de boas-vindas ou menu principal.
+Função associada: Fhome() (presumivelmente, exibe a tela inicial).
+Dados do jogo, como posição da bola e barras, são reiniciados por meio da função resetData.
+Ações:
+
+Limpa a tela e os sprites (videoClear() e clearSprite()).
+Reinicia os elementos da partida para suas posições padrão.
+Aguarda entrada do jogador para avançar ao próximo estado.
+#### Estado 1: Tela do Jogo
+Descrição:
+
+Representa a fase principal do jogo, onde a bola, as barras e os elementos interagem.
+Contém toda a lógica do jogo, incluindo:
+Movimento da bola.
+Movimento das barras (controladas pelo jogador ou pela IA).
+Colisões com bordas, raquetes e detecção de fim de jogo.
+Ações:
+
+Configura os limites e elementos da tela:
+Bordas são desenhadas usando videoBox.
+A bola e as barras são desenhadas e posicionadas via setSprite.
+Atualiza as posições das barras com base nos controles do jogador e nos valores de aceleração (axis_x).
+Detecta colisões:
+Entre a bola e as barras (ballRacketCollision).
+Entre a bola e as bordas da área de jogo (ballBorderCollision).
+Monitora a vida dos jogadores (lifeJ1 e lifeJ2) e verifica se o jogo terminou com checkEndGame.
+#### Estado 2: Pausa
+Descrição:
+
+Coloca o jogo em estado de pausa, permitindo ao jogador acessar opções de menu ou simplesmente pausar a partida.
+Função associada: Fpause(currentOption + 1).
+Ações:
+
+Limpa a tela e os sprites.
+Exibe um menu de pausa, permitindo ao jogador navegar pelas opções com os botões.
+Opções no menu podem incluir "Continuar", "Reiniciar" ou "Sair", embora as ações específicas não sejam detalhadas no código.
+Estado 3: Reiniciar o Jogo
+Descrição:
+
+Reinicia os elementos da partida, como vidas dos jogadores, posição da bola e das barras.
+Útil para reiniciar o jogo após uma rodada ou ao selecionar "Reiniciar" no menu de pausa.
+Ações:
+
+Limpa a tela e os sprites.
+Reinicia vidas e reposiciona a bola e as barras por meio da função resetData.
+Atualiza a flag flagReset para indicar que o jogo foi reiniciado.
+#### Estado 4: Game Over
+Descrição:
+
+Exibe a tela de "Game Over" quando o jogo termina.
+Determina o vencedor ou perdedor com base em flagGameOver.
+Ações:
+
+Limpa a tela e os sprites.
+Reinicia as vidas e os elementos do jogo.
+Se flagGameOver não for -1 (ou seja, há um resultado do jogo), exibe a tela de Game Over com a função Fover.
+Controle dos Estados
+A lógica do jogo alterna entre os estados com base em eventos e condições específicas. Por exemplo:
+
+O estado inicial (stateGame == 0) leva ao estado de jogo (stateGame == 1) quando o jogador inicia a partida.
+Durante o jogo, o jogador pode pausar (stateGame == 2) ou terminar a partida por vitória ou derrota, o que leva ao estado de Game Over (stateGame == 4).
+O menu de pausa permite reiniciar (stateGame == 3) ou retornar ao jogo (stateGame == 1).
