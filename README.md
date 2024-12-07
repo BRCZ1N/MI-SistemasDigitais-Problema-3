@@ -145,7 +145,7 @@ A seguir, apresentamos algumas das artes criadas pela nossa equipe para o desenv
   <li>Figura 1 - Um asset em pixel art de 20x20 pixels representando uma bola de vôlei, projetado para reforçar a temática praiana do jogo. </li>
   <li>Figura 2 - É uma parte da barra do player 1, foram utilizadas 4 dessas, pois o tamanho maximo da sprite é 20x20 então com 4 alinhadas lado a lado temos 20x80.</li>
   <li>Figura 3 - Mesma coisa só que para o player 2, com a cor diferente. </li>
-  <li>Figura 4 - Seria bitmap do s. </li>
+  <li>Figura 4 - Seria bitmap do cenário, para ajudar ambientar ainda mais o jogo, tem o tamanho exato do restante da tela que não era usado, porém . </li>
 </ul>
 
 <div align='center'>
@@ -193,14 +193,16 @@ Figura 6. Tela inicial.
 
 <div align='center'>
 
+<div >
 ![image](./Imagens/overp1.gif)
-
+![image](./Imagens/overp2.gif)
+</div>
 Figura 7. Tela de game over player 1.
 </div>
 
 <div align='center'>
 
-![image](./Imagens/overp2.gif)
+
 
 Figura 8. Tela de game over player 2.
 </div>
@@ -328,12 +330,7 @@ Abra o terminal e execute o seguinte comando para obter o código do repositóri
 <div div align="justify" id="conclusao"> 
 <h2> Conclusão</h2>
 
-A implementação deste projeto de Tetris na placa DE1-SoC, com uso das linguagens C e Assembly, apresentou desafios consideráveis e proporcionou um aprendizado significativo sobre mapeamento de memória em Assembly, controle de pilha de execução e integração de software com hardware.
+Os testes realizados confirmaram o bom funcionamento do jogo, validando a implementação dos controles, a movimentação da bola, as colisões e a interação dinâmica entre os jogadores e o ambiente. O sistema de pausa e o menu, além do controle de vidas e as telas de game over, proporcionaram uma experiência de jogo fluida e agradável.
 
-Ao concluir o trabalho, aprofundamos nosso conhecimento na comunicação entre software e hardware, consolidando a capacidade de integrá-los por meio de uma biblioteca em Assembly. Foram explorados conceitos essenciais de mapeamento e manipulação de memória no contexto da DE1-SoC, e avançamos na prática com a linguagem Assembly.
-
-Todos os requisitos estipulados foram atendidos com sucesso na interface entre HPS e FPGA e no desenvolvimento de uma biblioteca em Assembly para a GPU.
-
-Embora as funcionalidades principais do jogo tenham sido implementadas, identificamos possibilidades de melhorias, como a rotação das peças, otimização do uso do processador gráfico para uma atualização mais fluida da tela, e a adição de um botão para ajustar a velocidade das peças, entre outras.
-
-
+Este projeto não apenas demonstrou o domínio de conceitos fundamentais de sistemas digitais e programação de baixo nível, mas também exemplificou como recursos avançados podem ser utilizados para criar jogos interativos e imersivos em plataformas de hardware específicas, como a DE1-SoC.
+A escolha de usar a placa DE1-SoC, com seu processador ARM Cortex-A9 e FPGA Cyclone V, foi crucial para fornecer a robustez necessária ao projeto. A implementação de funcionalidades como o controle dos jogadores via acelerômetro e mouse, a dinâmica de movimentação e colisão da bola, e o sistema de vida com sprites de gaivotas, não só cumpriu os requisitos do problema, mas também proporcionou uma experiência interativa interessante.
