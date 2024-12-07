@@ -149,9 +149,9 @@ Podemos ver a seguir algumas artes criadas pela nossa equipe para o jogo.
 
 ![image](./Imagens/BOLA200X.png)
 
-Figura 1. Direção da bola após a colisão com a raquete.
+Figura 1. Bola de voilei.
 </div>
-
+Asset 20x20 de uma bola de volei para remeter a temática de praia.
 <div align='center'>
 
 ![image](./Imagens/barj1.png)
@@ -223,7 +223,7 @@ Para isso, analisaram-se os pixels adjacentes à posição atual da bola. Caso a
 
 <div align='center'>
   
-![image]()
+![image](./Imagens/307570102-c6f7f7e6-55ec-46b4-aeb5-2e7fae90a975.png)
 
 Figura 5. Área de verificação da bola.m
 </div>
@@ -232,7 +232,7 @@ Quando uma colisão é detectada, a direção do movimento da bola é invertida.
 
 <div align='center'>
   
-![image]()
+![image](./Imagens/307570128-469b0651-2cec-450e-9369-f1245a6c3f72.png)
 
 Figura 6. Direção da bola após a colisão com blocos.
 </div>
@@ -241,7 +241,7 @@ Para as colisões entre a bola e a raquete, um comportamento diferenciado foi im
 
 <div align='center'>
 
-![image]()
+![image](./Imagens/307570141-b3938712-5385-42a9-b6d1-1cd5a6001014.gif)
 
 Figura 7. Direção da bola após a colisão com a raquete.
 </div>
