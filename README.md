@@ -137,8 +137,69 @@ A compilação nativa ocorre quando o código é compilado no mesmo sistema em q
 
 ## Criação de assets para o jogo
 
-Como todo jogo exige uma variedade de **assets**, o desenvolvimento de **Beach Pong** não foi diferente. Para a criação desses elementos, utilizamos o software multiplataforma e web-based [Piskel](https://www.piskelapp.com/). Sua alta compatibilidade com diferentes sistemas e a possibilidade de acesso online tornaram o processo mais ágil e flexível, permitindo que parte do trabalho fosse realizada remotamente em casa e outra parte no laboratório, além da possibilidade de exportar um arquivo C.
-Para conseguir transferir os assets criados no [Piskel](https://www.piskelapp.com/) para o jogo, foi utilizados algumas funções, uma delas a `Re` que varrem o array e desenha pixel a pixel na tela
+Como todo jogo exige uma variedade de **assets**, o desenvolvimento de **Beach Pong** não foi diferente. Para criar esses elementos, utilizamos o software multiplataforma e web-based [Piskel](https://www.piskelapp.com/). Sua alta compatibilidade com diferentes sistemas, aliada à conveniência de acesso online, facilitou o trabalho, permitindo que os assets fossem desenvolvidos tanto remotamente, em casa, quanto no laboratório. Além disso, o Piskel oferece a opção de exportar os assets diretamente em formato **C**, tornando a integração com o jogo ainda mais eficiente.
+
+Para incorporar os assets criados no [Piskel](https://www.piskelapp.com/) ao jogo, foram utilizadas algumas funções específicas. Uma delas é a `void renderScreen()`, que percorre o array de pixels e os desenha individualmente na tela, apagando o quadro anterior. Essa função foi essencial para a criação das animações das telas, como a inicial, a de pausa e a de game over.
+
+Outra função semelhante foi empregada exclusivamente para carregar e sobrescrever os sprites na memória da GPU. Esse processo envolveu a leitura da sprite criada no Piskel e sua transferência para o registrador, ponto a ponto. Como cada sprite possui uma dimensão de **20x20 pixels**, foram necessários ajustes em **400 pontos** para cada nova inserção. Essas funções desempenharam um papel crucial na personalização e funcionalidade do jogo.
+
+Podemos ver a seguir algumas artes criadas pela nossa equipe para o jogo.
+
+<div align='center'>
+
+![image]()
+
+Figura 1. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image]()
+
+Figura 2. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image]()
+
+Figura 3. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image]()
+
+Figura 4. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image]()
+
+Figura 5. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image]()
+
+Figura 6. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image]()
+
+Figura 7. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image]()
+
+Figura 8. Direção da bola após a colisão com a raquete.
+</div>
 
 ## Funcionamento dos elementos do jogo 
 
