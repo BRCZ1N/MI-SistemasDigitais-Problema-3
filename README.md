@@ -142,8 +142,8 @@ Como todo jogo exige uma variedade de **assets**, o desenvolvimento de **Beach P
 A seguir, apresentamos algumas das artes criadas pela nossa equipe para o desenvolvimento do jogo **Beach Pong**. Esses designs foram elaborados cuidadosamente para refletir a temática praiana e garantir uma experiência visual envolvente e única. Cada elemento foi pensado para integrar perfeitamente com a jogabilidade e reforçar a identidade do projeto.
 
 <uL> 
-  <li>Figura 1 é um asset em pixel art de 20x20 pixels representando uma bola de vôlei, projetado para reforçar a temática praiana do jogo. </li>
-  <li>Controle simultâneo para dois jogadores, utilizando obrigatoriamente o acelerômetro e, adicionalmente, o mouse.</li>
+  <li>Figura 1 - Um asset em pixel art de 20x20 pixels representando uma bola de vôlei, projetado para reforçar a temática praiana do jogo. </li>
+  <li>Figura 2 - É uma parte da barra do player 1, foram utilizadas 4 dessas, pois .</li>
   <li>Interação dinâmica, onde a variação na velocidade do movimento dos dispositivos reflete diretamente na ação do ator do jogo. Por exemplo, no estilo Breakout, movimentos bruscos do mouse resultam em deslocamentos mais rápidos da barra.</li>
   <li>Exibição de informações na tela, como placar e número de vidas restantes. </li>
 </ul>
@@ -174,42 +174,42 @@ Figura 3. Barra jogador 2.
 
 ![image](./Imagens/cenarioReduzido.png)
 
-Figura 4. Cenário.
+Figura 4. Cenário esquerdo.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/gaivota200X.gif)
 
-Figura 5. Direção da bola após a colisão com a raquete.
+Figura 5. Gaivota.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/inicial.gif)
 
-Figura 6. Direção da bola após a colisão com a raquete.
+Figura 6. Tela inicial.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/overp1.gif)
 
-Figura 7. Direção da bola após a colisão com a raquete.
+Figura 7. Tela de game over player 1.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/overp2.gif)
 
-Figura 8. Direção da bola após a colisão com a raquete.
+Figura 8. Tela de game over player 2.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/pause.gif)
 
-Figura 8. Direção da bola após a colisão com a raquete.
+Figura 8. Menu de pause.
 </div>
 
 
@@ -282,7 +282,6 @@ A máquina de estados possui os seguintes estados principais:
   <li>Estado de Retorno ao Jogo: Fecha o menu e retorna ao jogo no estado em que foi pausado. </li>
 </ul>
 
-
 ### Vidas 
 
 O sistema de vidas é representado por sprites que simbolizam a pontuação dos jogadores. Seguindo a temática do jogo, são utilizados sprites em formato de gaivotas (Imagem TAL), posicionados na lateral esquerda da tela principal. Cada vez que a bola atinge a parte inferior ou superior do cenário, o jogador perde uma vida, e um dos sprites é removido. Quando todas as vidas são perdidas, o jogo é encerrado, resultando na derrota do jogador.
@@ -290,5 +289,51 @@ O sistema de vidas é representado por sprites que simbolizam a pontuação dos 
 ### Testes 
 
 Para validar o funcionamento do jogo, foram realizados testes simples. Esses testes avaliaram todas as funcionalidades implementadas, garantindo que o jogo atendesse aos requisitos e expectativas do projeto.
+
+</div>
+
+<div align="justify" id="makefile"> 
+<h2>Makefile</h2>
+
+Para atender aos requisitos e simplificar o processo de compilação e execução do projeto, foi gerado um `Makefile`. Este arquivo serve como uma ferramenta que automatiza a construção do projeto, facilitando o gerenciamento do processo de compilação. O `Makefile` executa as seguintes operações:
+
+- **Compilação**: Compila os arquivos de código-fonte em arquivos objeto.
+- **Linkagem**: Combina os arquivos objeto em um executável.
+- **Limpeza**: Remove arquivos temporários e o executável gerado.
+- **Execução**: Permite iniciar o programa compilado.
+
+</div>
+
+<div  align="justify" id="execucao"> 
+<h2>Guia de Instalação e Execução</h2>
+
+Para iniciar o projeto, siga os passos abaixo para obter o código-fonte, compilar o código e executá-lo em um dispositivo FPGA DE1-SoC.
+
+**Passo 1: Clonar o Repositório**
+
+Abra o terminal e execute o seguinte comando para obter o código do repositório:
+
+    git clone https://github.com/BRCZ1N/MI-SistemasDigitais-Problema-2.git
+
+**Passo 2: Acessar o Diretório**
+
+    cd MI-SistemasDigitais-Problema-2\Modules
+
+**Passo 3: Compile e execute o código usando o comando:**
+
+    make 
+
+</div>
+
+<div div align="justify" id="conclusao"> 
+<h2> Conclusão</h2>
+
+A implementação deste projeto de Tetris na placa DE1-SoC, com uso das linguagens C e Assembly, apresentou desafios consideráveis e proporcionou um aprendizado significativo sobre mapeamento de memória em Assembly, controle de pilha de execução e integração de software com hardware.
+
+Ao concluir o trabalho, aprofundamos nosso conhecimento na comunicação entre software e hardware, consolidando a capacidade de integrá-los por meio de uma biblioteca em Assembly. Foram explorados conceitos essenciais de mapeamento e manipulação de memória no contexto da DE1-SoC, e avançamos na prática com a linguagem Assembly.
+
+Todos os requisitos estipulados foram atendidos com sucesso na interface entre HPS e FPGA e no desenvolvimento de uma biblioteca em Assembly para a GPU.
+
+Embora as funcionalidades principais do jogo tenham sido implementadas, identificamos possibilidades de melhorias, como a rotação das peças, otimização do uso do processador gráfico para uma atualização mais fluida da tela, e a adição de um botão para ajustar a velocidade das peças, entre outras.
 
 
