@@ -147,59 +147,67 @@ Podemos ver a seguir algumas artes criadas pela nossa equipe para o jogo.
 
 <div align='center'>
 
-![image](BOLA200X.png)
+![image](./Imagens/BOLA200X.png)
 
 Figura 1. Direção da bola após a colisão com a raquete.
 </div>
 
 <div align='center'>
 
-![image]()
+![image](./Imagens/barj1.png)
 
 Figura 2. Direção da bola após a colisão com a raquete.
 </div>
 
 <div align='center'>
 
-![image]()
+![image](./Imagens/barj2.png)
 
 Figura 3. Direção da bola após a colisão com a raquete.
 </div>
 
 <div align='center'>
 
-![image]()
+![image](./Imagens/cenarioReduzido.png)
 
 Figura 4. Direção da bola após a colisão com a raquete.
 </div>
 
 <div align='center'>
 
-![image]()
+![image](./Imagens/gaivota200X.gif)
 
 Figura 5. Direção da bola após a colisão com a raquete.
 </div>
 
 <div align='center'>
 
-![image]()
+![image](./Imagens/inicial.gif)
 
 Figura 6. Direção da bola após a colisão com a raquete.
 </div>
 
 <div align='center'>
 
-![image]()
+![image](./Imagens/overp1.gif)
 
 Figura 7. Direção da bola após a colisão com a raquete.
 </div>
 
 <div align='center'>
 
-![image]()
+![image](./Imagens/overp2.gif)
 
 Figura 8. Direção da bola após a colisão com a raquete.
 </div>
+
+<div align='center'>
+
+![image](./Imagens/pause.gif)
+
+Figura 8. Direção da bola após a colisão com a raquete.
+</div>
+
 
 ## Funcionamento dos elementos do jogo 
 
