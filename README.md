@@ -139,38 +139,42 @@ A compilação nativa ocorre quando o código é compilado no mesmo sistema em q
 
 Como todo jogo exige uma variedade de **assets**, o desenvolvimento de **Beach Pong** não foi diferente. Para criar esses elementos, utilizamos o software multiplataforma e web-based [Piskel](https://www.piskelapp.com/). Sua alta compatibilidade com diferentes sistemas, aliada à conveniência de acesso online, facilitou o trabalho, permitindo que os assets fossem desenvolvidos tanto remotamente, em casa, quanto no laboratório. Além disso, o Piskel oferece a opção de exportar os assets diretamente em formato **C**, tornando a integração com o jogo ainda mais eficiente.
 
-Para incorporar os assets criados no [Piskel](https://www.piskelapp.com/) ao jogo, foram utilizadas algumas funções específicas. Uma delas é a `void renderScreen()`, que percorre o array de pixels e os desenha individualmente na tela, apagando o quadro anterior. Essa função foi essencial para a criação das animações das telas, como a inicial, a de pausa e a de game over.
+A seguir, apresentamos algumas das artes criadas pela nossa equipe para o desenvolvimento do jogo **Beach Pong**. Esses designs foram elaborados cuidadosamente para refletir a temática praiana e garantir uma experiência visual envolvente e única. Cada elemento foi pensado para integrar perfeitamente com a jogabilidade e reforçar a identidade do projeto.
 
-Outra função semelhante foi empregada exclusivamente para carregar e sobrescrever os sprites na memória da GPU. Esse processo envolveu a leitura da sprite criada no Piskel e sua transferência para o registrador, ponto a ponto. Como cada sprite possui uma dimensão de **20x20 pixels**, foram necessários ajustes em **400 pontos** para cada nova inserção. Essas funções desempenharam um papel crucial na personalização e funcionalidade do jogo.
-
-Podemos ver a seguir algumas artes criadas pela nossa equipe para o jogo.
+<uL> 
+  <li>Figura 1 é um asset em pixel art de 20x20 pixels representando uma bola de vôlei, projetado para reforçar a temática praiana do jogo. </li>
+  <li>Controle simultâneo para dois jogadores, utilizando obrigatoriamente o acelerômetro e, adicionalmente, o mouse.</li>
+  <li>Interação dinâmica, onde a variação na velocidade do movimento dos dispositivos reflete diretamente na ação do ator do jogo. Por exemplo, no estilo Breakout, movimentos bruscos do mouse resultam em deslocamentos mais rápidos da barra.</li>
+  <li>Exibição de informações na tela, como placar e número de vidas restantes. </li>
+</ul>
 
 <div align='center'>
 
 ![image](./Imagens/BOLA200X.png)
 
-Figura 1. Bola de voilei.
+Figura 1. Bola de vôlei.
+
 </div>
-Asset 20x20 de uma bola de volei para remeter a temática de praia.
+
 <div align='center'>
 
 ![image](./Imagens/barj1.png)
 
-Figura 2. Direção da bola após a colisão com a raquete.
+Figura 2. Barra jogador 1.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/barj2.png)
 
-Figura 3. Direção da bola após a colisão com a raquete.
+Figura 3. Barra jogador 2.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/cenarioReduzido.png)
 
-Figura 4. Direção da bola após a colisão com a raquete.
+Figura 4. Cenário.
 </div>
 
 <div align='center'>
@@ -219,34 +223,34 @@ A movimentação da bola no cenário foi implementada alterando suas posições 
 
 Garantir as colisões da bola com os elementos do cenário, como paredes, blocos e a raquete, é essencial para o funcionamento do jogo. Essa funcionalidade foi implementada antecipando o movimento da bola, ou seja, verificando sua posição futura. 
 
-Para isso, analisaram-se os pixels adjacentes à posição atual da bola. Caso algum desses pixels se sobreponha a um pixel pertencente a outro elemento do cenário, ocorre a detecção de uma colisão. Se a posição atual da bola é (x, y), verificam-se as seguintes posições: (x+1, y), (x-1, y), (x, y+1) e (x, y-1) para colisões horizontais e verticais, além das diagonais (x+1, y+1), (x-1, y+1), (x+1, y-1) e (x-1, y-1) para colisões nas bordas (Figura TAL).
+Para isso, analisaram-se os pixels adjacentes à posição atual da bola. Caso algum desses pixels se sobreponha a um pixel pertencente a outro elemento do cenário, ocorre a detecção de uma colisão. Se a posição atual da bola é (x, y), verificam-se as seguintes posições: (x+1, y), (x-1, y), (x, y+1) e (x, y-1) para colisões horizontais e verticais, além das diagonais (x+1, y+1), (x-1, y+1), (x+1, y-1) e (x-1, y-1) para colisões nas bordas (Figura 9).
 
 <div align='center'>
   
 ![image](./Imagens/307570102-c6f7f7e6-55ec-46b4-aeb5-2e7fae90a975.png)
 
-Figura 5. Área de verificação da bola.m
+Figura 9. Área de verificação da bola.m
 </div>
 
-Quando uma colisão é detectada, a direção do movimento da bola é invertida. Para colisões verticais, apenas o sinal da velocidade vertical é alterado; para colisões horizontais, apenas o sinal da velocidade horizontal muda. Já em colisões diagonais, ambos os sinais das velocidades horizontal e vertical são invertidos (Figura TAL).
+Quando uma colisão é detectada, a direção do movimento da bola é invertida. Para colisões verticais, apenas o sinal da velocidade vertical é alterado; para colisões horizontais, apenas o sinal da velocidade horizontal muda. Já em colisões diagonais, ambos os sinais das velocidades horizontal e vertical são invertidos (Figura 10).
 
 <div align='center'>
   
 ![image](./Imagens/307570128-469b0651-2cec-450e-9369-f1245a6c3f72.png)
 
-Figura 6. Direção da bola após a colisão com blocos.
+Figura 10. Direção da bola após a colisão com blocos.
 </div>
 
-Para as colisões entre a bola e a raquete, um comportamento diferenciado foi implementado. A raquete é dividida em três zonas: colisões na zona esquerda fazem a bola se deslocar para a esquerda e para cima; colisões na zona central resultam em um movimento ascendente; e colisões na zona direita direcionam a bola para a direita e para cima (Figura TAL).
+Para as colisões entre a bola e a raquete, um comportamento diferenciado foi implementado. A raquete é dividida em três zonas: colisões na zona esquerda fazem a bola se deslocar para a esquerda e para cima; colisões na zona central resultam em um movimento ascendente; e colisões na zona direita direcionam a bola para a direita e para cima (Figura 11).
 
 <div align='center'>
 
-![image](./Imagens/307570141-b3938712-5385-42a9-b6d1-1cd5a6001014.gif)
+![image](./Imagens/307570141-b3938712-5385-42a9-b6d1-1cd5a6001014.png)
 
-Figura 7. Direção da bola após a colisão com a raquete.
+Figura 11. Direção da bola após a colisão com a raquete.
 </div>
 
-### Movimentação da raquete 
+### Movimentação das raquetes 
 
 A movimentação das raquetes dos jogadores foi implementada utilizando dois métodos distintos, adaptados ao tipo de controle de cada um:
 
@@ -270,11 +274,14 @@ O jogo conta com um sistema de menu que permite ao jogador acessar opções como
 
 A máquina de estados possui os seguintes estados principais:
 
-Estado de Jogo Ativo: Representa o estado padrão em que o jogador está jogando. A partir deste estado, o jogador pode pausar o jogo para acessar o menu.
-Estado de Menu: Exibe as opções de reinício, retorno ao menu inicial e retorno ao jogo. Dependendo do botão pressionado, a máquina de estados executa a ação correspondente.
-Estado de Reinício: Reinicia a partida, retornando ao estado inicial do jogo.
-Estado de Tela Inicial: Retorna à tela inicial do jogo, onde o jogador pode iniciar uma nova partida.
-Estado de Retorno ao Jogo: Fecha o menu e retorna ao jogo no estado em que foi pausado.
+<uL> 
+  <li>Estado de Jogo Ativo: Representa o estado padrão em que o jogador está jogando. A partir deste estado, o jogador pode pausar o jogo para acessar o menu.</li>
+  <li>Estado de Menu: Exibe as opções de reinício, retorno ao menu inicial e retorno ao jogo. Dependendo do botão pressionado, a máquina de estados executa a ação correspondente.</li>
+  <li>Estado de Reinício: Reinicia a partida, retornando ao estado inicial do jogo.</li>
+  <li>Estado de Tela Inicial: Retorna à tela inicial do jogo, onde o jogador pode iniciar uma nova partida. </li>
+  <li>Estado de Retorno ao Jogo: Fecha o menu e retorna ao jogo no estado em que foi pausado. </li>
+</ul>
+
 
 ### Vidas 
 
