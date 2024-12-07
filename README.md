@@ -143,9 +143,9 @@ A seguir, apresentamos algumas das artes criadas pela nossa equipe para o desenv
 
 <uL> 
   <li>Figura 1 - Um asset em pixel art de 20x20 pixels representando uma bola de vôlei, projetado para reforçar a temática praiana do jogo. </li>
-  <li>Figura 2 - É uma parte da barra do player 1, foram utilizadas 4 dessas, pois .</li>
-  <li>Interação dinâmica, onde a variação na velocidade do movimento dos dispositivos reflete diretamente na ação do ator do jogo. Por exemplo, no estilo Breakout, movimentos bruscos do mouse resultam em deslocamentos mais rápidos da barra.</li>
-  <li>Exibição de informações na tela, como placar e número de vidas restantes. </li>
+  <li>Figura 2 - É uma parte da barra do player 1, foram utilizadas 4 dessas, pois o tamanho maximo da sprite é 20x20 então com 4 alinhadas lado a lado temos 20x80.</li>
+  <li>Figura 3 - Mesma coisa só que para o player 2, com a cor diferente. </li>
+  <li>Figura 4 - Seria bitmap do s. </li>
 </ul>
 
 <div align='center'>
@@ -313,11 +313,11 @@ Para iniciar o projeto, siga os passos abaixo para obter o código-fonte, compil
 
 Abra o terminal e execute o seguinte comando para obter o código do repositório:
 
-    git clone https://github.com/BRCZ1N/MI-SistemasDigitais-Problema-2.git
+    git clone https://github.com/BRCZ1N/MI-SistemasDigitais-Problema-3.git
 
 **Passo 2: Acessar o Diretório**
 
-    cd MI-SistemasDigitais-Problema-2\Modules
+    cd MI-SistemasDigitais-Problema-3\Modules
 
 **Passo 3: Compile e execute o código usando o comando:**
 
