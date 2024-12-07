@@ -15,6 +15,7 @@
 # Sumário
 
 - [Sobre o Projeto](#sobre-o-projeto)
+- [Equipe](#equipe)
 - [Descrição dos Equipamentos e Software Utilizados](#equipamentos)
 - [Estrutura da Placa DE1-SoC](#arq_CPU)
 - [Metodologia](#metodologia)
@@ -41,7 +42,7 @@ Os requisitos principais para elaboração do sistema são apresentados a seguir
 </ul>
 
 Ao longo deste relatório, serão detalhadas as etapas de construção do jogo, o uso das ferramentas disponíveis, e a integração de novos elementos que destacam a criatividade e a complexidade do projeto.
-
+<div align="justify" id="equipe"> 
 <h2>  Equipe <br></h2>
 <uL> 
   <li><a href="https://github.com/Oguelo">Alex da Fonseca Dantas Junior</a></li>
@@ -143,9 +144,11 @@ A seguir, apresentamos algumas das artes criadas pela nossa equipe para o desenv
 
 <uL> 
   <li>Figura 1 - Um asset em pixel art de 20x20 pixels representando uma bola de vôlei, projetado para reforçar a temática praiana do jogo. </li>
-  <li>Figura 2 - É uma parte da barra do player 1, foram utilizadas 4 dessas, pois o tamanho maximo da sprite é 20x20 então com 4 alinhadas lado a lado temos 20x80.</li>
-  <li>Figura 3 - Mesma coisa só que para o player 2, com a cor diferente. </li>
-  <li>Figura 4 - Seria bitmap do cenário, para ajudar ambientar ainda mais o jogo, tem o tamanho exato do restante da tela que não era usado, porém . </li>
+  <li>Figura 2 - É uma parte da barra do player 1 ou 2, foram utilizadas 4 dessas, pois o tamanho máximo da sprite é 20x20 então com 4 alinhadas lado a lado temos 20x80.</li>
+  <li>Figura 3 - Seria bitmap do cenário, para ajudar ambientar ainda mais o jogo, tem o tamanho exato do restante da tela que não era usado, porém não houve tempo para implementação. </li>
+  <li>Figura 4 - É uma gaivota, ela representa a vida dos players, a gaivota é uma ave comumente vista em praias. </li>
+  <li>Figura 5 - É uma gaivota, ela representa a vida dos players, a gaivota é uma ave comumente vista em praias. </li>
+
 </ul>
 
 <div align='center'>
@@ -159,53 +162,41 @@ Figura 1. Bola de vôlei.
 <div align='center'>
 
 ![image](./Imagens/barj1.png)
-
-Figura 2. Barra jogador 1.
-</div>
-
-<div align='center'>
-
 ![image](./Imagens/barj2.png)
 
-Figura 3. Barra jogador 2.
+Figura 2. 1/4 de Barra dos jogadores.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/cenarioReduzido.png)
 
-Figura 4. Cenário esquerdo.
+Figura 3. Cenário esquerdo.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/gaivota200X.gif)
 
-Figura 5. Gaivota.
+Figura 4. Gaivota.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/inicial.gif)
 
-Figura 6. Tela inicial.
+Figura 5. Tela inicial.
 </div>
 
 <div align='center'>
 
-<div >
+
 ![image](./Imagens/overp1.gif)
 ![image](./Imagens/overp2.gif)
-</div>
+
 Figura 7. Tela de game over player 1.
 </div>
 
-<div align='center'>
-
-
-
-Figura 8. Tela de game over player 2.
-</div>
 
 <div align='center'>
 
@@ -334,3 +325,4 @@ Os testes realizados confirmaram o bom funcionamento do jogo, validando a implem
 
 Este projeto não apenas demonstrou o domínio de conceitos fundamentais de sistemas digitais e programação de baixo nível, mas também exemplificou como recursos avançados podem ser utilizados para criar jogos interativos e imersivos em plataformas de hardware específicas, como a DE1-SoC.
 A escolha de usar a placa DE1-SoC, com seu processador ARM Cortex-A9 e FPGA Cyclone V, foi crucial para fornecer a robustez necessária ao projeto. A implementação de funcionalidades como o controle dos jogadores via acelerômetro e mouse, a dinâmica de movimentação e colisão da bola, e o sistema de vida com sprites de gaivotas, não só cumpriu os requisitos do problema, mas também proporcionou uma experiência interativa interessante.
+O desenvolvimento do projeto Beach Pong na DE1-SoC foi uma experiência desafiadora e enriquecedora, a utilização de tecnologias como a GPU e o acelerômetro, aliada ao design de um jogo com temática praiana, demonstrou a capacidade de integrar hardware e software de maneira eficiente e criativa.
