@@ -27,26 +27,18 @@
 <div align="justify" id="sobre-o-projeto"> 
 <h2> Sobre o Projeto</h2>
 
-Este projeto se concentra na ultima atividade desenvolvida, utilizando os conhecimentos adquiridos nos projetos anteriores,das quais é importante pontuar, o uso da GPU e do acelerometro.
+Este projeto representa a culminação das atividades desenvolvidas no módulo integrador TEC499 - Sistemas Digitais do curso de Engenharia de Computação da UEFS. A proposta desafia os alunos a aplicar os conhecimentos adquiridos em projetos anteriores, com destaque para a utilização de recursos como a GPU e o acelerômetro.
 
-O problema 3 do módulo integrador TEC499 - SISTEMAS DIGITAIS do curso de Engenharia de Computação da UEFS propõe a criação de um jogo utilizando todos os recursos implementados nos dois primeiros projetos onde é necessario utilizar todas as funções implementadas na biblioteca
-do Processador Gráfico e a criação de no minimo 1 novo sprite para ser usado no projeto.
-
-Este relatório aborda a construção do jogo Pong com uma tematica praiana, onde todas as ferramentas são utilizadas, além disso aborda a utilização de um novo equipamento de Entrada/Saida, este sendo o mouse.
+O Problema 3 do módulo exige a criação de um jogo que integre todas as funções previamente implementadas na biblioteca do Processador Gráfico, além de introduzir pelo menos um novo sprite na memória do sistema para ser utilizado no projeto. Este relatório documenta o desenvolvimento de um jogo Pong com uma temática praiana, onde a jogabilidade é enriquecida pela adição de um novo dispositivo de entrada/saída: o mouse.
 
 Os requisitos principais para elaboração do sistema são apresentados a seguir:
 
-*Deverá utilizar todas as funções implementadas na biblioteca
-do Processador Gráfico e no mínimo um novo sprite deve ser
-colocado na memória e utilizado no jogo;
-*Os dois jogadores devem jogar simultaneamente utilizando
-obrigatoriamente o acelerômetro, e adicionalmente o mouse;
-*A variação da velocidade no movimento deve ser refletida na
-ação do ator do jogo. Por exemplo, no jogo breakout a barra
-se move com velocidade maior se o movimento do mouse for
-brusco;
-*Informações do jogo (placar, vidas, etc.) devem na tela do
-jogo;
+<uL> 
+  <li>Deverá utilizar todas as funções implementadas na biblioteca do Processador Gráfico e no mínimo um novo sprite deve ser colocado na memória e utilizado no jogo;</li>
+  <li>Os dois jogadores devem jogar simultaneamente utilizando obrigatoriamente o acelerômetro, e adicionalmente o mouse;</li>
+  <li>A variação da velocidade no movimento deve ser refletida na ação do ator do jogo. Por exemplo, no jogo breakout a barra se move com velocidade maior se o movimento do mouse for brusco;</li>
+  <li>Informações do jogo (placar, vidas, etc.) devem na tela do jogo; </li>
+</ul>
 
 <h2>  Equipe <br></h2>
 <uL> 
@@ -77,7 +69,7 @@ A linguagem assembly foi escolhida por sua capacidade de oferecer controle diret
 
 O GCC, abreviação de "GNU Compiler Collection" (Coleção de Compiladores GNU), é uma popular distribuição de compiladores que oferece suporte a diversas linguagens de programação, como C, C++, Objective-C, Fortran e Ada. Quando executado, o GCC realiza várias etapas, incluindo pré-processamento, compilação, montagem e vinculação. Ele também disponibiliza uma ampla variedade de opções de linha de comando, permitindo que o desenvolvedor personalize o processo de compilação conforme suas necessidades específicas
 
-<h3>Vistual Studio Code</h3>
+<h3>Visual Studio Code</h3>
 
 O Visual Studio Code, conhecido como VSCode, é um ambiente de desenvolvimento amplamente usado. Desenvolvido pela Microsoft, é um editor de código gratuito e de código aberto com recursos como realce de sintaxe, conclusão de código e depuração integrada. Suporta várias linguagens e possui extensões para personalização. No projeto ele foi utilizado para desenvolver o código fonte do jogo.
 
@@ -141,12 +133,76 @@ O sistema DE1-SoC é composto pelo HPS e pelo FPGA, ambos integrados no chip Cyc
 
 A compilação nativa ocorre quando o código é compilado no mesmo sistema em que será executado. Aqui, a compilação será realizada diretamente na placa, utilizando a linha de comando do Linux e as ferramentas de compilação integradas. O comando `gcc` invoca o GNU C Compiler, um compilador de código aberto muito usado para gerar executáveis no Linux.
 
+
+## Funcionamento dos elementos do jogo 
+
+### Movimentação da bola
+
+A movimentação da bola no cenário foi implementada alterando suas posições horizontal e vertical de forma contínua ao longo do tempo. Isso foi feito incrementando ou decrementando essas posições a uma taxa constante, com base na direção desejada para o movimento da bola.
+
+### Colisão 
+
+
+Garantir as colisões da bola com os elementos do cenário, como paredes, blocos e a raquete, é essencial para o funcionamento do jogo. Essa funcionalidade foi implementada antecipando o movimento da bola, ou seja, verificando sua posição futura.
+
+Para isso, analisaram-se os pixels adjacentes à posição atual da bola. Caso algum desses pixels se sobreponha a um pixel pertencente a outro elemento do cenário, ocorre a detecção de uma colisão. Se a posição atual da bola é (x, y), verificam-se as seguintes posições: (x+1, y), (x-1, y), (x, y+1) e (x, y-1) para colisões horizontais e verticais, além das diagonais (x+1, y+1), (x-1, y+1), (x+1, y-1) e (x-1, y-1) para colisões nas bordas (Figura 5).
+
+<div align='center'>
+  
+![image](https://github.com/BaptistaGabriel/Breakout-na-DE1-SoC--Desenvolvendo-um-Jogo-em-uma-Plataforma-ARM/assets/91295529/c6f7f7e6-55ec-46b4-aeb5-2e7fae90a975)
+
+Figura 5. Área de verificação da bola.m
 </div>
-## Metodologia
 
-A metodologia deste projeto consistiu em desenvolver um novo jogo utilizando recursos ja anteriormente explorados, tais como a biblioteca para interação com a GPU e o acelerometro. A partir dessas bibliotecas, várias funções foram adaptadas para uso no jogo, mantendo a compatibilidade com a estrutura original e garantindo uma integração otimizada com a GPU para exibição gráfica dos elementos do jogo e o acelerometro.
+Quando uma colisão é detectada, a direção do movimento da bola é invertida. Para colisões verticais, apenas o sinal da velocidade vertical é alterado; para colisões horizontais, apenas o sinal da velocidade horizontal muda. Já em colisões diagonais, ambos os sinais das velocidades horizontal e vertical são invertidos (Figura 6).
 
-As etapas do projeto serão detalhadas nas sessões posteriores, onde serão demonstrados o processo de implementação das funções, os testes realizados para validar o funcionamento das bibliotecas e a adaptação das funções gráficas para o ambiente de jogo. A otimização e os ajustes finais também serão discutidos, destacando as melhorias no desempenho gráfico e na interação com a GPU.
+<div align='center'>
+  
+![image](https://github.com/BaptistaGabriel/Breakout-na-DE1-SoC--Desenvolvendo-um-Jogo-em-uma-Plataforma-ARM/assets/91295529/469b0651-2cec-450e-9369-f1245a6c3f72)
+
+Figura 6. Direção da bola após a colisão com blocos.
+</div>
+
+Para as colisões entre a bola e a raquete, um comportamento diferenciado foi implementado. A raquete é dividida em três zonas: colisões na zona esquerda fazem a bola se deslocar para a esquerda e para cima; colisões na zona central resultam em um movimento ascendente; e colisões na zona direita direcionam a bola para a direita e para cima (Figura 7).
+
+<div align='center'>
+
+![image](https://github.com/BaptistaGabriel/Breakout-na-DE1-SoC--Desenvolvendo-um-Jogo-em-uma-Plataforma-ARM/assets/91295529/b3938712-5385-42a9-b6d1-1cd5a6001014)
+
+Figura 7. Direção da bola após a colisão com a raquete.
+</div>
+
+### Movimentação da raquete 
+
+A movimentação horizontal da raquete foi implementada com base nos valores lidos do eixo x do acelerômetro. Valores positivos incrementam a posição da raquete, movendo-a para a direita, enquanto valores negativos a decrementam, deslocando-a para a esquerda.
+
+Para evitar que a raquete saia dos limites da tela, sua posição foi restrita, garantindo que permaneça dentro do campo visível ao jogador.
+
+### Pausa 
+
+O sistema de pausa, um dos requisitos do projeto, foi implementado monitorando constantemente os estados dos botões no loop principal. Quando o botão de pausa é pressionado, o sistema acessa atualizações.
+
+Dentro desse loop, o estado do botão continua sendo verificado. Se o jogador pressionar o botão novamente, o sistema sai do estado de pausa, retornando ao loop principal e retomando o jogo.
+
+### Sistema de Menu
+
+O jogo conta com um sistema de menu que permite ao jogador acessar opções como reiniciar a partida, retornar ao menu inicial ou continuar no estado atual do jogo. Esse sistema é um subconjunto de estados da máquina de estados que gerencia as transições entre as diferentes partes do jogo, com base nas entradas dos botões disponíveis na placa.
+
+A máquina de estados possui os seguintes estados principais:
+
+Estado de Jogo Ativo: Representa o estado padrão em que o jogador está jogando. A partir deste estado, o jogador pode pausar o jogo para acessar o menu.
+Estado de Menu: Exibe as opções de reinício, retorno ao menu inicial e retorno ao jogo. Dependendo do botão pressionado, a máquina de estados executa a ação correspondente.
+Estado de Reinício: Reinicia a partida, retornando ao estado inicial do jogo.
+Estado de Tela Inicial: Retorna à tela inicial do jogo, onde o jogador pode iniciar uma nova partida.
+Estado de Retorno ao Jogo: Fecha o menu e retorna ao jogo no estado em que foi pausado.
+
+### Vidas 
+
+O sistema de vidas é representado por sprites que simbolizam a pontuação dos jogadores. Seguindo a temática do jogo, são utilizados sprites em formato de gaivotas (Imagem TAL), posicionados na lateral esquerda da tela principal. Cada vez que a bola atinge a parte inferior ou superior do cenário, o jogador perde uma vida, e um dos sprites é removido. Quando todas as vidas são perdidas, o jogo é encerrado, resultando na derrota do jogador.
+
+## Testes 
+
+Para validar o funcionamento do jogo, foram realizados diversos testes. Esses testes avaliaram todas as funcionalidades implementadas, garantindo que o jogo atendesse aos requisitos e expectativas do projeto.
 
 ### Colisões
 
