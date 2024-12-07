@@ -22,6 +22,7 @@
 - [Resultados e Testes](#resultados-e-testes)
 - [Funcionamento do Jogo](#Funcionamento)
 - [Makefile](#makefile)
+- [Execução](#execucao)
 - [Conclusão](#conclusao)
 - [Referências](#referencia)
 
@@ -136,21 +137,14 @@ O sistema DE1-SoC é composto pelo HPS e pelo FPGA, ambos integrados no chip Cyc
 
 A compilação nativa ocorre quando o código é compilado no mesmo sistema em que será executado. Aqui, a compilação será realizada diretamente na placa, utilizando a linha de comando do Linux e as ferramentas de compilação integradas. O comando `gcc` invoca o GNU C Compiler, um compilador de código aberto muito usado para gerar executáveis no Linux.
 
-## Criação de assets para o jogo
+### Criação de assets para o jogo
 
 Como todo jogo exige uma variedade de **assets**, o desenvolvimento de **Beach Pong** não foi diferente. Para criar esses elementos, utilizamos o software multiplataforma e web-based [Piskel](https://www.piskelapp.com/). Sua alta compatibilidade com diferentes sistemas, aliada à conveniência de acesso online, facilitou o trabalho, permitindo que os assets fossem desenvolvidos tanto remotamente, em casa, quanto no laboratório. Além disso, o Piskel oferece a opção de exportar os assets diretamente em formato **C**, tornando a integração com o jogo ainda mais eficiente.
 
 A seguir, apresentamos algumas das artes criadas pela nossa equipe para o desenvolvimento do jogo **Beach Pong**. Esses designs foram elaborados cuidadosamente para refletir a temática praiana e garantir uma experiência visual envolvente e única. Cada elemento foi pensado para integrar perfeitamente com a jogabilidade e reforçar a identidade do projeto.
 
-<uL> 
-  <li>Figura 1 - Um asset em pixel art de 20x20 pixels representando uma bola de vôlei, projetado para reforçar a temática praiana do jogo. </li>
-  <li>Figura 2 - É uma parte da barra do player 1 ou 2, foram utilizadas 4 dessas, pois o tamanho máximo da sprite é 20x20 então com 4 alinhadas lado a lado temos 20x80.</li>
-  <li>Figura 3 - Seria bitmap do cenário, para ajudar ambientar ainda mais o jogo, tem o tamanho exato do restante da tela que não era usado, porém não houve tempo para implementação. </li>
-  <li>Figura 4 - É uma gaivota, ela representa a vida dos players, a gaivota é uma ave comumente vista em praias. </li>
-  <li>Figura 5 - É uma gaivota, ela representa a vida dos players, a gaivota é uma ave comumente vista em praias. </li>
 
-</ul>
-
+## 
 <div align='center'>
 
 ![image](./Imagens/BOLA200X.png)
@@ -194,7 +188,7 @@ Figura 5. Tela inicial.
 ![image](./Imagens/overp1.gif)
 ![image](./Imagens/overp2.gif)
 
-Figura 7. Tela de game over player 1.
+Figura 6. Tela de game over player 1 ou 2.
 </div>
 
 
@@ -205,8 +199,14 @@ Figura 7. Tela de game over player 1.
 Figura 8. Menu de pause.
 </div>
 
+- **Figura 1**: Asset em pixel art de 20x20 pixels representando uma bola de vôlei, criado para reforçar a temática praiana do jogo.  
+- **Figura 2**: Segmento da barra dos jogadores (Player 1 ou Player 2). Foram utilizados quatro desses segmentos alinhados lado a lado, formando uma barra de 20x80 pixels, já que o tamanho máximo de cada sprite é 20x20.  
+- **Figura 3**: Bitmap do cenário, projetado para complementar a ambientação do jogo. Possui o tamanho exato da área da tela não utilizada. Contudo, não houve tempo suficiente para sua implementação.  
+- **Figura 4**: Sprite de uma gaivota, utilizada como representação das vidas dos jogadores. A escolha da gaivota remete às aves comumente vistas em praias.  
+- **Figura 5**: Animação da tela inicial, exibindo uma praia com ondas e o nome do jogo, reforçando o tema principal.  
+- **Figura 6**: Animação da tela de game over, mostrando o jogador perdedor chorando, em linha com o espírito competitivo do jogo.  
+- **Figura 7**: Animação da tela de pause, permitindo aos jogadores escolher entre voltar ao jogo, retornar à tela inicial ou reiniciar a partida.  
 
-## Funcionamento dos elementos do jogo 
 
 ### Movimentação da bola
 
