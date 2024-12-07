@@ -216,7 +216,7 @@ A movimentação da bola no cenário foi implementada alterando suas posições 
 
 Garantir as colisões da bola com os elementos do cenário, como paredes, blocos e a raquete, é essencial para o funcionamento do jogo. Essa funcionalidade foi implementada antecipando o movimento da bola, ou seja, verificando sua posição futura. 
 
-Para isso, analisaram-se os pixels adjacentes à posição atual da bola. Caso algum desses pixels se sobreponha a um pixel pertencente a outro elemento do cenário, ocorre a detecção de uma colisão. Se a posição atual da bola é (x, y), verificam-se as seguintes posições: (x+1, y), (x-1, y), (x, y+1) e (x, y-1) para colisões horizontais e verticais, além das diagonais (x+1, y+1), (x-1, y+1), (x+1, y-1) e (x-1, y-1) para colisões nas bordas (Figura 9).
+Para isso, analisaram-se os pixels adjacentes à posição atual da bola. Caso algum desses pixels se sobreponha a um pixel pertencente a outro elemento do cenário, ocorre a detecção de uma colisão. Se a posição atual da bola é (x, y), verificam-se as seguintes posições: (x+1, y), (x-1, y), (x, y+1) e (x, y-1) para colisões horizontais e verticais, além das diagonais (x+1, y+1), (x-1, y+1), (x+1, y-1) e (x-1, y-1) para colisões nas bordas (Figura 8).
 
 <div align='center'>
   
@@ -234,7 +234,7 @@ Quando uma colisão é detectada, a direção do movimento da bola é invertida.
 Figura 9. Direção da bola após a colisão com blocos.
 </div>
 
-Para as colisões entre a bola e a raquete, um comportamento diferenciado foi implementado. A raquete é dividida em três zonas: colisões na zona esquerda fazem a bola se deslocar para a esquerda e para cima; colisões na zona central resultam em um movimento ascendente; e colisões na zona direita direcionam a bola para a direita e para cima (Figura 11).
+Para as colisões entre a bola e a raquete, um comportamento diferenciado foi implementado. A raquete é dividida em três zonas: colisões na zona esquerda fazem a bola se deslocar para a esquerda e para cima; colisões na zona central resultam em um movimento ascendente; e colisões na zona direita direcionam a bola para a direita e para cima (Figura 10).
 
 <div align='center'>
 
@@ -288,37 +288,36 @@ Para validar o funcionamento do jogo, foram realizados testes simples. Esses tes
 
 ![image](./Imagens/video1.gif)
 
-Figura 11. Direção da bola após a colisão com a raquete.
+Figura 11. Demonstrativo menu de pausa.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/video2.gif)
 
-Figura 11. Direção da bola após a colisão com a raquete.
+Figura 12. Demonstrativo gameplay.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/video3.gif)
 
-Figura 11. Direção da bola após a colisão com a raquete.
+Figura 13. Demonstrativo main menu.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/video4.gif)
 
-Figura 11. Direção da bola após a colisão com a raquete.
+Figura 14. Demonstrativo game over.
 </div>
 
 <div align='center'>
 
 ![image](./Imagens/video5.gif)
 
-Figura 11. Direção da bola após a colisão com a raquete.
+Figura 15. Demonstrativo inicio de jogo.
 </div>
-
 
 
 </div>
