@@ -34,11 +34,13 @@ O Problema 3 do módulo exige a criação de um jogo que integre todas as funç�
 Os requisitos principais para elaboração do sistema são apresentados a seguir:
 
 <uL> 
-  <li>Deverá utilizar todas as funções implementadas na biblioteca do Processador Gráfico e no mínimo um novo sprite deve ser colocado na memória e utilizado no jogo;</li>
-  <li>Os dois jogadores devem jogar simultaneamente utilizando obrigatoriamente o acelerômetro, e adicionalmente o mouse;</li>
-  <li>A variação da velocidade no movimento deve ser refletida na ação do ator do jogo. Por exemplo, no jogo breakout a barra se move com velocidade maior se o movimento do mouse for brusco;</li>
-  <li>Informações do jogo (placar, vidas, etc.) devem na tela do jogo; </li>
+  <li>Uso completo das funcionalidades da biblioteca do Processador Gráfico e a inclusão de pelo menos um novo sprite no jogo.</li>
+  <li>Controle simultâneo para dois jogadores, utilizando obrigatoriamente o acelerômetro e, adicionalmente, o mouse.</li>
+  <li>Interação dinâmica, onde a variação na velocidade do movimento dos dispositivos reflete diretamente na ação do ator do jogo. Por exemplo, no estilo Breakout, movimentos bruscos do mouse resultam em deslocamentos mais rápidos da barra.</li>
+  <li>Exibição de informações na tela, como placar e número de vidas restantes. </li>
 </ul>
+
+Ao longo deste relatório, serão detalhadas as etapas de construção do jogo, o uso das ferramentas disponíveis, e a integração de novos elementos que destacam a criatividade e a complexidade do projeto.
 
 <h2>  Equipe <br></h2>
 <uL> 
@@ -133,6 +135,10 @@ O sistema DE1-SoC é composto pelo HPS e pelo FPGA, ambos integrados no chip Cyc
 
 A compilação nativa ocorre quando o código é compilado no mesmo sistema em que será executado. Aqui, a compilação será realizada diretamente na placa, utilizando a linha de comando do Linux e as ferramentas de compilação integradas. O comando `gcc` invoca o GNU C Compiler, um compilador de código aberto muito usado para gerar executáveis no Linux.
 
+## Criação de assets para o jogo
+
+Como todo jogo exige uma variedade de **assets**, o desenvolvimento de **Beach Pong** não foi diferente. Para a criação desses elementos, utilizamos o software multiplataforma e web-based [Piskel](https://www.piskelapp.com/). Sua alta compatibilidade com diferentes sistemas e a possibilidade de acesso online tornaram o processo mais ágil e flexível, permitindo que parte do trabalho fosse realizada remotamente em casa e outra parte no laboratório, além da possibilidade de exportar um arquivo C.
+Para conseguir transferir os assets criados no [Piskel](https://www.piskelapp.com/) para o jogo, foi utilizados algumas funções, uma delas a `Re` que varrem o array e desenha pixel a pixel na tela
 
 ## Funcionamento dos elementos do jogo 
 
@@ -142,47 +148,52 @@ A movimentação da bola no cenário foi implementada alterando suas posições 
 
 ### Colisão 
 
+Garantir as colisões da bola com os elementos do cenário, como paredes, blocos e a raquete, é essencial para o funcionamento do jogo. Essa funcionalidade foi implementada antecipando o movimento da bola, ou seja, verificando sua posição futura. 
 
-Garantir as colisões da bola com os elementos do cenário, como paredes, blocos e a raquete, é essencial para o funcionamento do jogo. Essa funcionalidade foi implementada antecipando o movimento da bola, ou seja, verificando sua posição futura.
-
-Para isso, analisaram-se os pixels adjacentes à posição atual da bola. Caso algum desses pixels se sobreponha a um pixel pertencente a outro elemento do cenário, ocorre a detecção de uma colisão. Se a posição atual da bola é (x, y), verificam-se as seguintes posições: (x+1, y), (x-1, y), (x, y+1) e (x, y-1) para colisões horizontais e verticais, além das diagonais (x+1, y+1), (x-1, y+1), (x+1, y-1) e (x-1, y-1) para colisões nas bordas (Figura 5).
+Para isso, analisaram-se os pixels adjacentes à posição atual da bola. Caso algum desses pixels se sobreponha a um pixel pertencente a outro elemento do cenário, ocorre a detecção de uma colisão. Se a posição atual da bola é (x, y), verificam-se as seguintes posições: (x+1, y), (x-1, y), (x, y+1) e (x, y-1) para colisões horizontais e verticais, além das diagonais (x+1, y+1), (x-1, y+1), (x+1, y-1) e (x-1, y-1) para colisões nas bordas (Figura TAL).
 
 <div align='center'>
   
-![image](https://github.com/BaptistaGabriel/Breakout-na-DE1-SoC--Desenvolvendo-um-Jogo-em-uma-Plataforma-ARM/assets/91295529/c6f7f7e6-55ec-46b4-aeb5-2e7fae90a975)
+![image]()
 
 Figura 5. Área de verificação da bola.m
 </div>
 
-Quando uma colisão é detectada, a direção do movimento da bola é invertida. Para colisões verticais, apenas o sinal da velocidade vertical é alterado; para colisões horizontais, apenas o sinal da velocidade horizontal muda. Já em colisões diagonais, ambos os sinais das velocidades horizontal e vertical são invertidos (Figura 6).
+Quando uma colisão é detectada, a direção do movimento da bola é invertida. Para colisões verticais, apenas o sinal da velocidade vertical é alterado; para colisões horizontais, apenas o sinal da velocidade horizontal muda. Já em colisões diagonais, ambos os sinais das velocidades horizontal e vertical são invertidos (Figura TAL).
 
 <div align='center'>
   
-![image](https://github.com/BaptistaGabriel/Breakout-na-DE1-SoC--Desenvolvendo-um-Jogo-em-uma-Plataforma-ARM/assets/91295529/469b0651-2cec-450e-9369-f1245a6c3f72)
+![image]()
 
 Figura 6. Direção da bola após a colisão com blocos.
 </div>
 
-Para as colisões entre a bola e a raquete, um comportamento diferenciado foi implementado. A raquete é dividida em três zonas: colisões na zona esquerda fazem a bola se deslocar para a esquerda e para cima; colisões na zona central resultam em um movimento ascendente; e colisões na zona direita direcionam a bola para a direita e para cima (Figura 7).
+Para as colisões entre a bola e a raquete, um comportamento diferenciado foi implementado. A raquete é dividida em três zonas: colisões na zona esquerda fazem a bola se deslocar para a esquerda e para cima; colisões na zona central resultam em um movimento ascendente; e colisões na zona direita direcionam a bola para a direita e para cima (Figura TAL).
 
 <div align='center'>
 
-![image](https://github.com/BaptistaGabriel/Breakout-na-DE1-SoC--Desenvolvendo-um-Jogo-em-uma-Plataforma-ARM/assets/91295529/b3938712-5385-42a9-b6d1-1cd5a6001014)
+![image]()
 
 Figura 7. Direção da bola após a colisão com a raquete.
 </div>
 
 ### Movimentação da raquete 
 
-A movimentação horizontal da raquete foi implementada com base nos valores lidos do eixo x do acelerômetro. Valores positivos incrementam a posição da raquete, movendo-a para a direita, enquanto valores negativos a decrementam, deslocando-a para a esquerda.
+A movimentação das raquetes dos jogadores foi implementada utilizando dois métodos distintos, adaptados ao tipo de controle de cada um:
 
-Para evitar que a raquete saia dos limites da tela, sua posição foi restrita, garantindo que permaneça dentro do campo visível ao jogador.
+Jogador 1 (Acelerômetro): A raquete do primeiro jogador é controlada através do acelerômetro da placa. Valores positivos no eixo X do acelerômetro incrementam a posição da raquete, movendo-a para a direita, enquanto valores negativos decrementam, deslocando-a para a esquerda. Essa abordagem oferece uma experiência de controle baseado em movimento físico, permitindo que o jogador mova a raquete de forma intuitiva ao inclinar a placa para a esquerda ou direita.
+
+Jogador 2 (Mouse): A raquete do segundo jogador é controlada através do movimento do mouse. A posição horizontal do mouse é monitorada, e a raquete é movida para a esquerda ou para a direita com base no movimento do cursor. A lógica para a identificação de movimentos de esquerda ou direita é implementada comparando a posição atual do mouse com a posição anterior, garantindo que a raquete se mova na direção correta.
+
+Para ambos os jogadores, a posição das raquetes foi restringida dentro dos limites da tela. Isso garante que as raquetes permaneçam visíveis e dentro do campo de jogo, evitando que saiam da área jogável, mantendo a jogabilidade fluida e sem interrupções.
 
 ### Pausa 
 
-O sistema de pausa, um dos requisitos do projeto, foi implementado monitorando constantemente os estados dos botões no loop principal. Quando o botão de pausa é pressionado, o sistema acessa atualizações.
+O sistema de pausa, essencial para o funcionamento do jogo, utiliza a máquina de estados para realizar a transição entre o Estado de Jogo Ativo e o Estado de Menu.
 
-Dentro desse loop, o estado do botão continua sendo verificado. Se o jogador pressionar o botão novamente, o sistema sai do estado de pausa, retornando ao loop principal e retomando o jogo.
+Ao pressionar o botão de pausa durante a partida, o jogo é interrompido e o sistema alterna para o menu, permitindo ao jogador acessar opções como reiniciar a partida, retornar ao menu inicial ou continuar jogando. Durante essa pausa, o estado do jogo é preservado, garantindo que o jogador possa retomar exatamente de onde parou caso opte por continuar.
+
+A lógica de pausa está integrada ao sistema de gerenciamento de estados, assegurando uma transição fluida entre o jogo e o menu, sem interrupções ou perdas no fluxo de execução.
 
 ### Sistema de Menu
 
@@ -200,127 +211,8 @@ Estado de Retorno ao Jogo: Fecha o menu e retorna ao jogo no estado em que foi p
 
 O sistema de vidas é representado por sprites que simbolizam a pontuação dos jogadores. Seguindo a temática do jogo, são utilizados sprites em formato de gaivotas (Imagem TAL), posicionados na lateral esquerda da tela principal. Cada vez que a bola atinge a parte inferior ou superior do cenário, o jogador perde uma vida, e um dos sprites é removido. Quando todas as vidas são perdidas, o jogo é encerrado, resultando na derrota do jogador.
 
-## Testes 
+### Testes 
 
-Para validar o funcionamento do jogo, foram realizados diversos testes. Esses testes avaliaram todas as funcionalidades implementadas, garantindo que o jogo atendesse aos requisitos e expectativas do projeto.
+Para validar o funcionamento do jogo, foram realizados testes simples. Esses testes avaliaram todas as funcionalidades implementadas, garantindo que o jogo atendesse aos requisitos e expectativas do projeto.
 
-### Colisões
 
-- Existem dois tipos principais de colisões implementadas no jogo:
-
-*Colisão com as Raquetes*
-A função ballRacketCollision é responsável por detectar se a bola colidiu com uma raquete. Essa detecção utiliza um sistema de intervalos para verificar se a bola está dentro da área de colisão da raquete (tanto no eixo X quanto no eixo Y). A raquete é dividida em três partes: início (esquerda), centro, e fim (direita), cada uma com um comportamento de colisão diferente.
-
-Etapas da verificação de colisão:
-
-Definir a faixa de colisão:
-
-A faixa horizontal é calculada usando a posição central da raquete com uma margem para cada lado.
-A faixa vertical é calculada com base na altura da raquete e uma margem acima e abaixo.
-Detectar colisões específicas:
-
-Se a bola colide com o início da raquete, ela muda de direção horizontal e vertical com um movimento mais inclinado.
-Se a bola colide com o centro, ela muda apenas a direção vertical.
-Se a bola colide com o fim, o comportamento é simétrico ao do início.
-*Colisão com a parede*
-A função ballBorderCollision verifica se a bola atingiu as bordas da tela (laterais, topo ou base).
-
-Quando a bola atinge as bordas laterais, ela inverte sua direção horizontal (hori).
-Quando a bola atinge o topo ou a base, o jogador correspondente perde uma vida, e os dados são reiniciados com a função resetData.
-
-### As raquetes 
-
-As raquetes são representadas como um bloco horizontal na tela feito por sprite , com coordenadas centrais e um tamanho fixo (BAR_SIZE). Sua posição no eixo X (coordX) é ajustada dinamicamente para permitir que o jogador mova a raquete lateralmente, enquanto a posição no eixo Y (coordY) permanece fixa.
-
-#### Estrutura da Raquete
-A raquete utiliza uma estrutura de dados chamada Bar, que contém:
-
-coordX: Coordenada central no eixo X.
-coordY: Coordenada fixa no eixo Y.
-BAR_SIZE: Metade do tamanho total da raquete.
-A raquete pode ser desenhada na tela utilizando uma função gráfica (como videoBox), mas este aspecto visual está desacoplado da lógica de movimento.
-
-#### Movimento da Raquete
-O movimento da raquete é gerenciado pela função moveBar, que ajusta a posição horizontal da raquete com base em um valor de aceleração (accelX). Este valor indica a direção e a magnitude do movimento. A função também verifica os limites da tela para impedir que a raquete ultrapasse as bordas.
-
-Algoritmo de Movimento
-A lógica do movimento é implementada em três etapas:
-
-Definir limites da raquete:
-
-São definidos os limites laterais (xStart e xEnd) que delimitam a área permitida para a raquete.
-Esses limites correspondem às bordas visíveis do jogo.
-Verificar se o movimento é permitido:
-
-A função verifica se o movimento proposto pela aceleração (accelX) manterá a raquete dentro dos limites.
-Se o movimento for válido, a coordenada coordX da raquete é atualizada.
-Corrigir a posição ao atingir os limites:
-
-Caso o movimento ultrapasse os limites laterais, a posição da raquete é ajustada automaticamente para o limite mais próximo.
-### Estados do game
-Um dos requisitos do game foi a necessidade de implementar estados para o game juntamente com um menu que fosse interativo para essas funções, e esses são os estados do jogo:
-#### Estado 0: Tela Inicial
-Descrição:
-
-Esse é o estado inicial do jogo, exibindo a tela de boas-vindas ou menu principal.
-Função associada: Fhome() (presumivelmente, exibe a tela inicial).
-Dados do jogo, como posição da bola e barras, são reiniciados por meio da função resetData.
-Ações:
-
-Limpa a tela e os sprites (videoClear() e clearSprite()).
-Reinicia os elementos da partida para suas posições padrão.
-Aguarda entrada do jogador para avançar ao próximo estado.
-#### Estado 1: Tela do Jogo
-Descrição:
-
-Representa a fase principal do jogo, onde a bola, as barras e os elementos interagem.
-Contém toda a lógica do jogo, incluindo:
-Movimento da bola.
-Movimento das barras (controladas pelo jogador ou pela IA).
-Colisões com bordas, raquetes e detecção de fim de jogo.
-Ações:
-
-Configura os limites e elementos da tela:
-Bordas são desenhadas usando videoBox.
-A bola e as barras são desenhadas e posicionadas via setSprite.
-Atualiza as posições das barras com base nos controles do jogador e nos valores de aceleração (axis_x).
-Detecta colisões:
-Entre a bola e as barras (ballRacketCollision).
-Entre a bola e as bordas da área de jogo (ballBorderCollision).
-Monitora a vida dos jogadores (lifeJ1 e lifeJ2) e verifica se o jogo terminou com checkEndGame.
-#### Estado 2: Pausa
-Descrição:
-
-Coloca o jogo em estado de pausa, permitindo ao jogador acessar opções de menu ou simplesmente pausar a partida.
-Função associada: Fpause(currentOption + 1).
-Ações:
-
-Limpa a tela e os sprites.
-Exibe um menu de pausa, permitindo ao jogador navegar pelas opções com os botões.
-Opções no menu podem incluir "Continuar", "Reiniciar" ou "Sair", embora as ações específicas não sejam detalhadas no código.
-Estado 3: Reiniciar o Jogo
-Descrição:
-
-Reinicia os elementos da partida, como vidas dos jogadores, posição da bola e das barras.
-Útil para reiniciar o jogo após uma rodada ou ao selecionar "Reiniciar" no menu de pausa.
-Ações:
-
-Limpa a tela e os sprites.
-Reinicia vidas e reposiciona a bola e as barras por meio da função resetData.
-Atualiza a flag flagReset para indicar que o jogo foi reiniciado.
-#### Estado 4: Game Over
-Descrição:
-
-Exibe a tela de "Game Over" quando o jogo termina.
-Determina o vencedor ou perdedor com base em flagGameOver.
-Ações:
-
-Limpa a tela e os sprites.
-Reinicia as vidas e os elementos do jogo.
-Se flagGameOver não for -1 (ou seja, há um resultado do jogo), exibe a tela de Game Over com a função Fover.
-Controle dos Estados
-A lógica do jogo alterna entre os estados com base em eventos e condições específicas. Por exemplo:
-
-O estado inicial (stateGame == 0) leva ao estado de jogo (stateGame == 1) quando o jogador inicia a partida.
-Durante o jogo, o jogador pode pausar (stateGame == 2) ou terminar a partida por vitória ou derrota, o que leva ao estado de Game Over (stateGame == 4).
-O menu de pausa permite reiniciar (stateGame == 3) ou retornar ao jogo (stateGame == 1).
