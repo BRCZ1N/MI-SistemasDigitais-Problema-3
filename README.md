@@ -147,7 +147,7 @@ Podemos ver a seguir algumas artes criadas pela nossa equipe para o jogo.
 
 <div align='center'>
 
-![image]()
+![image](BOLA200X.png)
 
 Figura 1. Direção da bola após a colisão com a raquete.
 </div>
