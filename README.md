@@ -283,6 +283,44 @@ O sistema de vidas é representado por sprites que simbolizam a pontuação dos 
 
 Para validar o funcionamento do jogo, foram realizados testes simples. Esses testes avaliaram todas as funcionalidades implementadas, garantindo que o jogo atendesse aos requisitos e expectativas do projeto.
 
+
+<div align='center'>
+
+![image](./Imagens/video1.gif)
+
+Figura 11. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image](./Imagens/video2.gif)
+
+Figura 11. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image](./Imagens/video3.gif)
+
+Figura 11. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image](./Imagens/video4.gif)
+
+Figura 11. Direção da bola após a colisão com a raquete.
+</div>
+
+<div align='center'>
+
+![image](./Imagens/video5.gif)
+
+Figura 11. Direção da bola após a colisão com a raquete.
+</div>
+
+
+
 </div>
 
 <div align="justify" id="makefile"> 
