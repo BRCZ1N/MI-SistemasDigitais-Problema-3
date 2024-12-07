@@ -196,7 +196,7 @@ Figura 6. Tela de game over player 1 ou 2.
 
 ![image](./Imagens/pause.gif)
 
-Figura 8. Menu de pause.
+Figura 7. Menu de pause.
 </div>
 
 - **Figura 1**: Asset em pixel art de 20x20 pixels representando uma bola de vôlei, criado para reforçar a temática praiana do jogo.  
@@ -222,7 +222,7 @@ Para isso, analisaram-se os pixels adjacentes à posição atual da bola. Caso a
   
 ![image](./Imagens/307570102-c6f7f7e6-55ec-46b4-aeb5-2e7fae90a975.png)
 
-Figura 9. Área de verificação da bola.m
+Figura 8. Área de verificação da bola.m
 </div>
 
 Quando uma colisão é detectada, a direção do movimento da bola é invertida. Para colisões verticais, apenas o sinal da velocidade vertical é alterado; para colisões horizontais, apenas o sinal da velocidade horizontal muda. Já em colisões diagonais, ambos os sinais das velocidades horizontal e vertical são invertidos (Figura 10).
@@ -231,7 +231,7 @@ Quando uma colisão é detectada, a direção do movimento da bola é invertida.
   
 ![image](./Imagens/307570128-469b0651-2cec-450e-9369-f1245a6c3f72.png)
 
-Figura 10. Direção da bola após a colisão com blocos.
+Figura 9. Direção da bola após a colisão com blocos.
 </div>
 
 Para as colisões entre a bola e a raquete, um comportamento diferenciado foi implementado. A raquete é dividida em três zonas: colisões na zona esquerda fazem a bola se deslocar para a esquerda e para cima; colisões na zona central resultam em um movimento ascendente; e colisões na zona direita direcionam a bola para a direita e para cima (Figura 11).
@@ -240,7 +240,7 @@ Para as colisões entre a bola e a raquete, um comportamento diferenciado foi im
 
 ![image](./Imagens/307570141-b3938712-5385-42a9-b6d1-1cd5a6001014.png)
 
-Figura 11. Direção da bola após a colisão com a raquete.
+Figura 10. Direção da bola após a colisão com a raquete.
 </div>
 
 ### Movimentação das raquetes 
